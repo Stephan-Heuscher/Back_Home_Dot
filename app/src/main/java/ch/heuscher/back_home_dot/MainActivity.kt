@@ -1,7 +1,5 @@
 package ch.heuscher.back_home_dot
 
-import android.app.AppOpsManager
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -29,37 +27,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var previewDot: View
 
     private lateinit var settings: OverlaySettings
+    private lateinit var permissionManager: PermissionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         settings = OverlaySettings(this)
+        permissionManager = PermissionManager(this)
 
-        statusText = findViewById(R.id.status_text)
-        overlayPermissionButton = findViewById(R.id.overlay_permission_button)
-        accessibilityButton = findViewById(R.id.accessibility_button)
-        usageStatsButton = findViewById(R.id.usage_stats_button)
-        overlaySwitch = findViewById(R.id.overlay_switch)
-        alphaSeekBar = findViewById(R.id.alpha_seekbar)
-        alphaValueText = findViewById(R.id.alpha_value_text)
-        previewDot = findViewById(R.id.preview_dot)
-
-        overlayPermissionButton.setOnClickListener {
-            requestOverlayPermission()
-        }
-
-        accessibilityButton.setOnClickListener {
-            openAccessibilitySettings()
-        }
-
-        usageStatsButton.setOnClickListener {
-            requestUsageStatsPermission()
-        }
-
-        setupOverlaySwitch()
-        setupAlphaSeekBar()
-        setupColorButtons()
+        initializeViews()
+        setupClickListeners()
+        setupUI()
 
         checkPermissionsAndStartService()
     }
@@ -69,66 +48,77 @@ class MainActivity : AppCompatActivity() {
         checkPermissionsAndStartService()
     }
 
+    private fun initializeViews() {
+        statusText = findViewById(R.id.status_text)
+        overlayPermissionButton = findViewById(R.id.overlay_permission_button)
+        accessibilityButton = findViewById(R.id.accessibility_button)
+        usageStatsButton = findViewById(R.id.usage_stats_button)
+        overlaySwitch = findViewById(R.id.overlay_switch)
+        alphaSeekBar = findViewById(R.id.alpha_seekbar)
+        alphaValueText = findViewById(R.id.alpha_value_text)
+        previewDot = findViewById(R.id.preview_dot)
+    }
+
+    private fun setupClickListeners() {
+        overlayPermissionButton.setOnClickListener { requestOverlayPermission() }
+        accessibilityButton.setOnClickListener { openAccessibilitySettings() }
+        usageStatsButton.setOnClickListener { requestUsageStatsPermission() }
+    }
+
+    private fun setupUI() {
+        setupOverlaySwitch()
+        setupAlphaSeekBar()
+        setupColorButtons()
+    }
+
     private fun checkPermissionsAndStartService() {
-        val hasOverlayPermission = checkOverlayPermission()
-        val hasAccessibilityService = BackHomeAccessibilityService.isServiceEnabled()
-        val hasUsageStatsPermission = checkUsageStatsPermission()
+        updateUI()
 
-        updateUI(hasOverlayPermission, hasAccessibilityService, hasUsageStatsPermission)
-
-        if (hasOverlayPermission && hasAccessibilityService) {
+        if (permissionManager.hasAllRequiredPermissions()) {
             startOverlayService()
         }
     }
 
-    private fun updateUI(hasOverlayPermission: Boolean, hasAccessibilityService: Boolean, hasUsageStatsPermission: Boolean) {
-        val status = StringBuilder()
-        status.append("Status:\n\n")
+    private fun updateUI() {
+        val hasOverlay = permissionManager.hasOverlayPermission()
+        val hasAccessibility = permissionManager.hasAccessibilityPermission()
+        val hasUsageStats = permissionManager.hasUsageStatsPermission()
 
-        if (hasOverlayPermission) {
-            status.append("✓ Overlay-Berechtigung aktiviert\n")
-            overlayPermissionButton.isEnabled = false
-        } else {
-            status.append("✗ Overlay-Berechtigung nicht aktiviert\n")
-            overlayPermissionButton.isEnabled = true
-        }
+        // Update button states
+        overlayPermissionButton.isEnabled = !hasOverlay
+        accessibilityButton.isEnabled = !hasAccessibility
+        usageStatsButton.isEnabled = !hasUsageStats
 
-        if (hasAccessibilityService) {
-            status.append("✓ Accessibility Service aktiviert\n")
-            accessibilityButton.isEnabled = false
-        } else {
-            status.append("✗ Accessibility Service nicht aktiviert\n")
-            accessibilityButton.isEnabled = true
-        }
-
-        if (hasUsageStatsPermission) {
-            status.append("✓ App-Nutzungsstatistik aktiviert\n")
-            usageStatsButton.isEnabled = false
-        } else {
-            status.append("✗ App-Nutzungsstatistik nicht aktiviert\n")
-            usageStatsButton.isEnabled = true
-        }
-
-        if (hasOverlayPermission && hasAccessibilityService) {
-            status.append("\n\nDer verschiebbare Punkt ist aktiv!\n\n")
-            status.append("• Doppelklick = Zur vorherigen App")
-            if (hasUsageStatsPermission) {
-                status.append(" (direkt)\n")
-            } else {
-                status.append(" (via Recents)\n")
-            }
-            status.append("• Dreifachklick = App-Übersicht\n")
-            status.append("• Langes Drücken = Home")
-        }
-
-        statusText.text = status.toString()
+        // Build status text
+        val status = buildStatusText(hasOverlay, hasAccessibility, hasUsageStats)
+        statusText.text = status
     }
 
-    private fun checkOverlayPermission(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Settings.canDrawOverlays(this)
-        } else {
-            true
+    private fun buildStatusText(hasOverlay: Boolean, hasAccessibility: Boolean, hasUsageStats: Boolean): String {
+        return buildString {
+            append("Status:\n\n")
+
+            // Overlay permission
+            append(if (hasOverlay) "✓" else "✗")
+            append(" Overlay-Berechtigung\n")
+
+            // Accessibility permission
+            append(if (hasAccessibility) "✓" else "✗")
+            append(" Accessibility Service\n")
+
+            // Usage stats permission
+            append(if (hasUsageStats) "✓" else "✗")
+            append(" App-Nutzungsstatistik")
+
+            // Active status
+            if (hasOverlay && hasAccessibility) {
+                append("\n\n")
+                append("Der verschiebbare Punkt ist aktiv!\n\n")
+                append("• Doppelklick = Vorherige App")
+                append(if (hasUsageStats) " (direkt)\n" else " (via Recents)\n")
+                append("• Dreifachklick = App-Übersicht\n")
+                append("• Langes Drücken = Home")
+            }
         }
     }
 
@@ -163,29 +153,6 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun checkUsageStatsPermission(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return false
-        }
-
-        val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appOps.unsafeCheckOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(),
-                packageName
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            appOps.checkOpNoThrow(
-                AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(),
-                packageName
-            )
-        }
-        return mode == AppOpsManager.MODE_ALLOWED
-    }
-
     private fun requestUsageStatsPermission() {
         AlertDialog.Builder(this)
             .setTitle("App-Nutzungsstatistik Berechtigung")
@@ -216,7 +183,7 @@ class MainActivity : AppCompatActivity() {
         overlaySwitch.isChecked = settings.isEnabled
         overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
             settings.isEnabled = isChecked
-            if (checkOverlayPermission() && BackHomeAccessibilityService.isServiceEnabled()) {
+            if (permissionManager.hasAllRequiredPermissions()) {
                 startOverlayService()
             }
         }
@@ -311,11 +278,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun notifyOverlayService() {
-        if (settings.isEnabled && checkOverlayPermission() && BackHomeAccessibilityService.isServiceEnabled()) {
+        if (settings.isEnabled && permissionManager.hasAllRequiredPermissions()) {
             // Restart service to apply changes
             stopOverlayService()
-            val serviceIntent = Intent(this, OverlayService::class.java)
-            startService(serviceIntent)
+            startService(Intent(this, OverlayService::class.java))
         }
     }
 

@@ -4,25 +4,30 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
 
+/**
+ * Accessibility service for performing system navigation actions
+ */
 class BackHomeAccessibilityService : AccessibilityService() {
 
     private lateinit var appSwitcher: AppSwitcherUtil
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        val info = AccessibilityServiceInfo().apply {
+
+        // Configure service info
+        serviceInfo = AccessibilityServiceInfo().apply {
             eventTypes = AccessibilityEvent.TYPES_ALL_MASK
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
             flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS
             notificationTimeout = 100
         }
-        serviceInfo = info
 
         appSwitcher = AppSwitcherUtil(this)
-
-        // Notify that service is connected
         instance = this
     }
 
@@ -39,45 +44,59 @@ class BackHomeAccessibilityService : AccessibilityService() {
         return super.onUnbind(intent)
     }
 
+    /**
+     * Perform back navigation action
+     */
     fun performBackAction() {
         performGlobalAction(GLOBAL_ACTION_BACK)
     }
 
+    /**
+     * Perform home action
+     */
     fun performHomeAction() {
         performGlobalAction(GLOBAL_ACTION_HOME)
     }
 
+    /**
+     * Switch to previous app
+     * Tries ActivityManager first, then UsageStatsManager, falls back to double-RECENTS
+     */
     fun performRecentsAction() {
-        // Use UsageStatsManager to switch to previous app directly
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val success = appSwitcher.switchToPreviousApp()
-            if (!success) {
-                // Fallback to double-tap recents if UsageStats fails
-                performGlobalAction(GLOBAL_ACTION_RECENTS)
-                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                    performGlobalAction(GLOBAL_ACTION_RECENTS)
-                }, 250)
+            // Try intelligent app switching
+            if (appSwitcher.switchToPreviousApp()) {
+                return
             }
-        } else {
-            // For older Android versions, use double-tap recents
-            performGlobalAction(GLOBAL_ACTION_RECENTS)
-            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                performGlobalAction(GLOBAL_ACTION_RECENTS)
-            }, 250)
         }
+
+        // Fallback: double-tap recents
+        performDoubleRecents()
     }
 
+    /**
+     * Open recent apps overview
+     */
     fun performRecentsOverviewAction() {
-        // Single recents action to open task overview
         performGlobalAction(GLOBAL_ACTION_RECENTS)
     }
 
+    /**
+     * Fallback method: Double-tap recents to switch to previous app
+     */
+    private fun performDoubleRecents() {
+        performGlobalAction(GLOBAL_ACTION_RECENTS)
+        handler.postDelayed({
+            performGlobalAction(GLOBAL_ACTION_RECENTS)
+        }, RECENTS_DOUBLE_TAP_DELAY)
+    }
+
     companion object {
+        private const val RECENTS_DOUBLE_TAP_DELAY = 250L
+
         var instance: BackHomeAccessibilityService? = null
             private set
 
-        fun isServiceEnabled(): Boolean {
-            return instance != null
-        }
+        fun isServiceEnabled(): Boolean = instance != null
     }
 }
