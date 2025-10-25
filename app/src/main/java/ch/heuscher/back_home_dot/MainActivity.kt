@@ -73,7 +73,8 @@ class MainActivity : AppCompatActivity() {
 
         if (hasOverlayPermission && hasAccessibilityService) {
             status.append("\n\nDer verschiebbare Punkt ist aktiv!\n\n")
-            status.append("• Kurzes Tippen = Zurück\n")
+            status.append("• Doppelklick = Zur vorherigen App\n")
+            status.append("• Dreifachklick = App-Übersicht\n")
             status.append("• Langes Drücken = Home")
         }
 

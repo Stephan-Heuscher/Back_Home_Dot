@@ -26,16 +26,26 @@ class OverlayService : Service() {
 
     private var isLongPress = false
     private var hasMoved = false
+    private var clickCount = 0
+    private var lastClickTime = 0L
+
     private val longPressHandler = Handler(Looper.getMainLooper())
+    private val clickHandler = Handler(Looper.getMainLooper())
+
     private val longPressRunnable = Runnable {
         isLongPress = true
         performHapticFeedback()
         BackHomeAccessibilityService.instance?.performHomeAction()
     }
 
+    private val clickTimeoutRunnable = Runnable {
+        handleClicks()
+    }
+
     companion object {
         private const val LONG_PRESS_TIMEOUT = 500L
         private const val MOVE_THRESHOLD = 10
+        private const val DOUBLE_CLICK_TIMEOUT = 300L
     }
 
     private fun performHapticFeedback() {
@@ -43,6 +53,25 @@ class OverlayService : Service() {
             android.view.HapticFeedbackConstants.VIRTUAL_KEY,
             android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
         )
+    }
+
+    private fun handleClicks() {
+        when (clickCount) {
+            1 -> {
+                // Single click - do nothing (we only respond to double and triple clicks now)
+            }
+            2 -> {
+                // Double click - switch to previous app
+                performHapticFeedback()
+                BackHomeAccessibilityService.instance?.performRecentsAction()
+            }
+            3 -> {
+                // Triple click - open recent apps overview
+                performHapticFeedback()
+                BackHomeAccessibilityService.instance?.performRecentsOverviewAction()
+            }
+        }
+        clickCount = 0
     }
 
     override fun onCreate() {
@@ -113,9 +142,20 @@ class OverlayService : Service() {
                         longPressHandler.removeCallbacks(longPressRunnable)
 
                         if (!hasMoved && !isLongPress) {
-                            // Short tap - perform back action
-                            performHapticFeedback()
-                            BackHomeAccessibilityService.instance?.performBackAction()
+                            // Tap detected - count clicks
+                            val currentTime = System.currentTimeMillis()
+                            if (currentTime - lastClickTime < DOUBLE_CLICK_TIMEOUT) {
+                                // Within double-click timeout
+                                clickCount++
+                                clickHandler.removeCallbacks(clickTimeoutRunnable)
+                            } else {
+                                // New click sequence
+                                clickCount = 1
+                            }
+                            lastClickTime = currentTime
+
+                            // Wait for potential additional clicks
+                            clickHandler.postDelayed(clickTimeoutRunnable, DOUBLE_CLICK_TIMEOUT)
                         }
 
                         return true
@@ -133,6 +173,7 @@ class OverlayService : Service() {
             floatingView = null
         }
         longPressHandler.removeCallbacks(longPressRunnable)
+        clickHandler.removeCallbacks(clickTimeoutRunnable)
     }
 
     override fun onBind(intent: Intent?): IBinder? {

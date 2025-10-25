@@ -42,6 +42,20 @@ class BackHomeAccessibilityService : AccessibilityService() {
         performGlobalAction(GLOBAL_ACTION_HOME)
     }
 
+    fun performRecentsAction() {
+        // Double-tap recents to switch to previous app
+        performGlobalAction(GLOBAL_ACTION_RECENTS)
+        // Small delay before second recents action
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            performGlobalAction(GLOBAL_ACTION_RECENTS)
+        }, 100)
+    }
+
+    fun performRecentsOverviewAction() {
+        // Single recents action to open task overview
+        performGlobalAction(GLOBAL_ACTION_RECENTS)
+    }
+
     companion object {
         var instance: BackHomeAccessibilityService? = null
             private set
