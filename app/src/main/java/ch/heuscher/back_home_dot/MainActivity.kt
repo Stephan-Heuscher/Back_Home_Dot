@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             if (hasOverlay && hasAccessibility) {
                 append("\n\n")
                 append("Der verschiebbare Punkt ist aktiv!\n\n")
+                append("• Klick = Zurück\n")
                 append("• Doppelklick = Vorherige App")
                 append(if (hasUsageStats) " (direkt)\n" else " (via Recents)\n")
                 append("• Dreifachklick = App-Übersicht\n")

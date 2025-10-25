@@ -77,7 +77,9 @@ class OverlayService : Service() {
     private fun handleClicks() {
         when (clickCount) {
             1 -> {
-                // Single click - do nothing (we only respond to double and triple clicks now)
+                // Single click - back action
+                performHapticFeedback()
+                BackHomeAccessibilityService.instance?.performBackAction()
             }
             2 -> {
                 // Double click - switch to previous app
