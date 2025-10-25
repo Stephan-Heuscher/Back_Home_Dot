@@ -44,11 +44,11 @@ class BackHomeAccessibilityService : AccessibilityService() {
 
     fun performRecentsAction() {
         // Double-tap recents to switch to previous app
+        // Use a longer delay to reduce flicker
         performGlobalAction(GLOBAL_ACTION_RECENTS)
-        // Small delay before second recents action
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             performGlobalAction(GLOBAL_ACTION_RECENTS)
-        }, 100)
+        }, 250)
     }
 
     fun performRecentsOverviewAction() {

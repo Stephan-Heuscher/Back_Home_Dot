@@ -196,18 +196,28 @@ class MainActivity : AppCompatActivity() {
 
         // Primary color button
         val primaryButton = findViewById<Button>(R.id.color_theme_primary)
-        if (theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)) {
-            val primaryColor = typedValue.data
-            primaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
-            primaryButton.setOnClickListener { setColor(primaryColor) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)) {
+                val primaryColor = typedValue.data
+                primaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
+                primaryButton.setOnClickListener { setColor(primaryColor) }
+            }
+        } else {
+            // Fallback for older versions
+            primaryButton.setOnClickListener { setColor(0xFF2196F3.toInt()) }
         }
 
         // Secondary color button
         val secondaryButton = findViewById<Button>(R.id.color_theme_secondary)
-        if (theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true)) {
-            val secondaryColor = typedValue.data
-            secondaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(secondaryColor)
-            secondaryButton.setOnClickListener { setColor(secondaryColor) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (theme.resolveAttribute(android.R.attr.colorAccent, typedValue, true)) {
+                val secondaryColor = typedValue.data
+                secondaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(secondaryColor)
+                secondaryButton.setOnClickListener { setColor(secondaryColor) }
+            }
+        } else {
+            // Fallback for older versions
+            secondaryButton.setOnClickListener { setColor(0xFF03DAC5.toInt()) }
         }
 
         // Preset colors
