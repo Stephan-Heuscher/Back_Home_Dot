@@ -190,6 +190,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupColorButtons() {
+        // Get theme colors
+        val typedValue = android.util.TypedValue()
+        val theme = theme
+
+        // Primary color button
+        val primaryButton = findViewById<Button>(R.id.color_theme_primary)
+        if (theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)) {
+            val primaryColor = typedValue.data
+            primaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
+            primaryButton.setOnClickListener { setColor(primaryColor) }
+        }
+
+        // Secondary color button
+        val secondaryButton = findViewById<Button>(R.id.color_theme_secondary)
+        if (theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true)) {
+            val secondaryColor = typedValue.data
+            secondaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(secondaryColor)
+            secondaryButton.setOnClickListener { setColor(secondaryColor) }
+        }
+
+        // Preset colors
         findViewById<Button>(R.id.color_blue).setOnClickListener { setColor(0xFF2196F3.toInt()) }
         findViewById<Button>(R.id.color_red).setOnClickListener { setColor(0xFFF44336.toInt()) }
         findViewById<Button>(R.id.color_green).setOnClickListener { setColor(0xFF4CAF50.toInt()) }
@@ -198,6 +219,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.color_cyan).setOnClickListener { setColor(0xFF00BCD4.toInt()) }
         findViewById<Button>(R.id.color_yellow).setOnClickListener { setColor(0xFFFFEB3B.toInt()) }
         findViewById<Button>(R.id.color_gray).setOnClickListener { setColor(0xFF607D8B.toInt()) }
+
+        // Custom color picker
+        findViewById<Button>(R.id.color_custom).setOnClickListener { showColorPickerDialog() }
     }
 
     private fun setColor(color: Int) {
@@ -226,5 +250,75 @@ class MainActivity : AppCompatActivity() {
             val serviceIntent = Intent(this, OverlayService::class.java)
             startService(serviceIntent)
         }
+    }
+
+    private fun showColorPickerDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.color_picker_dialog, null)
+
+        val colorPreview = dialogView.findViewById<View>(R.id.color_preview)
+        val redSeekBar = dialogView.findViewById<SeekBar>(R.id.red_seekbar)
+        val greenSeekBar = dialogView.findViewById<SeekBar>(R.id.green_seekbar)
+        val blueSeekBar = dialogView.findViewById<SeekBar>(R.id.blue_seekbar)
+        val redValue = dialogView.findViewById<TextView>(R.id.red_value)
+        val greenValue = dialogView.findViewById<TextView>(R.id.green_value)
+        val blueValue = dialogView.findViewById<TextView>(R.id.blue_value)
+
+        // Initialize with current color
+        val currentColor = settings.color
+        val currentRed = Color.red(currentColor)
+        val currentGreen = Color.green(currentColor)
+        val currentBlue = Color.blue(currentColor)
+
+        redSeekBar.progress = currentRed
+        greenSeekBar.progress = currentGreen
+        blueSeekBar.progress = currentBlue
+        redValue.text = currentRed.toString()
+        greenValue.text = currentGreen.toString()
+        blueValue.text = currentBlue.toString()
+
+        fun updateColorPreview() {
+            val color = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
+            colorPreview.setBackgroundColor(color)
+        }
+
+        updateColorPreview()
+
+        redSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                redValue.text = progress.toString()
+                updateColorPreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        greenSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                greenValue.text = progress.toString()
+                updateColorPreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        blueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                blueValue.text = progress.toString()
+                updateColorPreview()
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        AlertDialog.Builder(this)
+            .setTitle("Eigene Farbe wählen")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                val selectedColor = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
+                // Convert to ARGB format with full alpha
+                setColor(0xFF000000.toInt() or selectedColor)
+            }
+            .setNegativeButton("Abbrechen", null)
+            .show()
     }
 }

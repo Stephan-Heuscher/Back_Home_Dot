@@ -12,9 +12,13 @@ class OverlaySettings(context: Context) {
         private const val KEY_ENABLED = "overlay_enabled"
         private const val KEY_COLOR = "overlay_color"
         private const val KEY_ALPHA = "overlay_alpha"
+        private const val KEY_POSITION_X = "position_x"
+        private const val KEY_POSITION_Y = "position_y"
 
         private const val DEFAULT_COLOR = 0xFF2196F3.toInt() // Blue
         private const val DEFAULT_ALPHA = 255 // Fully opaque
+        private const val DEFAULT_POSITION_X = 100
+        private const val DEFAULT_POSITION_Y = 100
     }
 
     var isEnabled: Boolean
@@ -28,6 +32,14 @@ class OverlaySettings(context: Context) {
     var alpha: Int
         get() = prefs.getInt(KEY_ALPHA, DEFAULT_ALPHA)
         set(value) = prefs.edit().putInt(KEY_ALPHA, value.coerceIn(0, 255)).apply()
+
+    var positionX: Int
+        get() = prefs.getInt(KEY_POSITION_X, DEFAULT_POSITION_X)
+        set(value) = prefs.edit().putInt(KEY_POSITION_X, value).apply()
+
+    var positionY: Int
+        get() = prefs.getInt(KEY_POSITION_Y, DEFAULT_POSITION_Y)
+        set(value) = prefs.edit().putInt(KEY_POSITION_Y, value).apply()
 
     fun getColorWithAlpha(): Int {
         val baseColor = color

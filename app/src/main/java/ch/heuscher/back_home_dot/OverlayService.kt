@@ -12,6 +12,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.WindowManager
 
 class OverlayService : Service() {
@@ -34,6 +35,11 @@ class OverlayService : Service() {
     private val longPressHandler = Handler(Looper.getMainLooper())
     private val clickHandler = Handler(Looper.getMainLooper())
 
+    // Use system timeouts
+    private var longPressTimeout: Long = 500L
+    private var doubleTapTimeout: Long = 300L
+    private var touchSlop: Int = 10
+
     private val longPressRunnable = Runnable {
         isLongPress = true
         performHapticFeedback()
@@ -45,9 +51,9 @@ class OverlayService : Service() {
     }
 
     companion object {
-        private const val LONG_PRESS_TIMEOUT = 500L
-        private const val MOVE_THRESHOLD = 10
-        private const val DOUBLE_CLICK_TIMEOUT = 300L
+        // Fallback values if system config unavailable
+        private const val DEFAULT_LONG_PRESS_TIMEOUT = 500L
+        private const val DEFAULT_DOUBLE_TAP_TIMEOUT = 300L
     }
 
     private fun performHapticFeedback() {
@@ -93,6 +99,12 @@ class OverlayService : Service() {
         settings = OverlaySettings(this)
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
+        // Load system gesture timeouts
+        val viewConfig = ViewConfiguration.get(this)
+        longPressTimeout = viewConfig.longPressTimeout.toLong()
+        doubleTapTimeout = viewConfig.doubleTapTimeout.toLong()
+        touchSlop = viewConfig.scaledTouchSlop
+
         // Inflate the floating view layout
         floatingView = LayoutInflater.from(this).inflate(R.layout.overlay_layout, null)
 
@@ -107,6 +119,10 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.TYPE_PHONE
         }
 
+        // Load saved position or use default
+        val savedX = settings.positionX
+        val savedY = settings.positionY
+
         params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -115,8 +131,8 @@ class OverlayService : Service() {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = 100
-            y = 100
+            x = savedX
+            y = savedY
         }
 
         // Add the view to the window
@@ -134,8 +150,8 @@ class OverlayService : Service() {
                         isLongPress = false
                         hasMoved = false
 
-                        // Start long press timer
-                        longPressHandler.postDelayed(longPressRunnable, LONG_PRESS_TIMEOUT)
+                        // Start long press timer using system timeout
+                        longPressHandler.postDelayed(longPressRunnable, longPressTimeout)
                         return true
                     }
 
@@ -143,8 +159,8 @@ class OverlayService : Service() {
                         val deltaX = event.rawX - initialTouchX
                         val deltaY = event.rawY - initialTouchY
 
-                        // Check if the user has moved significantly
-                        if (Math.abs(deltaX) > MOVE_THRESHOLD || Math.abs(deltaY) > MOVE_THRESHOLD) {
+                        // Check if the user has moved significantly using system touch slop
+                        if (Math.abs(deltaX) > touchSlop || Math.abs(deltaY) > touchSlop) {
                             hasMoved = true
                             longPressHandler.removeCallbacks(longPressRunnable)
 
@@ -158,10 +174,18 @@ class OverlayService : Service() {
                     MotionEvent.ACTION_UP -> {
                         longPressHandler.removeCallbacks(longPressRunnable)
 
+                        // Save position if moved
+                        if (hasMoved) {
+                            params?.let {
+                                settings.positionX = it.x
+                                settings.positionY = it.y
+                            }
+                        }
+
                         if (!hasMoved && !isLongPress) {
                             // Tap detected - count clicks
                             val currentTime = System.currentTimeMillis()
-                            if (currentTime - lastClickTime < DOUBLE_CLICK_TIMEOUT) {
+                            if (currentTime - lastClickTime < doubleTapTimeout) {
                                 // Within double-click timeout
                                 clickCount++
                                 clickHandler.removeCallbacks(clickTimeoutRunnable)
@@ -171,8 +195,8 @@ class OverlayService : Service() {
                             }
                             lastClickTime = currentTime
 
-                            // Wait for potential additional clicks
-                            clickHandler.postDelayed(clickTimeoutRunnable, DOUBLE_CLICK_TIMEOUT)
+                            // Wait for potential additional clicks using system timeout
+                            clickHandler.postDelayed(clickTimeoutRunnable, doubleTapTimeout)
                         }
 
                         return true

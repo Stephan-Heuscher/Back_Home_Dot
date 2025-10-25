@@ -114,10 +114,28 @@
             android:layout_marginBottom="8dp">
 
             <Button
+                android:id="@+id/color_theme_primary"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="P" />
+
+            <Button
+                android:id="@+id/color_theme_secondary"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="S" />
+
+            <Button
                 android:id="@+id/color_blue"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
+                android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#2196F3"
                 android:text="" />
@@ -128,16 +146,21 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
                 android:backgroundTint="#F44336"
                 android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
 
             <Button
                 android:id="@+id/color_green"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#4CAF50"
                 android:text="" />
@@ -148,21 +171,16 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:backgroundTint="#FF9800"
                 android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
 
             <Button
                 android:id="@+id/color_purple"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
+                android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#9C27B0"
                 android:text="" />
@@ -173,16 +191,21 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
                 android:backgroundTint="#00BCD4"
                 android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
             <Button
                 android:id="@+id/color_yellow"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#FFEB3B"
                 android:text="" />
@@ -193,8 +216,17 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:backgroundTint="#607D8B"
                 android:text="" />
+
+            <Button
+                android:id="@+id/color_custom"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="2"
+                android:layout_marginStart="4dp"
+                android:text="Eigene Farbe..." />
         </LinearLayout>
 
         <!-- Vorschau -->
