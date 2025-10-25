@@ -3,6 +3,7 @@ package ch.heuscher.back_home_dot
 import android.app.Service
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -18,6 +19,7 @@ class OverlayService : Service() {
     private lateinit var windowManager: WindowManager
     private var floatingView: View? = null
     private var params: WindowManager.LayoutParams? = null
+    private lateinit var settings: OverlaySettings
 
     private var initialX: Int = 0
     private var initialY: Int = 0
@@ -55,6 +57,17 @@ class OverlayService : Service() {
         )
     }
 
+    private fun applyColorSettings() {
+        val dotView = floatingView?.findViewById<View>(R.id.floating_dot)
+        dotView?.let {
+            val drawable = GradientDrawable()
+            drawable.shape = GradientDrawable.OVAL
+            drawable.setColor(settings.getColorWithAlpha())
+            drawable.setStroke(2, android.graphics.Color.WHITE)
+            it.background = drawable
+        }
+    }
+
     private fun handleClicks() {
         when (clickCount) {
             1 -> {
@@ -77,10 +90,14 @@ class OverlayService : Service() {
     override fun onCreate() {
         super.onCreate()
 
+        settings = OverlaySettings(this)
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         // Inflate the floating view layout
         floatingView = LayoutInflater.from(this).inflate(R.layout.overlay_layout, null)
+
+        // Apply color and alpha settings to the floating dot
+        applyColorSettings()
 
         // Set up layout parameters
         val layoutType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
