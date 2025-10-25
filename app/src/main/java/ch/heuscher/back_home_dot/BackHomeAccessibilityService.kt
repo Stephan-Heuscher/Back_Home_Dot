@@ -3,9 +3,12 @@ package ch.heuscher.back_home_dot
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
+import android.os.Build
 import android.view.accessibility.AccessibilityEvent
 
 class BackHomeAccessibilityService : AccessibilityService() {
+
+    private lateinit var appSwitcher: AppSwitcherUtil
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -16,6 +19,8 @@ class BackHomeAccessibilityService : AccessibilityService() {
             notificationTimeout = 100
         }
         serviceInfo = info
+
+        appSwitcher = AppSwitcherUtil(this)
 
         // Notify that service is connected
         instance = this
@@ -43,12 +48,23 @@ class BackHomeAccessibilityService : AccessibilityService() {
     }
 
     fun performRecentsAction() {
-        // Double-tap recents to switch to previous app
-        // Use a longer delay to reduce flicker
-        performGlobalAction(GLOBAL_ACTION_RECENTS)
-        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+        // Use UsageStatsManager to switch to previous app directly
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val success = appSwitcher.switchToPreviousApp()
+            if (!success) {
+                // Fallback to double-tap recents if UsageStats fails
+                performGlobalAction(GLOBAL_ACTION_RECENTS)
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    performGlobalAction(GLOBAL_ACTION_RECENTS)
+                }, 250)
+            }
+        } else {
+            // For older Android versions, use double-tap recents
             performGlobalAction(GLOBAL_ACTION_RECENTS)
-        }, 250)
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                performGlobalAction(GLOBAL_ACTION_RECENTS)
+            }, 250)
+        }
     }
 
     fun performRecentsOverviewAction() {

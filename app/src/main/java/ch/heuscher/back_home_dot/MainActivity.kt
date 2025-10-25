@@ -1,5 +1,7 @@
 package ch.heuscher.back_home_dot
 
+import android.app.AppOpsManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var overlayPermissionButton: Button
     private lateinit var accessibilityButton: Button
+    private lateinit var usageStatsButton: Button
     private lateinit var overlaySwitch: SwitchCompat
     private lateinit var alphaSeekBar: SeekBar
     private lateinit var alphaValueText: TextView
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         statusText = findViewById(R.id.status_text)
         overlayPermissionButton = findViewById(R.id.overlay_permission_button)
         accessibilityButton = findViewById(R.id.accessibility_button)
+        usageStatsButton = findViewById(R.id.usage_stats_button)
         overlaySwitch = findViewById(R.id.overlay_switch)
         alphaSeekBar = findViewById(R.id.alpha_seekbar)
         alphaValueText = findViewById(R.id.alpha_value_text)
@@ -47,6 +51,10 @@ class MainActivity : AppCompatActivity() {
 
         accessibilityButton.setOnClickListener {
             openAccessibilitySettings()
+        }
+
+        usageStatsButton.setOnClickListener {
+            requestUsageStatsPermission()
         }
 
         setupOverlaySwitch()
@@ -64,15 +72,16 @@ class MainActivity : AppCompatActivity() {
     private fun checkPermissionsAndStartService() {
         val hasOverlayPermission = checkOverlayPermission()
         val hasAccessibilityService = BackHomeAccessibilityService.isServiceEnabled()
+        val hasUsageStatsPermission = checkUsageStatsPermission()
 
-        updateUI(hasOverlayPermission, hasAccessibilityService)
+        updateUI(hasOverlayPermission, hasAccessibilityService, hasUsageStatsPermission)
 
         if (hasOverlayPermission && hasAccessibilityService) {
             startOverlayService()
         }
     }
 
-    private fun updateUI(hasOverlayPermission: Boolean, hasAccessibilityService: Boolean) {
+    private fun updateUI(hasOverlayPermission: Boolean, hasAccessibilityService: Boolean, hasUsageStatsPermission: Boolean) {
         val status = StringBuilder()
         status.append("Status:\n\n")
 
@@ -92,9 +101,22 @@ class MainActivity : AppCompatActivity() {
             accessibilityButton.isEnabled = true
         }
 
+        if (hasUsageStatsPermission) {
+            status.append("✓ App-Nutzungsstatistik aktiviert\n")
+            usageStatsButton.isEnabled = false
+        } else {
+            status.append("✗ App-Nutzungsstatistik nicht aktiviert\n")
+            usageStatsButton.isEnabled = true
+        }
+
         if (hasOverlayPermission && hasAccessibilityService) {
             status.append("\n\nDer verschiebbare Punkt ist aktiv!\n\n")
-            status.append("• Doppelklick = Zur vorherigen App\n")
+            status.append("• Doppelklick = Zur vorherigen App")
+            if (hasUsageStatsPermission) {
+                status.append(" (direkt)\n")
+            } else {
+                status.append(" (via Recents)\n")
+            }
             status.append("• Dreifachklick = App-Übersicht\n")
             status.append("• Langes Drücken = Home")
         }
@@ -135,6 +157,41 @@ class MainActivity : AppCompatActivity() {
             .setMessage(R.string.please_enable_accessibility)
             .setPositiveButton(R.string.open_settings) { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                startActivity(intent)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun checkUsageStatsPermission(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return false
+        }
+
+        val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            appOps.unsafeCheckOpNoThrow(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(),
+                packageName
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            appOps.checkOpNoThrow(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(),
+                packageName
+            )
+        }
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    private fun requestUsageStatsPermission() {
+        AlertDialog.Builder(this)
+            .setTitle("App-Nutzungsstatistik Berechtigung")
+            .setMessage("Für den direkten App-Wechsel (ohne Flackern) benötigt die App Zugriff auf die Nutzungsstatistik.\n\nBitte aktivieren Sie \"Back_Home_Dot\" in den Einstellungen.")
+            .setPositiveButton(R.string.open_settings) { _, _ ->
+                val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
                 startActivity(intent)
             }
             .setNegativeButton(android.R.string.cancel, null)

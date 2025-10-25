@@ -101,8 +101,8 @@ class OverlayService : Service() {
 
         // Load system gesture timeouts
         val viewConfig = ViewConfiguration.get(this)
-        longPressTimeout = viewConfig.longPressTimeout.toLong()
-        doubleTapTimeout = viewConfig.doubleTapTimeout.toLong()
+        longPressTimeout = ViewConfiguration.getLongPressTimeout().toLong()
+        doubleTapTimeout = ViewConfiguration.getDoubleTapTimeout().toLong()
         touchSlop = viewConfig.scaledTouchSlop
 
         // Inflate the floating view layout
