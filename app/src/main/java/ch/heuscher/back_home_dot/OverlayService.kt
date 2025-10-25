@@ -38,6 +38,13 @@ class OverlayService : Service() {
         private const val MOVE_THRESHOLD = 10
     }
 
+    private fun performHapticFeedback() {
+        floatingView?.performHapticFeedback(
+            android.view.HapticFeedbackConstants.VIRTUAL_KEY,
+            android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+        )
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -115,13 +122,6 @@ class OverlayService : Service() {
                     }
                 }
                 return false
-            }
-
-            private fun performHapticFeedback() {
-                floatingView?.performHapticFeedback(
-                    android.view.HapticFeedbackConstants.VIRTUAL_KEY,
-                    android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
-                )
             }
         })
     }
