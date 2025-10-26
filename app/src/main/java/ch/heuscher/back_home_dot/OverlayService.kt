@@ -130,7 +130,7 @@ class OverlayService : Service() {
         fromWidth: Int, fromHeight: Int, fromRotation: Int,
         toRotation: Int
     ): Pair<Int, Int> {
-        // Calculate rotation difference (each step is 90° CW)
+        // Calculate rotation difference (each step is 90° CCW)
         val rotationDiff = (toRotation - fromRotation + 4) % 4
 
         if (rotationDiff == 0) {
@@ -138,26 +138,34 @@ class OverlayService : Service() {
             return Pair(x, y)
         }
 
-        var newX = x
-        var newY = y
+        // Get dot size for center-point calculation
+        val dotSize = (48 * resources.displayMetrics.density).toInt()
+
+        // Calculate center point of dot (x,y is top-left corner)
+        var centerX = x + dotSize / 2
+        var centerY = y + dotSize / 2
+
         var currentWidth = fromWidth
         var currentHeight = fromHeight
 
-        // Apply 90° CW rotation for each step
+        // Apply 90° CCW rotation for each step (transforming center point)
         repeat(rotationDiff) {
-            val tempX = newX
-            val tempY = newY
+            val tempCenterX = centerX
+            val tempCenterY = centerY
 
-            // 90° CW rotation transformation
-            // Display.getRotation() increments mean CW rotation
-            newX = currentHeight - tempY
-            newY = tempX
+            // 90° CCW rotation transformation of center point
+            centerX = tempCenterY
+            centerY = currentWidth - tempCenterX
 
             // Swap dimensions for next iteration
             val temp = currentWidth
             currentWidth = currentHeight
             currentHeight = temp
         }
+
+        // Convert center point back to top-left corner
+        val newX = centerX - dotSize / 2
+        val newY = centerY - dotSize / 2
 
         return Pair(newX, newY)
     }
