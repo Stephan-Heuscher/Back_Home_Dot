@@ -35,6 +35,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Accessibility Service aktivieren"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/stop_service_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Service beenden"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF"
             android:layout_marginBottom="24dp" />
 
         <!-- Einstellungen Section -->

@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var overlayPermissionButton: Button
     private lateinit var accessibilityButton: Button
+    private lateinit var stopServiceButton: Button
     private lateinit var overlaySwitch: SwitchCompat
     private lateinit var alphaSeekBar: SeekBar
     private lateinit var alphaValueText: TextView
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         statusText = findViewById(R.id.status_text)
         overlayPermissionButton = findViewById(R.id.overlay_permission_button)
         accessibilityButton = findViewById(R.id.accessibility_button)
+        stopServiceButton = findViewById(R.id.stop_service_button)
         overlaySwitch = findViewById(R.id.overlay_switch)
         alphaSeekBar = findViewById(R.id.alpha_seekbar)
         alphaValueText = findViewById(R.id.alpha_value_text)
@@ -60,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         overlayPermissionButton.setOnClickListener { requestOverlayPermission() }
         accessibilityButton.setOnClickListener { openAccessibilitySettings() }
+        stopServiceButton.setOnClickListener { showStopServiceDialog() }
     }
 
     private fun setupUI() {
@@ -108,6 +111,7 @@ class MainActivity : AppCompatActivity() {
                 append("• Klick = Zurück\n")
                 append("• Doppelklick = Vorherige App\n")
                 append("• Dreifachklick = App-Übersicht\n")
+                append("• Vierfachklick = Diese App öffnen\n")
                 append("• Langes Drücken = Home")
             }
         }
@@ -141,6 +145,31 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun showStopServiceDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Service beenden")
+            .setMessage("Möchten Sie den Overlay-Service wirklich beenden?\n\nHinweis: Der Accessibility Service muss manuell in den System-Einstellungen deaktiviert werden.")
+            .setPositiveButton("Beenden") { _, _ ->
+                // Disable overlay
+                settings.isEnabled = false
+                overlaySwitch.isChecked = false
+                stopOverlayService()
+
+                // Show info about accessibility service
+                AlertDialog.Builder(this)
+                    .setTitle("Accessibility Service")
+                    .setMessage("Der Overlay-Service wurde beendet.\n\nUm die App vollständig zu deaktivieren, deaktivieren Sie bitte auch den Accessibility Service in den System-Einstellungen.")
+                    .setPositiveButton("Einstellungen öffnen") { _, _ ->
+                        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                        startActivity(intent)
+                    }
+                    .setNegativeButton("Später", null)
+                    .show()
+            }
+            .setNegativeButton("Abbrechen", null)
             .show()
     }
 
