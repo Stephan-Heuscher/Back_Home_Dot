@@ -83,6 +83,7 @@ Back Home Dot ist ein praktisches Tool für schnelle Navigation auf Android.
 • Einfacher Klick = Zurück
 • Doppelklick = Zur vorherigen App wechseln
 • Dreifachklick = App-Übersicht (Multitasking)
+• Vierfachklick = Einstellungen öffnen
 • Langes Drücken = Home-Bildschirm
 
 ⚙️ ANPASSBAR
@@ -91,6 +92,7 @@ Back Home Dot ist ein praktisches Tool für schnelle Navigation auf Android.
 • Deckkraft einstellbar (0-100%)
 • Position frei verschiebbar
 • Ein/Aus-Schalter
+• Service-Stop Button für einfaches Beenden
 
 ♿ ACCESSIBILITY / BEDIENUNGSHILFE
 
