@@ -5,17 +5,23 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.cardview.widget.CardView
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var permissionsSection: LinearLayout
+    private lateinit var overlayPermissionCard: CardView
     private lateinit var overlayStatusIcon: TextView
     private lateinit var overlayStatusText: TextView
     private lateinit var overlayPermissionButton: Button
+    private lateinit var accessibilityPermissionCard: CardView
     private lateinit var accessibilityStatusIcon: TextView
     private lateinit var accessibilityStatusText: TextView
     private lateinit var accessibilityButton: Button
@@ -49,9 +55,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
+        permissionsSection = findViewById(R.id.permissions_section)
+        overlayPermissionCard = findViewById(R.id.overlay_permission_card)
         overlayStatusIcon = findViewById(R.id.overlay_status_icon)
         overlayStatusText = findViewById(R.id.overlay_status_text)
         overlayPermissionButton = findViewById(R.id.overlay_permission_button)
+        accessibilityPermissionCard = findViewById(R.id.accessibility_permission_card)
         accessibilityStatusIcon = findViewById(R.id.accessibility_status_icon)
         accessibilityStatusText = findViewById(R.id.accessibility_status_text)
         accessibilityButton = findViewById(R.id.accessibility_button)
@@ -83,31 +92,12 @@ class MainActivity : AppCompatActivity() {
         val hasOverlay = permissionManager.hasOverlayPermission()
         val hasAccessibility = permissionManager.hasAccessibilityPermission()
 
-        // Update overlay permission status
-        if (hasOverlay) {
-            overlayStatusIcon.text = "✓"
-            overlayStatusIcon.setTextColor(0xFF4CAF50.toInt()) // Green
-            overlayStatusText.text = "Aktiviert"
-            overlayPermissionButton.visibility = android.view.View.GONE
-        } else {
-            overlayStatusIcon.text = "✗"
-            overlayStatusIcon.setTextColor(0xFFD32F2F.toInt()) // Red
-            overlayStatusText.text = "Nicht aktiviert"
-            overlayPermissionButton.visibility = android.view.View.VISIBLE
-        }
+        // Show/hide individual permission cards
+        overlayPermissionCard.visibility = if (hasOverlay) View.GONE else View.VISIBLE
+        accessibilityPermissionCard.visibility = if (hasAccessibility) View.GONE else View.VISIBLE
 
-        // Update accessibility permission status
-        if (hasAccessibility) {
-            accessibilityStatusIcon.text = "✓"
-            accessibilityStatusIcon.setTextColor(0xFF4CAF50.toInt()) // Green
-            accessibilityStatusText.text = "Aktiviert"
-            accessibilityButton.visibility = android.view.View.GONE
-        } else {
-            accessibilityStatusIcon.text = "✗"
-            accessibilityStatusIcon.setTextColor(0xFFD32F2F.toInt()) // Red
-            accessibilityStatusText.text = "Nicht aktiviert"
-            accessibilityButton.visibility = android.view.View.VISIBLE
-        }
+        // Show/hide entire permissions section
+        permissionsSection.visibility = if (hasOverlay && hasAccessibility) View.GONE else View.VISIBLE
 
         // Update switch
         overlaySwitch.isChecked = settings.isEnabled
@@ -121,9 +111,9 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder(this)
-                    .setTitle("Overlay-Berechtigung erforderlich")
-                    .setMessage("Diese Berechtigung erlaubt es der App, den Navigationspunkt über anderen Apps anzuzeigen.\n\nDies ist für die Hauptfunktion der App notwendig.")
-                    .setPositiveButton("Einstellungen öffnen") { _, _ ->
+                    .setTitle("Punkt anzeigen erlauben")
+                    .setMessage("Erlauben Sie, dass der Punkt über anderen Apps angezeigt wird.")
+                    .setPositiveButton("Öffnen") { _, _ ->
                         val intent = Intent(
                             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:$packageName")
@@ -138,9 +128,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun openAccessibilitySettings() {
         AlertDialog.Builder(this)
-            .setTitle("Bedienungshilfe-Dienst erforderlich")
-            .setMessage("Der Bedienungshilfe-Dienst ermöglicht der App, Systemnavigation durchzuführen (Zurück, Home, App-Wechsel).\n\nBitte aktivieren Sie \"Back Home Dot\" in den Bedienungshilfe-Einstellungen.")
-            .setPositiveButton("Einstellungen öffnen") { _, _ ->
+            .setTitle("Navigation erlauben")
+            .setMessage("Erlauben Sie, dass die App für Sie navigiert (Zurück, Home, App-Wechsel).\n\nSchalten Sie \"Back Home Dot\" ein.")
+            .setPositiveButton("Öffnen") { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 startActivity(intent)
             }
@@ -155,8 +145,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showStopServiceDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Service beenden")
-            .setMessage("Möchten Sie den Service wirklich beenden?\n\nDer Overlay-Service wird gestoppt. Der Bedienungshilfe-Dienst muss manuell in den System-Einstellungen deaktiviert werden.")
+            .setTitle("App beenden")
+            .setMessage("Wollen Sie die App wirklich beenden?\n\nDer Punkt wird ausgeschaltet.")
             .setPositiveButton("Beenden") { _, _ ->
                 // Disable overlay
                 settings.isEnabled = false
@@ -166,14 +156,14 @@ class MainActivity : AppCompatActivity() {
 
                 // Show info about accessibility service
                 AlertDialog.Builder(this)
-                    .setTitle("Service beendet")
-                    .setMessage("Der Overlay-Service wurde beendet.\n\nUm die App vollständig zu deaktivieren, deaktivieren Sie bitte auch den Bedienungshilfe-Dienst in den System-Einstellungen.")
-                    .setPositiveButton("Einstellungen öffnen") { _, _ ->
+                    .setTitle("App beendet")
+                    .setMessage("Punkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"Back Home Dot\" in den Einstellungen.")
+                    .setPositiveButton("Einstellungen") { _, _ ->
                         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         startActivity(intent)
                         closeApp()
                     }
-                    .setNegativeButton("App schließen") { _, _ ->
+                    .setNegativeButton("Schließen") { _, _ ->
                         closeApp()
                     }
                     .setOnDismissListener {

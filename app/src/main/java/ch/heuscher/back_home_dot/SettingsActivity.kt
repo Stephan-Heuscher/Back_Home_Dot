@@ -28,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Enable back button in action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Einstellungen"
+        supportActionBar?.title = "Zurück"
 
         settings = OverlaySettings(this)
 
