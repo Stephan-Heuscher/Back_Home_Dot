@@ -92,18 +92,18 @@ class OverlayService : Service() {
                 BackHomeAccessibilityService.instance?.performRecentsOverviewAction()
             }
             else -> {
-                // 4+ clicks - open this app's main activity
+                // 4+ clicks - open settings
                 if (clickCount >= 4) {
                     performHapticFeedback()
-                    openMainActivity()
+                    openSettings()
                 }
             }
         }
         clickCount = 0
     }
 
-    private fun openMainActivity() {
-        val intent = Intent(this, MainActivity::class.java).apply {
+    private fun openSettings() {
+        val intent = Intent(this, SettingsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
