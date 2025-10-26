@@ -2,6 +2,7 @@ package ch.heuscher.back_home_dot
 
 import android.app.Service
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -71,6 +72,60 @@ class OverlayService : Service() {
             drawable.setColor(settings.getColorWithAlpha())
             drawable.setStroke(2, android.graphics.Color.WHITE)
             it.background = drawable
+        }
+    }
+
+    private fun constrainPositionToBounds(x: Int, y: Int): Pair<Int, Int> {
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
+        // Get the dot size (assuming 80dp as defined in overlay_layout.xml)
+        val dotSize = (80 * displayMetrics.density).toInt()
+
+        // Constrain X position (allow negative for left edge, but keep visible)
+        val constrainedX = x.coerceIn(-dotSize / 2, screenWidth - dotSize / 2)
+
+        // Constrain Y position (keep within screen, accounting for status bar and nav bar)
+        // Leave some margin at top and bottom
+        val topMargin = (24 * displayMetrics.density).toInt() // Status bar area
+        val bottomMargin = (100 * displayMetrics.density).toInt() // Nav bar area + safety
+        val constrainedY = y.coerceIn(topMargin, screenHeight - dotSize - bottomMargin)
+
+        return Pair(constrainedX, constrainedY)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // Recalculate position based on saved percentages
+        params?.let { layoutParams ->
+            val displayMetrics = resources.displayMetrics
+            val newWidth = displayMetrics.widthPixels
+            val newHeight = displayMetrics.heightPixels
+
+            // Calculate new position from saved percentages
+            val newX = (settings.positionXPercent * newWidth).toInt()
+            val newY = (settings.positionYPercent * newHeight).toInt()
+
+            // Apply bounds checking
+            val (constrainedX, constrainedY) = constrainPositionToBounds(newX, newY)
+
+            layoutParams.x = constrainedX
+            layoutParams.y = constrainedY
+
+            // Update the view
+            floatingView?.let { view ->
+                windowManager.updateViewLayout(view, layoutParams)
+            }
+
+            // Save new screen dimensions
+            settings.screenWidth = newWidth
+            settings.screenHeight = newHeight
+
+            // Update percentages based on constrained position
+            settings.positionXPercent = constrainedX.toFloat() / newWidth
+            settings.positionYPercent = constrainedY.toFloat() / newHeight
         }
     }
 
@@ -154,9 +209,14 @@ class OverlayService : Service() {
             savedY = settings.positionY
         }
 
-        // Save current screen dimensions
+        // Apply bounds checking to ensure dot is visible
+        val (constrainedX, constrainedY) = constrainPositionToBounds(savedX, savedY)
+
+        // Save current screen dimensions and constrained position
         settings.screenWidth = currentWidth
         settings.screenHeight = currentHeight
+        settings.positionXPercent = constrainedX.toFloat() / currentWidth
+        settings.positionYPercent = constrainedY.toFloat() / currentHeight
 
         params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -169,8 +229,8 @@ class OverlayService : Service() {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = savedX
-            y = savedY
+            x = constrainedX
+            y = constrainedY
         }
 
         // Add the view to the window
@@ -202,8 +262,15 @@ class OverlayService : Service() {
                             hasMoved = true
                             longPressHandler.removeCallbacks(longPressRunnable)
 
-                            params?.x = initialX + deltaX.toInt()
-                            params?.y = initialY + deltaY.toInt()
+                            // Calculate new position
+                            val newX = initialX + deltaX.toInt()
+                            val newY = initialY + deltaY.toInt()
+
+                            // Apply bounds checking
+                            val (constrainedX, constrainedY) = constrainPositionToBounds(newX, newY)
+
+                            params?.x = constrainedX
+                            params?.y = constrainedY
                             windowManager.updateViewLayout(floatingView, params)
                         }
                         return true
@@ -215,6 +282,7 @@ class OverlayService : Service() {
                         // Save position if moved
                         if (hasMoved) {
                             params?.let {
+                                // The position is already constrained from ACTION_MOVE
                                 // Save as both pixels and percentages
                                 settings.positionX = it.x
                                 settings.positionY = it.y
