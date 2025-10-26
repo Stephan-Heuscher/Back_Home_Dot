@@ -32,11 +32,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ihr Tipp-Helfer für Navigation"
+            android:text="Ihr Tipp-Helfer zur Navigation"
             android:textSize="18sp"
             android:textColor="?android:attr/textColorSecondary"
             android:gravity="center"
-            android:contentDescription="Ihr Tipp-Helfer für Navigation"
+            android:contentDescription="Ihr Tipp-Helfer zur Navigation"
             android:layout_marginBottom="32dp" />
 
         <!-- Berechtigungen Section -->
@@ -91,7 +91,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Punkt anzeigen"
+                            android:text="AssistiPunkt anzeigen"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="?android:attr/textColorPrimary" />
@@ -100,7 +100,7 @@
                             android:id="@+id/overlay_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Zeigt den Punkt über Apps"
+                            android:text="Zeigt den AssistiPunkt über Apps"
                             android:textSize="14sp"
                             android:textColor="?android:attr/textColorSecondary"
                             android:layout_marginTop="2dp" />
@@ -112,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:text="Erlauben"
                         android:textSize="16sp"
-                        android:contentDescription="Punkt über Apps anzeigen erlauben"
+                        android:contentDescription="AssistiPunkt über Apps anzeigen erlauben"
                         android:minHeight="48dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -181,16 +181,6 @@
 
         </LinearLayout>
 
-        <!-- Steuerung Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Steuerung"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary"
-            android:layout_marginBottom="16dp" />
-
         <!-- Aktivieren/Deaktivieren Switch -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -216,7 +206,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Punkt Ein/Aus"
+                        android:text="AssistiPunkt Ein/Aus"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="?android:attr/textColorPrimary" />
@@ -224,7 +214,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Zeigt den Punkt an"
+                        android:text="Zeigt den AssistiPunkt an"
                         android:textSize="16sp"
                         android:textColor="?android:attr/textColorSecondary"
                         android:layout_marginTop="4dp" />
@@ -234,7 +224,7 @@
                     android:id="@+id/overlay_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Punkt ein oder aus schalten"
+                    android:contentDescription="AssistiPunkt ein oder aus schalten"
                     android:minHeight="48dp"
                     android:minWidth="48dp"
                     android:layout_marginStart="16dp"
@@ -282,11 +272,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle Apps\n• 4x tippen = App öffnen\n• Lang drücken = Startseite"
+                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle offenen Apps\n• 4x tippen = App öffnen\n• Lang drücken = Startseite"
                     android:textSize="16sp"
                     android:lineSpacingExtra="4dp"
                     android:textColor="#1565C0"
-                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle Apps, Viermal tippen für App öffnen, Lang drücken für Startseite" />
+                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle offenen Apps, Viermal tippen für App öffnen, Lang drücken für Startseite" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -295,9 +285,9 @@
             android:id="@+id/rewarded_ad_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="📺 Werbung ansehen"
-            android:textSize="18sp"
-            android:contentDescription="Unterstütze die App mit einer Werbung"
+            android:text="📺 App unterstützen\nDanke für Ihre Unterstützung!"
+            android:textSize="16sp"
+            android:contentDescription="App durch Werbung unterstützen"
             android:minHeight="64dp"
             android:layout_marginTop="24dp"
             android:paddingVertical="16dp"

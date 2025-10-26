@@ -133,8 +133,8 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder(this)
-                    .setTitle("Punkt anzeigen erlauben")
-                    .setMessage("Erlauben Sie, dass der Punkt über anderen Apps angezeigt wird.")
+                    .setTitle("AssistiPunkt anzeigen erlauben")
+                    .setMessage("Erlauben Sie, dass der AssistiPunkt über anderen Apps angezeigt wird.")
                     .setPositiveButton("Öffnen") { _, _ ->
                         val intent = Intent(
                             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity() {
     private fun showStopServiceDialog() {
         AlertDialog.Builder(this)
             .setTitle("App beenden")
-            .setMessage("Wollen Sie die App wirklich beenden?\n\nDer Punkt wird ausgeschaltet.")
+            .setMessage("Wollen Sie die App wirklich beenden?\n\nDer AssistiPunkt wird ausgeschaltet.")
             .setPositiveButton("Beenden") { _, _ ->
                 // Disable overlay
                 settings.isEnabled = false
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                 // Show info about accessibility service
                 AlertDialog.Builder(this)
                     .setTitle("App beendet")
-                    .setMessage("Punkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"AssistiPunkt\" in den Einstellungen.")
+                    .setMessage("AssistiPunkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"AssistiPunkt\" in den Einstellungen.")
                     .setPositiveButton("Einstellungen") { _, _ ->
                         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         startActivity(intent)
@@ -280,9 +280,9 @@ class MainActivity : AppCompatActivity() {
         if (::rewardedAdButton.isInitialized) {
             rewardedAdButton.isEnabled = rewardedAd != null
             rewardedAdButton.text = if (rewardedAd != null) {
-                "📺 Werbung ansehen"
+                "📺 App unterstützen\nDanke für Ihre Unterstützung!"
             } else {
-                "📺 Werbung lädt..."
+                "📺 Werbung lädt...\nEinen Moment bitte"
             }
         }
     }
