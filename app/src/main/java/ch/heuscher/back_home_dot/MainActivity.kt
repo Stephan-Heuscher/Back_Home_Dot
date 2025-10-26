@@ -13,8 +13,11 @@ import androidx.appcompat.widget.SwitchCompat
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var statusText: TextView
+    private lateinit var overlayStatusIcon: TextView
+    private lateinit var overlayStatusText: TextView
     private lateinit var overlayPermissionButton: Button
+    private lateinit var accessibilityStatusIcon: TextView
+    private lateinit var accessibilityStatusText: TextView
     private lateinit var accessibilityButton: Button
     private lateinit var overlaySwitch: SwitchCompat
     private lateinit var settingsButton: Button
@@ -46,8 +49,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeViews() {
-        statusText = findViewById(R.id.status_text)
+        overlayStatusIcon = findViewById(R.id.overlay_status_icon)
+        overlayStatusText = findViewById(R.id.overlay_status_text)
         overlayPermissionButton = findViewById(R.id.overlay_permission_button)
+        accessibilityStatusIcon = findViewById(R.id.accessibility_status_icon)
+        accessibilityStatusText = findViewById(R.id.accessibility_status_text)
         accessibilityButton = findViewById(R.id.accessibility_button)
         overlaySwitch = findViewById(R.id.overlay_switch)
         settingsButton = findViewById(R.id.settings_button)
@@ -77,9 +83,31 @@ class MainActivity : AppCompatActivity() {
         val hasOverlay = permissionManager.hasOverlayPermission()
         val hasAccessibility = permissionManager.hasAccessibilityPermission()
 
-        // Update button states
-        overlayPermissionButton.isEnabled = !hasOverlay
-        accessibilityButton.isEnabled = !hasAccessibility
+        // Update overlay permission status
+        if (hasOverlay) {
+            overlayStatusIcon.text = "✓"
+            overlayStatusIcon.setTextColor(0xFF4CAF50.toInt()) // Green
+            overlayStatusText.text = "Aktiviert"
+            overlayPermissionButton.visibility = android.view.View.GONE
+        } else {
+            overlayStatusIcon.text = "✗"
+            overlayStatusIcon.setTextColor(0xFFD32F2F.toInt()) // Red
+            overlayStatusText.text = "Nicht aktiviert"
+            overlayPermissionButton.visibility = android.view.View.VISIBLE
+        }
+
+        // Update accessibility permission status
+        if (hasAccessibility) {
+            accessibilityStatusIcon.text = "✓"
+            accessibilityStatusIcon.setTextColor(0xFF4CAF50.toInt()) // Green
+            accessibilityStatusText.text = "Aktiviert"
+            accessibilityButton.visibility = android.view.View.GONE
+        } else {
+            accessibilityStatusIcon.text = "✗"
+            accessibilityStatusIcon.setTextColor(0xFFD32F2F.toInt()) // Red
+            accessibilityStatusText.text = "Nicht aktiviert"
+            accessibilityButton.visibility = android.view.View.VISIBLE
+        }
 
         // Update switch
         overlaySwitch.isChecked = settings.isEnabled
@@ -87,35 +115,6 @@ class MainActivity : AppCompatActivity() {
 
         // Update settings button
         settingsButton.isEnabled = hasOverlay && hasAccessibility
-
-        // Build status text
-        val status = buildStatusText(hasOverlay, hasAccessibility)
-        statusText.text = status
-    }
-
-    private fun buildStatusText(hasOverlay: Boolean, hasAccessibility: Boolean): String {
-        return buildString {
-            append("Status:\n\n")
-
-            // Overlay permission
-            append(if (hasOverlay) "✓" else "✗")
-            append(" Overlay-Berechtigung\n")
-
-            // Accessibility permission
-            append(if (hasAccessibility) "✓" else "✗")
-            append(" Bedienungshilfe-Dienst")
-
-            // Active status
-            if (hasOverlay && hasAccessibility) {
-                if (settings.isEnabled) {
-                    append("\n\n✅ Der Punkt ist aktiv!")
-                } else {
-                    append("\n\n⏸️ Der Punkt ist deaktiviert.")
-                }
-            } else {
-                append("\n\n⚠️ Bitte aktivieren Sie alle Berechtigungen.")
-            }
-        }
     }
 
     private fun requestOverlayPermission() {
@@ -172,18 +171,26 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("Einstellungen öffnen") { _, _ ->
                         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         startActivity(intent)
-                        finishAffinity() // Close the app
+                        closeApp()
                     }
                     .setNegativeButton("App schließen") { _, _ ->
-                        finishAffinity() // Close the app
+                        closeApp()
                     }
                     .setOnDismissListener {
-                        finishAffinity() // Close the app when dialog is dismissed
+                        closeApp()
                     }
                     .show()
             }
             .setNegativeButton("Abbrechen", null)
             .show()
+    }
+
+    private fun closeApp() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAndRemoveTask()
+        } else {
+            finishAffinity()
+        }
     }
 
     private fun startOverlayService() {

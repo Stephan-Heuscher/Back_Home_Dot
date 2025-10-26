@@ -36,26 +36,6 @@
             android:contentDescription="Navigation für alle Benutzer"
             android:layout_marginBottom="32dp" />
 
-        <!-- Status -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:contentPadding="20dp">
-
-            <TextView
-                android:id="@+id/status_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Status wird geladen..."
-                android:textSize="18sp"
-                android:lineSpacingExtra="6dp"
-                android:textColor="?android:attr/textColorPrimary"
-                android:contentDescription="Status der App" />
-        </androidx.cardview.widget.CardView>
-
         <!-- Berechtigungen Section -->
         <TextView
             android:layout_width="match_parent"
@@ -66,27 +46,127 @@
             android:textColor="?android:attr/textColorPrimary"
             android:layout_marginBottom="16dp" />
 
-        <Button
-            android:id="@+id/overlay_permission_button"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Overlay-Berechtigung aktivieren"
-            android:textSize="18sp"
-            android:contentDescription="Overlay-Berechtigung aktivieren, um den Punkt über anderen Apps anzuzeigen"
-            android:minHeight="64dp"
             android:layout_marginBottom="12dp"
-            android:paddingVertical="16dp" />
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
 
-        <Button
-            android:id="@+id/accessibility_button"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/overlay_status_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="✗"
+                    android:textSize="28sp"
+                    android:textColor="#D32F2F"
+                    android:gravity="center"
+                    android:layout_marginEnd="16dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Overlay-Berechtigung"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:id="@+id/overlay_status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nicht aktiviert"
+                        android:textSize="14sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/overlay_permission_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Aktivieren"
+                    android:textSize="16sp"
+                    android:contentDescription="Overlay-Berechtigung aktivieren"
+                    android:minHeight="48dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bedienungshilfe aktivieren"
-            android:textSize="18sp"
-            android:contentDescription="Bedienungshilfe-Dienst aktivieren für Navigation"
-            android:minHeight="64dp"
             android:layout_marginBottom="32dp"
-            android:paddingVertical="16dp" />
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp">
+
+                <TextView
+                    android:id="@+id/accessibility_status_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="✗"
+                    android:textSize="28sp"
+                    android:textColor="#D32F2F"
+                    android:gravity="center"
+                    android:layout_marginEnd="16dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bedienungshilfe"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:id="@+id/accessibility_status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nicht aktiviert"
+                        android:textSize="14sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/accessibility_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Aktivieren"
+                    android:textSize="16sp"
+                    android:contentDescription="Bedienungshilfe-Dienst aktivieren"
+                    android:minHeight="48dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!-- Steuerung Section -->
         <TextView

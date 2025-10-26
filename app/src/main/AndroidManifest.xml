@@ -27,6 +27,7 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="Einstellungen"
+            android:theme="@style/Theme.Material3.DayNight"
             android:parentActivityName=".MainActivity" />
 
         <service
