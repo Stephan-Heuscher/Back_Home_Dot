@@ -111,34 +111,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupColorButtons() {
-        // Get theme colors
-        val typedValue = android.util.TypedValue()
-        val theme = theme
-
-        // Primary color button
-        val primaryButton = findViewById<Button>(R.id.color_theme_primary)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)) {
-                val primaryColor = typedValue.data
-                primaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
-                primaryButton.setOnClickListener { setColor(primaryColor) }
-            }
-        } else {
-            primaryButton.setOnClickListener { setColor(0xFF2196F3.toInt()) }
-        }
-
-        // Secondary color button
-        val secondaryButton = findViewById<Button>(R.id.color_theme_secondary)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (theme.resolveAttribute(android.R.attr.colorAccent, typedValue, true)) {
-                val secondaryColor = typedValue.data
-                secondaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(secondaryColor)
-                secondaryButton.setOnClickListener { setColor(secondaryColor) }
-            }
-        } else {
-            secondaryButton.setOnClickListener { setColor(0xFF03DAC5.toInt()) }
-        }
-
         // Preset colors
         findViewById<Button>(R.id.color_blue).setOnClickListener { setColor(0xFF2196F3.toInt()) }
         findViewById<Button>(R.id.color_red).setOnClickListener { setColor(0xFFF44336.toInt()) }
