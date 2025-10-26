@@ -100,7 +100,7 @@
                             android:id="@+id/overlay_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Zeigt den AssistiPunkt über Apps"
+                            android:text="Zeigt den AssistiPunkt über Apps\n(In Einstellungen: Assistive Tap)"
                             android:textSize="14sp"
                             android:textColor="?android:attr/textColorSecondary"
                             android:layout_marginTop="2dp" />
@@ -162,7 +162,7 @@
                         android:id="@+id/accessibility_status_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Für Zurück, Home und App-Wechsel"
+                        android:text="Für Zurück, Home und App-Wechsel\n(In Einstellungen: Assistive Tap)"
                         android:textSize="14sp"
                         android:textColor="?android:attr/textColorSecondary"
                         android:layout_marginTop="2dp" />
@@ -272,11 +272,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle offenen Apps\n• 4x tippen = App öffnen\n• Lang drücken = Startseite"
+                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm"
                     android:textSize="16sp"
                     android:lineSpacingExtra="4dp"
                     android:textColor="#1565C0"
-                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle offenen Apps, Viermal tippen für App öffnen, Lang drücken für Startseite" />
+                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle offenen Apps, Viermal tippen für AssistiPunkt öffnen, Lang drücken für Start-Bildschirm" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -285,9 +285,9 @@
             android:id="@+id/rewarded_ad_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="📺 App unterstützen\nDanke für Ihre Unterstützung!"
+            android:text="📺 Werbung anschauen\nDanke für Ihre Unterstützung!"
             android:textSize="16sp"
-            android:contentDescription="App durch Werbung unterstützen"
+            android:contentDescription="Werbung anschauen"
             android:minHeight="64dp"
             android:layout_marginTop="24dp"
             android:paddingVertical="16dp"

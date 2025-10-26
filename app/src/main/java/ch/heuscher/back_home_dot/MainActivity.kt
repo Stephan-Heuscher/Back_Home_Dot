@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     private fun openAccessibilitySettings() {
         AlertDialog.Builder(this)
             .setTitle("Navigation erlauben")
-            .setMessage("Erlauben Sie, dass die App für Sie navigiert (Zurück, Home, App-Wechsel).\n\nSchalten Sie \"AssistiPunkt\" ein.")
+            .setMessage("Erlauben Sie, dass die App für Sie navigiert (Zurück, Home, App-Wechsel).\n\nSchalten Sie \"Assistive Tap\" ein.")
             .setPositiveButton("Öffnen") { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 startActivity(intent)
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                 // Show info about accessibility service
                 AlertDialog.Builder(this)
                     .setTitle("App beendet")
-                    .setMessage("AssistiPunkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"AssistiPunkt\" in den Einstellungen.")
+                    .setMessage("AssistiPunkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"Assistive Tap\" in den Einstellungen.")
                     .setPositiveButton("Einstellungen") { _, _ ->
                         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         startActivity(intent)
