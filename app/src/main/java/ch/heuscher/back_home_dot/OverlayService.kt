@@ -130,7 +130,7 @@ class OverlayService : Service() {
         fromWidth: Int, fromHeight: Int, fromRotation: Int,
         toRotation: Int
     ): Pair<Int, Int> {
-        // Calculate rotation difference (each step is 90° CCW)
+        // Calculate rotation difference (each step is 90° CW)
         val rotationDiff = (toRotation - fromRotation + 4) % 4
 
         if (rotationDiff == 0) {
@@ -143,14 +143,15 @@ class OverlayService : Service() {
         var currentWidth = fromWidth
         var currentHeight = fromHeight
 
-        // Apply 90° CCW rotation for each step
+        // Apply 90° CW rotation for each step
         repeat(rotationDiff) {
             val tempX = newX
             val tempY = newY
 
-            // 90° CCW rotation transformation
-            newX = tempY
-            newY = currentWidth - tempX
+            // 90° CW rotation transformation
+            // Display.getRotation() increments mean CW rotation
+            newX = currentHeight - tempY
+            newY = tempX
 
             // Swap dimensions for next iteration
             val temp = currentWidth
