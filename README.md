@@ -26,10 +26,15 @@
 
 ## 🖼️ Screenshots
 
-<!-- TODO: Screenshots hier einfügen -->
-```
-[Hauptbildschirm] [Einstellungen] [Schwebender Punkt in Aktion]
-```
+<p align="center">
+  <img src="screenshots/main_screen.png" width="30%" alt="Hauptbildschirm" />
+  <img src="screenshots/settings.png" width="30%" alt="Einstellungen" />
+  <img src="screenshots/floating_dot.png" width="30%" alt="AssistiPunkt in Aktion" />
+</p>
+
+<p align="center">
+  <em>Hauptbildschirm • Einstellungen • AssistiPunkt in Aktion</em>
+</p>
 
 ## 🚀 Installation
 
