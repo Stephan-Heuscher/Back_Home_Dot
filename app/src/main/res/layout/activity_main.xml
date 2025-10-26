@@ -35,13 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Accessibility Service aktivieren"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/usage_stats_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="App-Nutzungsstatistik aktivieren"
             android:layout_marginBottom="24dp" />
 
         <!-- Einstellungen Section -->

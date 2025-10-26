@@ -3,7 +3,6 @@ package ch.heuscher.back_home_dot
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
@@ -13,7 +12,6 @@ import android.view.accessibility.AccessibilityEvent
  */
 class BackHomeAccessibilityService : AccessibilityService() {
 
-    private lateinit var appSwitcher: AppSwitcherUtil
     private val handler = Handler(Looper.getMainLooper())
 
     override fun onServiceConnected() {
@@ -27,7 +25,6 @@ class BackHomeAccessibilityService : AccessibilityService() {
             notificationTimeout = 100
         }
 
-        appSwitcher = AppSwitcherUtil(this)
         instance = this
     }
 
@@ -59,19 +56,13 @@ class BackHomeAccessibilityService : AccessibilityService() {
     }
 
     /**
-     * Switch to previous app
-     * Tries ActivityManager first, then UsageStatsManager, falls back to double-RECENTS
+     * Switch to previous app using double-tap recents
      */
     fun performRecentsAction() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Try intelligent app switching
-            if (appSwitcher.switchToPreviousApp()) {
-                return
-            }
-        }
-
-        // Fallback: double-tap recents
-        performDoubleRecents()
+        performGlobalAction(GLOBAL_ACTION_RECENTS)
+        handler.postDelayed({
+            performGlobalAction(GLOBAL_ACTION_RECENTS)
+        }, RECENTS_DOUBLE_TAP_DELAY)
     }
 
     /**
@@ -81,18 +72,8 @@ class BackHomeAccessibilityService : AccessibilityService() {
         performGlobalAction(GLOBAL_ACTION_RECENTS)
     }
 
-    /**
-     * Fallback method: Double-tap recents to switch to previous app
-     */
-    private fun performDoubleRecents() {
-        performGlobalAction(GLOBAL_ACTION_RECENTS)
-        handler.postDelayed({
-            performGlobalAction(GLOBAL_ACTION_RECENTS)
-        }, RECENTS_DOUBLE_TAP_DELAY)
-    }
-
     companion object {
-        private const val RECENTS_DOUBLE_TAP_DELAY = 250L
+        private const val RECENTS_DOUBLE_TAP_DELAY = 100L
 
         var instance: BackHomeAccessibilityService? = null
             private set

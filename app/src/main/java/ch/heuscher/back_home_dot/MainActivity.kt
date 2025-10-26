@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var overlayPermissionButton: Button
     private lateinit var accessibilityButton: Button
-    private lateinit var usageStatsButton: Button
     private lateinit var overlaySwitch: SwitchCompat
     private lateinit var alphaSeekBar: SeekBar
     private lateinit var alphaValueText: TextView
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         statusText = findViewById(R.id.status_text)
         overlayPermissionButton = findViewById(R.id.overlay_permission_button)
         accessibilityButton = findViewById(R.id.accessibility_button)
-        usageStatsButton = findViewById(R.id.usage_stats_button)
         overlaySwitch = findViewById(R.id.overlay_switch)
         alphaSeekBar = findViewById(R.id.alpha_seekbar)
         alphaValueText = findViewById(R.id.alpha_value_text)
@@ -62,7 +60,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         overlayPermissionButton.setOnClickListener { requestOverlayPermission() }
         accessibilityButton.setOnClickListener { openAccessibilitySettings() }
-        usageStatsButton.setOnClickListener { requestUsageStatsPermission() }
     }
 
     private fun setupUI() {
@@ -82,19 +79,17 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI() {
         val hasOverlay = permissionManager.hasOverlayPermission()
         val hasAccessibility = permissionManager.hasAccessibilityPermission()
-        val hasUsageStats = permissionManager.hasUsageStatsPermission()
 
         // Update button states
         overlayPermissionButton.isEnabled = !hasOverlay
         accessibilityButton.isEnabled = !hasAccessibility
-        usageStatsButton.isEnabled = !hasUsageStats
 
         // Build status text
-        val status = buildStatusText(hasOverlay, hasAccessibility, hasUsageStats)
+        val status = buildStatusText(hasOverlay, hasAccessibility)
         statusText.text = status
     }
 
-    private fun buildStatusText(hasOverlay: Boolean, hasAccessibility: Boolean, hasUsageStats: Boolean): String {
+    private fun buildStatusText(hasOverlay: Boolean, hasAccessibility: Boolean): String {
         return buildString {
             append("Status:\n\n")
 
@@ -104,19 +99,14 @@ class MainActivity : AppCompatActivity() {
 
             // Accessibility permission
             append(if (hasAccessibility) "✓" else "✗")
-            append(" Accessibility Service\n")
-
-            // Usage stats permission
-            append(if (hasUsageStats) "✓" else "✗")
-            append(" App-Nutzungsstatistik")
+            append(" Accessibility Service")
 
             // Active status
             if (hasOverlay && hasAccessibility) {
                 append("\n\n")
                 append("Der verschiebbare Punkt ist aktiv!\n\n")
                 append("• Klick = Zurück\n")
-                append("• Doppelklick = Vorherige App")
-                append(if (hasUsageStats) " (direkt)\n" else " (via Recents)\n")
+                append("• Doppelklick = Vorherige App\n")
                 append("• Dreifachklick = App-Übersicht\n")
                 append("• Langes Drücken = Home")
             }
@@ -148,18 +138,6 @@ class MainActivity : AppCompatActivity() {
             .setMessage(R.string.please_enable_accessibility)
             .setPositiveButton(R.string.open_settings) { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                startActivity(intent)
-            }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
-    }
-
-    private fun requestUsageStatsPermission() {
-        AlertDialog.Builder(this)
-            .setTitle("App-Nutzungsstatistik Berechtigung")
-            .setMessage("Für den direkten App-Wechsel (ohne Flackern) benötigt die App Zugriff auf die Nutzungsstatistik.\n\nBitte aktivieren Sie \"Back_Home_Dot\" in den Einstellungen.")
-            .setPositiveButton(R.string.open_settings) { _, _ ->
-                val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
                 startActivity(intent)
             }
             .setNegativeButton(android.R.string.cancel, null)
