@@ -27,9 +27,9 @@
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img src="screenshots/main_screen.png" width="30%" alt="Hauptbildschirm" />
-  <img src="screenshots/settings.png" width="30%" alt="Einstellungen" />
-  <img src="screenshots/floating_dot.png" width="30%" alt="AssistiPunkt in Aktion" />
+  <img src="screenshots/main_screen.jpg" width="30%" alt="Hauptbildschirm" />
+  <img src="screenshots/settings.jpg" width="30%" alt="Einstellungen" />
+  <img src="screenshots/floating_dot.jpg" width="30%" alt="AssistiPunkt in Aktion" />
 </p>
 
 <p align="center">
@@ -150,11 +150,31 @@ Beiträge sind willkommen! Bitte:
 
 ## 📋 Roadmap
 
-- [ ] Widget für schnellen Ein/Aus-Zugriff
-- [ ] Mehrere Punkte gleichzeitig
-- [ ] Gesten-Recorder für eigene Aktionen
-- [ ] Exportieren/Importieren von Einstellungen
-- [ ] Themes und Icon-Packs
+Die Weiterentwicklung von AssistiPunkt wird durch **Ihr Feedback** gesteuert!
+
+### 💡 Wie Sie mitgestalten können
+
+Haben Sie Ideen oder Wünsche für neue Features? Wir hören zu!
+
+1. **Feature-Wünsche**: Öffnen Sie ein [Issue](../../issues) mit dem Label "enhancement"
+2. **Probleme melden**: Teilen Sie uns Bugs oder Schwierigkeiten mit
+3. **Diskussionen**: Beteiligen Sie sich an den [Discussions](../../discussions)
+
+### 🎯 Mögliche Features (basierend auf Feedback)
+
+Die Priorisierung erfolgt nach:
+- ✨ Anzahl der Anfragen
+- ♿ Verbesserung der Barrierefreiheit
+- 🚀 Technischer Machbarkeit
+- 👥 Nutzen für die Community
+
+**Ihre Stimme zählt!** Je mehr Nutzer ein Feature wünschen, desto höher die Priorität.
+
+### 💬 Feedback geben
+
+- GitHub Issues: [Neue Anfrage erstellen](../../issues/new)
+- Diskussionen: [An Diskussion teilnehmen](../../discussions)
+- Email: Direkt über GitHub-Profil kontaktieren
 
 ## 🐛 Bekannte Einschränkungen
 
