@@ -125,7 +125,7 @@ class OverlayService : Service() {
     }
 
     private fun handleConfigurationChange() {
-        // Recalculate position based on saved percentages
+        // Keep the dot at the same physical position (same pixel coordinates)
         params?.let { layoutParams ->
             val size = getUsableScreenSize()
             val newWidth = size.x
@@ -133,12 +133,13 @@ class OverlayService : Service() {
 
             // Only update if screen size actually changed (rotation)
             if (newWidth != settings.screenWidth || newHeight != settings.screenHeight) {
-                // Calculate new position from saved percentages
-                val newX = (settings.positionXPercent * newWidth).toInt()
-                val newY = (settings.positionYPercent * newHeight).toInt()
+                // Use the SAME absolute position (same physical location on screen)
+                // This keeps the dot at e.g. (100, 200) in both portrait and landscape
+                val savedX = settings.positionX
+                val savedY = settings.positionY
 
-                // Apply bounds checking
-                val (constrainedX, constrainedY) = constrainPositionToBounds(newX, newY)
+                // Apply bounds checking to ensure it's still visible
+                val (constrainedX, constrainedY) = constrainPositionToBounds(savedX, savedY)
 
                 layoutParams.x = constrainedX
                 layoutParams.y = constrainedY
@@ -148,13 +149,11 @@ class OverlayService : Service() {
                     windowManager.updateViewLayout(view, layoutParams)
                 }
 
-                // Save new screen dimensions
+                // Save new screen dimensions and constrained position
                 settings.screenWidth = newWidth
                 settings.screenHeight = newHeight
-
-                // Update percentages based on constrained position
-                settings.positionXPercent = constrainedX.toFloat() / newWidth
-                settings.positionYPercent = constrainedY.toFloat() / newHeight
+                settings.positionX = constrainedX
+                settings.positionY = constrainedY
             }
         }
     }
@@ -229,19 +228,9 @@ class OverlayService : Service() {
         val currentWidth = size.x
         val currentHeight = size.y
 
-        // Load saved position using percentages for rotation stability
-        val savedX: Int
-        val savedY: Int
-
-        if (settings.screenWidth > 0 && settings.screenHeight > 0) {
-            // Convert saved percentages to current screen coordinates
-            savedX = (settings.positionXPercent * currentWidth).toInt()
-            savedY = (settings.positionYPercent * currentHeight).toInt()
-        } else {
-            // First run - use default pixel position
-            savedX = settings.positionX
-            savedY = settings.positionY
-        }
+        // Load saved absolute position (same physical location)
+        val savedX = settings.positionX
+        val savedY = settings.positionY
 
         // Apply bounds checking to ensure dot is visible
         val (constrainedX, constrainedY) = constrainPositionToBounds(savedX, savedY)
@@ -249,8 +238,8 @@ class OverlayService : Service() {
         // Save current screen dimensions and constrained position
         settings.screenWidth = currentWidth
         settings.screenHeight = currentHeight
-        settings.positionXPercent = constrainedX.toFloat() / currentWidth
-        settings.positionYPercent = constrainedY.toFloat() / currentHeight
+        settings.positionX = constrainedX
+        settings.positionY = constrainedY
 
         params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -316,20 +305,9 @@ class OverlayService : Service() {
                         if (hasMoved) {
                             params?.let {
                                 // The position is already constrained from ACTION_MOVE
-                                // Save as both pixels and percentages
+                                // Save absolute pixel position
                                 settings.positionX = it.x
                                 settings.positionY = it.y
-
-                                // Get current screen dimensions
-                                val size = getUsableScreenSize()
-                                val currentWidth = size.x
-                                val currentHeight = size.y
-
-                                // Save position as percentage for rotation stability
-                                settings.positionXPercent = it.x.toFloat() / currentWidth
-                                settings.positionYPercent = it.y.toFloat() / currentHeight
-                                settings.screenWidth = currentWidth
-                                settings.screenHeight = currentHeight
                             }
                         }
 
