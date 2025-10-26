@@ -21,22 +21,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Back Home Dot"
+            android:text="AssistiPunkt"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
             android:gravity="center"
-            android:contentDescription="Back Home Dot App"
+            android:contentDescription="AssistiPunkt App"
             android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Navigation für alle"
+            android:text="Ihr Tipp-Helfer für Navigation"
             android:textSize="18sp"
             android:textColor="?android:attr/textColorSecondary"
             android:gravity="center"
-            android:contentDescription="Navigation für alle Benutzer"
+            android:contentDescription="Ihr Tipp-Helfer für Navigation"
             android:layout_marginBottom="32dp" />
 
         <!-- Berechtigungen Section -->
