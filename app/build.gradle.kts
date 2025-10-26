@@ -12,19 +12,33 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = false
+        }
+    }
+
+    signingConfigs {
+        // TODO: Keystore für Release-Signierung erstellen
+        // create {
+        //     storeFile = file("path/to/your/keystore.jks")
+        //     storePassword = "your-keystore-password"
+        //     keyAlias = "your-key-alias"
+        //     keyPassword = "your-key-password"
+        // }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
