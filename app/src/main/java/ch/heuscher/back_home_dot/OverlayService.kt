@@ -1,7 +1,10 @@
 package ch.heuscher.back_home_dot
 
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
@@ -35,6 +38,14 @@ class OverlayService : Service() {
 
     private val longPressHandler = Handler(Looper.getMainLooper())
     private val clickHandler = Handler(Looper.getMainLooper())
+
+    private val configurationChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_CONFIGURATION_CHANGED) {
+                handleConfigurationChange()
+            }
+        }
+    }
 
     // Use system timeouts
     private var longPressTimeout: Long = 500L
@@ -80,8 +91,8 @@ class OverlayService : Service() {
         val screenWidth = displayMetrics.widthPixels
         val screenHeight = displayMetrics.heightPixels
 
-        // Get the dot size (assuming 80dp as defined in overlay_layout.xml)
-        val dotSize = (80 * displayMetrics.density).toInt()
+        // Get the dot size (48dp as defined in overlay_layout.xml)
+        val dotSize = (48 * displayMetrics.density).toInt()
 
         // Constrain so that no pixel of the dot goes off screen
         // X: from 0 to screenWidth - dotSize (keeps entire dot visible)
@@ -93,37 +104,38 @@ class OverlayService : Service() {
         return Pair(constrainedX, constrainedY)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
+    private fun handleConfigurationChange() {
         // Recalculate position based on saved percentages
         params?.let { layoutParams ->
             val displayMetrics = resources.displayMetrics
             val newWidth = displayMetrics.widthPixels
             val newHeight = displayMetrics.heightPixels
 
-            // Calculate new position from saved percentages
-            val newX = (settings.positionXPercent * newWidth).toInt()
-            val newY = (settings.positionYPercent * newHeight).toInt()
+            // Only update if screen size actually changed (rotation)
+            if (newWidth != settings.screenWidth || newHeight != settings.screenHeight) {
+                // Calculate new position from saved percentages
+                val newX = (settings.positionXPercent * newWidth).toInt()
+                val newY = (settings.positionYPercent * newHeight).toInt()
 
-            // Apply bounds checking
-            val (constrainedX, constrainedY) = constrainPositionToBounds(newX, newY)
+                // Apply bounds checking
+                val (constrainedX, constrainedY) = constrainPositionToBounds(newX, newY)
 
-            layoutParams.x = constrainedX
-            layoutParams.y = constrainedY
+                layoutParams.x = constrainedX
+                layoutParams.y = constrainedY
 
-            // Update the view
-            floatingView?.let { view ->
-                windowManager.updateViewLayout(view, layoutParams)
+                // Update the view
+                floatingView?.let { view ->
+                    windowManager.updateViewLayout(view, layoutParams)
+                }
+
+                // Save new screen dimensions
+                settings.screenWidth = newWidth
+                settings.screenHeight = newHeight
+
+                // Update percentages based on constrained position
+                settings.positionXPercent = constrainedX.toFloat() / newWidth
+                settings.positionYPercent = constrainedY.toFloat() / newHeight
             }
-
-            // Save new screen dimensions
-            settings.screenWidth = newWidth
-            settings.screenHeight = newHeight
-
-            // Update percentages based on constrained position
-            settings.positionXPercent = constrainedX.toFloat() / newWidth
-            settings.positionYPercent = constrainedY.toFloat() / newHeight
         }
     }
 
@@ -234,6 +246,10 @@ class OverlayService : Service() {
         // Add the view to the window
         windowManager.addView(floatingView, params)
 
+        // Register receiver for configuration changes (rotation)
+        val filter = IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED)
+        registerReceiver(configurationChangeReceiver, filter)
+
         // Set up touch listener for the floating view
         floatingView?.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View, event: MotionEvent): Boolean {
@@ -325,6 +341,14 @@ class OverlayService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+
+        // Unregister configuration change receiver
+        try {
+            unregisterReceiver(configurationChangeReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Receiver not registered, ignore
+        }
+
         floatingView?.let {
             windowManager.removeView(it)
             floatingView = null
