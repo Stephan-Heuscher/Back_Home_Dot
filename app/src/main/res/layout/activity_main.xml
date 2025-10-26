@@ -159,20 +159,6 @@
             android:textSize="18sp"
             android:contentDescription="Einstellungen öffnen für Farbe, Deckkraft und Geschwindigkeit"
             android:minHeight="64dp"
-            android:layout_marginBottom="12dp"
-            android:paddingVertical="16dp" />
-
-        <!-- Service beenden Button -->
-        <Button
-            android:id="@+id/stop_service_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="⛔ Service beenden"
-            android:textSize="18sp"
-            android:backgroundTint="#D32F2F"
-            android:textColor="#FFFFFF"
-            android:contentDescription="Service komplett beenden"
-            android:minHeight="64dp"
             android:layout_marginBottom="24dp"
             android:paddingVertical="16dp" />
 
@@ -209,6 +195,20 @@
                     android:contentDescription="Bedienungsanleitung: Einfach tippen für Zurück, Doppelt tippen für vorherige App, Dreifach tippen für App-Übersicht, Vierfach tippen für Einstellungen, Lang drücken für Home" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Service beenden Button -->
+        <Button
+            android:id="@+id/stop_service_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⛔ Service beenden"
+            android:textSize="18sp"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF"
+            android:contentDescription="Service komplett beenden und App schließen"
+            android:minHeight="64dp"
+            android:layout_marginTop="24dp"
+            android:paddingVertical="16dp" />
 
     </LinearLayout>
 </ScrollView>

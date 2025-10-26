@@ -44,6 +44,16 @@ class SettingsActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun initializeViews() {
         alphaSeekBar = findViewById(R.id.alpha_seekbar)
         alphaValueText = findViewById(R.id.alpha_value_text)

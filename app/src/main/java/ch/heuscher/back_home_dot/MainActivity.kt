@@ -172,8 +172,14 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("Einstellungen öffnen") { _, _ ->
                         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         startActivity(intent)
+                        finishAffinity() // Close the app
                     }
-                    .setNegativeButton("Später", null)
+                    .setNegativeButton("App schließen") { _, _ ->
+                        finishAffinity() // Close the app
+                    }
+                    .setOnDismissListener {
+                        finishAffinity() // Close the app when dialog is dismissed
+                    }
                     .show()
             }
             .setNegativeButton("Abbrechen", null)
