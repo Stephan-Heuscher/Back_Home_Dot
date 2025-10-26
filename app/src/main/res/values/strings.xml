@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Back_Home_Dot</string>
-    <string name="accessibility_service_description">Ermöglicht der Back Home Dot App, Navigationstasten und App-Wechsel auszuführen</string>
+    <string name="app_name">Assistive Tap</string>
+    <string name="accessibility_service_description">Ermöglicht der Assistive Tap App, Navigationstasten und App-Wechsel auszuführen</string>
     <string name="overlay_permission_needed">Overlay-Berechtigung erforderlich</string>
     <string name="accessibility_service_needed">Accessibility Service erforderlich</string>
     <string name="please_enable_overlay">Bitte aktivieren Sie die Overlay-Berechtigung für diese App</string>
