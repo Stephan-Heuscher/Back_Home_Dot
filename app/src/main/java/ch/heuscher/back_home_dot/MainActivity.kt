@@ -1,81 +1,75 @@
 package ch.heuscher.back_home_dot
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
-import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var statusText: TextView
     private lateinit var overlayPermissionButton: Button
     private lateinit var accessibilityButton: Button
-    private lateinit var stopServiceButton: Button
     private lateinit var overlaySwitch: SwitchCompat
-    private lateinit var alphaSeekBar: SeekBar
-    private lateinit var alphaValueText: TextView
-    private lateinit var previewDot: View
+    private lateinit var settingsButton: Button
+    private lateinit var stopServiceButton: Button
 
     private lateinit var settings: OverlaySettings
     private lateinit var permissionManager: PermissionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_new)
 
         settings = OverlaySettings(this)
         permissionManager = PermissionManager(this)
 
         initializeViews()
         setupClickListeners()
-        setupUI()
-
-        checkPermissionsAndStartService()
+        updateUI()
     }
 
     override fun onResume() {
         super.onResume()
-        checkPermissionsAndStartService()
+        updateUI()
+
+        // Start service if enabled and permissions are granted
+        if (settings.isEnabled && permissionManager.hasAllRequiredPermissions()) {
+            startOverlayService()
+        }
     }
 
     private fun initializeViews() {
         statusText = findViewById(R.id.status_text)
         overlayPermissionButton = findViewById(R.id.overlay_permission_button)
         accessibilityButton = findViewById(R.id.accessibility_button)
-        stopServiceButton = findViewById(R.id.stop_service_button)
         overlaySwitch = findViewById(R.id.overlay_switch)
-        alphaSeekBar = findViewById(R.id.alpha_seekbar)
-        alphaValueText = findViewById(R.id.alpha_value_text)
-        previewDot = findViewById(R.id.preview_dot)
+        settingsButton = findViewById(R.id.settings_button)
+        stopServiceButton = findViewById(R.id.stop_service_button)
     }
 
     private fun setupClickListeners() {
         overlayPermissionButton.setOnClickListener { requestOverlayPermission() }
         accessibilityButton.setOnClickListener { openAccessibilitySettings() }
         stopServiceButton.setOnClickListener { showStopServiceDialog() }
-    }
+        settingsButton.setOnClickListener { openSettings() }
 
-    private fun setupUI() {
-        setupOverlaySwitch()
-        setupAlphaSeekBar()
-        setupColorButtons()
-    }
-
-    private fun checkPermissionsAndStartService() {
-        updateUI()
-
-        if (permissionManager.hasAllRequiredPermissions()) {
-            startOverlayService()
+        overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
+            settings.isEnabled = isChecked
+            if (permissionManager.hasAllRequiredPermissions()) {
+                if (isChecked) {
+                    startOverlayService()
+                } else {
+                    stopOverlayService()
+                }
+            }
+            updateUI()
         }
     }
 
@@ -86,6 +80,13 @@ class MainActivity : AppCompatActivity() {
         // Update button states
         overlayPermissionButton.isEnabled = !hasOverlay
         accessibilityButton.isEnabled = !hasAccessibility
+
+        // Update switch
+        overlaySwitch.isChecked = settings.isEnabled
+        overlaySwitch.isEnabled = hasOverlay && hasAccessibility
+
+        // Update settings button
+        settingsButton.isEnabled = hasOverlay && hasAccessibility
 
         // Build status text
         val status = buildStatusText(hasOverlay, hasAccessibility)
@@ -102,17 +103,17 @@ class MainActivity : AppCompatActivity() {
 
             // Accessibility permission
             append(if (hasAccessibility) "✓" else "✗")
-            append(" Accessibility Service")
+            append(" Bedienungshilfe-Dienst")
 
             // Active status
             if (hasOverlay && hasAccessibility) {
-                append("\n\n")
-                append("Der verschiebbare Punkt ist aktiv!\n\n")
-                append("• Klick = Zurück\n")
-                append("• Doppelklick = Vorherige App\n")
-                append("• Dreifachklick = App-Übersicht\n")
-                append("• Vierfachklick = Diese App öffnen\n")
-                append("• Langes Drücken = Home")
+                if (settings.isEnabled) {
+                    append("\n\n✅ Der Punkt ist aktiv!")
+                } else {
+                    append("\n\n⏸️ Der Punkt ist deaktiviert.")
+                }
+            } else {
+                append("\n\n⚠️ Bitte aktivieren Sie alle Berechtigungen.")
             }
         }
     }
@@ -121,16 +122,16 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder(this)
-                    .setTitle(R.string.overlay_permission_needed)
-                    .setMessage(R.string.please_enable_overlay)
-                    .setPositiveButton(R.string.open_settings) { _, _ ->
+                    .setTitle("Overlay-Berechtigung erforderlich")
+                    .setMessage("Diese Berechtigung erlaubt es der App, den Navigationspunkt über anderen Apps anzuzeigen.\n\nDies ist für die Hauptfunktion der App notwendig.")
+                    .setPositiveButton("Einstellungen öffnen") { _, _ ->
                         val intent = Intent(
                             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:$packageName")
                         )
                         startActivity(intent)
                     }
-                    .setNegativeButton(android.R.string.cancel, null)
+                    .setNegativeButton("Abbrechen", null)
                     .show()
             }
         }
@@ -138,30 +139,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun openAccessibilitySettings() {
         AlertDialog.Builder(this)
-            .setTitle(R.string.accessibility_service_needed)
-            .setMessage(R.string.please_enable_accessibility)
-            .setPositiveButton(R.string.open_settings) { _, _ ->
+            .setTitle("Bedienungshilfe-Dienst erforderlich")
+            .setMessage("Der Bedienungshilfe-Dienst ermöglicht der App, Systemnavigation durchzuführen (Zurück, Home, App-Wechsel).\n\nBitte aktivieren Sie \"Back Home Dot\" in den Bedienungshilfe-Einstellungen.")
+            .setPositiveButton("Einstellungen öffnen") { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 startActivity(intent)
             }
-            .setNegativeButton(android.R.string.cancel, null)
+            .setNegativeButton("Abbrechen", null)
             .show()
+    }
+
+    private fun openSettings() {
+        val intent = Intent(this, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun showStopServiceDialog() {
         AlertDialog.Builder(this)
             .setTitle("Service beenden")
-            .setMessage("Möchten Sie den Overlay-Service wirklich beenden?\n\nHinweis: Der Accessibility Service muss manuell in den System-Einstellungen deaktiviert werden.")
+            .setMessage("Möchten Sie den Service wirklich beenden?\n\nDer Overlay-Service wird gestoppt. Der Bedienungshilfe-Dienst muss manuell in den System-Einstellungen deaktiviert werden.")
             .setPositiveButton("Beenden") { _, _ ->
                 // Disable overlay
                 settings.isEnabled = false
                 overlaySwitch.isChecked = false
                 stopOverlayService()
+                updateUI()
 
                 // Show info about accessibility service
                 AlertDialog.Builder(this)
-                    .setTitle("Accessibility Service")
-                    .setMessage("Der Overlay-Service wurde beendet.\n\nUm die App vollständig zu deaktivieren, deaktivieren Sie bitte auch den Accessibility Service in den System-Einstellungen.")
+                    .setTitle("Service beendet")
+                    .setMessage("Der Overlay-Service wurde beendet.\n\nUm die App vollständig zu deaktivieren, deaktivieren Sie bitte auch den Bedienungshilfe-Dienst in den System-Einstellungen.")
                     .setPositiveButton("Einstellungen öffnen") { _, _ ->
                         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                         startActivity(intent)
@@ -174,192 +181,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startOverlayService() {
-        if (settings.isEnabled) {
-            val serviceIntent = Intent(this, OverlayService::class.java)
-            startService(serviceIntent)
-        } else {
-            stopOverlayService()
-        }
+        val serviceIntent = Intent(this, OverlayService::class.java)
+        startService(serviceIntent)
     }
 
     private fun stopOverlayService() {
         val serviceIntent = Intent(this, OverlayService::class.java)
         stopService(serviceIntent)
-    }
-
-    private fun setupOverlaySwitch() {
-        overlaySwitch.isChecked = settings.isEnabled
-        overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
-            settings.isEnabled = isChecked
-            if (permissionManager.hasAllRequiredPermissions()) {
-                startOverlayService()
-            }
-        }
-    }
-
-    private fun setupAlphaSeekBar() {
-        alphaSeekBar.progress = settings.alpha
-        updateAlphaText(settings.alpha)
-
-        alphaSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                settings.alpha = progress
-                updateAlphaText(progress)
-                updatePreview()
-                notifyOverlayService()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        updatePreview()
-    }
-
-    private fun updateAlphaText(alpha: Int) {
-        val percentage = (alpha * 100) / 255
-        alphaValueText.text = "$percentage%"
-    }
-
-    private fun setupColorButtons() {
-        // Get theme colors
-        val typedValue = android.util.TypedValue()
-        val theme = theme
-
-        // Primary color button
-        val primaryButton = findViewById<Button>(R.id.color_theme_primary)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (theme.resolveAttribute(android.R.attr.colorPrimary, typedValue, true)) {
-                val primaryColor = typedValue.data
-                primaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
-                primaryButton.setOnClickListener { setColor(primaryColor) }
-            }
-        } else {
-            // Fallback for older versions
-            primaryButton.setOnClickListener { setColor(0xFF2196F3.toInt()) }
-        }
-
-        // Secondary color button
-        val secondaryButton = findViewById<Button>(R.id.color_theme_secondary)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (theme.resolveAttribute(android.R.attr.colorAccent, typedValue, true)) {
-                val secondaryColor = typedValue.data
-                secondaryButton.backgroundTintList = android.content.res.ColorStateList.valueOf(secondaryColor)
-                secondaryButton.setOnClickListener { setColor(secondaryColor) }
-            }
-        } else {
-            // Fallback for older versions
-            secondaryButton.setOnClickListener { setColor(0xFF03DAC5.toInt()) }
-        }
-
-        // Preset colors
-        findViewById<Button>(R.id.color_blue).setOnClickListener { setColor(0xFF2196F3.toInt()) }
-        findViewById<Button>(R.id.color_red).setOnClickListener { setColor(0xFFF44336.toInt()) }
-        findViewById<Button>(R.id.color_green).setOnClickListener { setColor(0xFF4CAF50.toInt()) }
-        findViewById<Button>(R.id.color_orange).setOnClickListener { setColor(0xFFFF9800.toInt()) }
-        findViewById<Button>(R.id.color_purple).setOnClickListener { setColor(0xFF9C27B0.toInt()) }
-        findViewById<Button>(R.id.color_cyan).setOnClickListener { setColor(0xFF00BCD4.toInt()) }
-        findViewById<Button>(R.id.color_yellow).setOnClickListener { setColor(0xFFFFEB3B.toInt()) }
-        findViewById<Button>(R.id.color_gray).setOnClickListener { setColor(0xFF607D8B.toInt()) }
-
-        // Custom color picker
-        findViewById<Button>(R.id.color_custom).setOnClickListener { showColorPickerDialog() }
-    }
-
-    private fun setColor(color: Int) {
-        settings.color = color
-        updatePreview()
-        notifyOverlayService()
-    }
-
-    private fun updatePreview() {
-        val drawable = previewDot.background as? GradientDrawable
-        if (drawable != null) {
-            drawable.setColor(settings.getColorWithAlpha())
-        } else {
-            val newDrawable = GradientDrawable()
-            newDrawable.shape = GradientDrawable.OVAL
-            newDrawable.setColor(settings.getColorWithAlpha())
-            newDrawable.setStroke(2, Color.WHITE)
-            previewDot.background = newDrawable
-        }
-    }
-
-    private fun notifyOverlayService() {
-        if (settings.isEnabled && permissionManager.hasAllRequiredPermissions()) {
-            // Restart service to apply changes
-            stopOverlayService()
-            startService(Intent(this, OverlayService::class.java))
-        }
-    }
-
-    private fun showColorPickerDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.color_picker_dialog, null)
-
-        val colorPreview = dialogView.findViewById<View>(R.id.color_preview)
-        val redSeekBar = dialogView.findViewById<SeekBar>(R.id.red_seekbar)
-        val greenSeekBar = dialogView.findViewById<SeekBar>(R.id.green_seekbar)
-        val blueSeekBar = dialogView.findViewById<SeekBar>(R.id.blue_seekbar)
-        val redValue = dialogView.findViewById<TextView>(R.id.red_value)
-        val greenValue = dialogView.findViewById<TextView>(R.id.green_value)
-        val blueValue = dialogView.findViewById<TextView>(R.id.blue_value)
-
-        // Initialize with current color
-        val currentColor = settings.color
-        val currentRed = Color.red(currentColor)
-        val currentGreen = Color.green(currentColor)
-        val currentBlue = Color.blue(currentColor)
-
-        redSeekBar.progress = currentRed
-        greenSeekBar.progress = currentGreen
-        blueSeekBar.progress = currentBlue
-        redValue.text = currentRed.toString()
-        greenValue.text = currentGreen.toString()
-        blueValue.text = currentBlue.toString()
-
-        fun updateColorPreview() {
-            val color = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
-            colorPreview.setBackgroundColor(color)
-        }
-
-        updateColorPreview()
-
-        redSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                redValue.text = progress.toString()
-                updateColorPreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        greenSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                greenValue.text = progress.toString()
-                updateColorPreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        blueSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                blueValue.text = progress.toString()
-                updateColorPreview()
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        AlertDialog.Builder(this)
-            .setTitle("Eigene Farbe wählen")
-            .setView(dialogView)
-            .setPositiveButton("OK") { _, _ ->
-                val selectedColor = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
-                // Convert to ARGB format with full alpha
-                setColor(0xFF000000.toInt() or selectedColor)
-            }
-            .setNegativeButton("Abbrechen", null)
-            .show()
     }
 }

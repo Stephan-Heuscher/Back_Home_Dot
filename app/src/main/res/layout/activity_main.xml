@@ -5,22 +5,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:padding="20dp"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:gravity="center_horizontal">
 
+        <!-- App Titel -->
         <TextView
-            android:id="@+id/status_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Status wird geladen..."
-            android:textSize="16sp"
-            android:lineSpacingExtra="4dp"
+            android:text="Back Home Dot"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:gravity="center"
+            android:contentDescription="Back Home Dot App"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Navigation für alle"
+            android:textSize="18sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:gravity="center"
+            android:contentDescription="Navigation für alle Benutzer"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Status -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:contentPadding="20dp">
+
+            <TextView
+                android:id="@+id/status_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status wird geladen..."
+                android:textSize="18sp"
+                android:lineSpacingExtra="6dp"
+                android:textColor="?android:attr/textColorPrimary"
+                android:contentDescription="Status der App" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Berechtigungen Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Erforderliche Berechtigungen"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
             android:layout_marginBottom="16dp" />
 
         <Button
@@ -28,237 +71,144 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Overlay-Berechtigung aktivieren"
-            android:layout_marginBottom="8dp" />
+            android:textSize="18sp"
+            android:contentDescription="Overlay-Berechtigung aktivieren, um den Punkt über anderen Apps anzuzeigen"
+            android:minHeight="64dp"
+            android:layout_marginBottom="12dp"
+            android:paddingVertical="16dp" />
 
         <Button
             android:id="@+id/accessibility_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Accessibility Service aktivieren"
-            android:layout_marginBottom="8dp" />
+            android:text="Bedienungshilfe aktivieren"
+            android:textSize="18sp"
+            android:contentDescription="Bedienungshilfe-Dienst aktivieren für Navigation"
+            android:minHeight="64dp"
+            android:layout_marginBottom="32dp"
+            android:paddingVertical="16dp" />
 
+        <!-- Steuerung Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Steuerung"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Aktivieren/Deaktivieren Switch -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:contentPadding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="64dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt aktivieren"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Zeigt den Navigationspunkt an"
+                        android:textSize="16sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/overlay_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Punkt aktivieren oder deaktivieren"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:layout_marginStart="16dp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Einstellungen Button -->
+        <Button
+            android:id="@+id/settings_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⚙ Einstellungen"
+            android:textSize="18sp"
+            android:contentDescription="Einstellungen öffnen für Farbe, Deckkraft und Geschwindigkeit"
+            android:minHeight="64dp"
+            android:layout_marginBottom="12dp"
+            android:paddingVertical="16dp" />
+
+        <!-- Service beenden Button -->
         <Button
             android:id="@+id/stop_service_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Service beenden"
-            android:backgroundTint="#F44336"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Einstellungen Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Einstellungen"
+            android:text="⛔ Service beenden"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF"
+            android:contentDescription="Service komplett beenden"
+            android:minHeight="64dp"
+            android:layout_marginBottom="24dp"
+            android:paddingVertical="16dp" />
 
-        <!-- Ein/Aus Schalter -->
-        <LinearLayout
+        <!-- Hilfe Text -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#E3F2FD"
+            app:contentPadding="20dp">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Punkt aktivieren"
-                android:textSize="16sp" />
+                android:orientation="vertical">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/overlay_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ℹ️ Bedienung"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#1976D2"
+                    android:layout_marginBottom="12dp" />
 
-        <!-- Deckkraft Einstellung -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Deckkraft"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-
-            <SeekBar
-                android:id="@+id/alpha_seekbar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="255"
-                android:progress="255" />
-
-            <TextView
-                android:id="@+id/alpha_value_text"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:text="100%"
-                android:textAlignment="textEnd"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
-
-        <!-- Farbe Auswahl -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Farbe"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <Button
-                android:id="@+id/color_theme_primary"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
-                android:text="P" />
-
-            <Button
-                android:id="@+id/color_theme_secondary"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:text="S" />
-
-            <Button
-                android:id="@+id/color_blue"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#2196F3"
-                android:text="" />
-
-            <Button
-                android:id="@+id/color_red"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:backgroundTint="#F44336"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <Button
-                android:id="@+id/color_green"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#4CAF50"
-                android:text="" />
-
-            <Button
-                android:id="@+id/color_orange"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#FF9800"
-                android:text="" />
-
-            <Button
-                android:id="@+id/color_purple"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#9C27B0"
-                android:text="" />
-
-            <Button
-                android:id="@+id/color_cyan"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:backgroundTint="#00BCD4"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <Button
-                android:id="@+id/color_yellow"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#FFEB3B"
-                android:text="" />
-
-            <Button
-                android:id="@+id/color_gray"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="#607D8B"
-                android:text="" />
-
-            <Button
-                android:id="@+id/color_custom"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="2"
-                android:layout_marginStart="4dp"
-                android:text="Eigene Farbe..." />
-        </LinearLayout>
-
-        <!-- Vorschau -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Vorschau"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#F0F0F0"
-            android:gravity="center">
-
-            <View
-                android:id="@+id/preview_dot"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:background="@drawable/floating_dot_background" />
-        </FrameLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• 1x Tippen = Zurück\n• 2x Tippen = Vorherige App\n• 3x Tippen = App-Übersicht\n• 4x Tippen = Einstellungen öffnen\n• Lang drücken = Home"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="#1565C0"
+                    android:contentDescription="Bedienungsanleitung: Einfach tippen für Zurück, Doppelt tippen für vorherige App, Dreifach tippen für App-Übersicht, Vierfach tippen für Einstellungen, Lang drücken für Home" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 </ScrollView>

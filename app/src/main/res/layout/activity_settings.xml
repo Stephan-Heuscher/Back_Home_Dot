@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="16dp"
+    tools:context=".SettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Titel -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Einstellungen"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:contentDescription="Einstellungen"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Deckkraft Einstellung -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Deckkraft"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bestimmt, wie durchsichtig der Punkt ist"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:layout_marginBottom="24dp">
+
+            <SeekBar
+                android:id="@+id/alpha_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="255"
+                android:progress="255"
+                android:contentDescription="Deckkraft einstellen"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/alpha_value_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:textSize="18sp"
+                android:textAlignment="textEnd"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_marginStart="16dp" />
+        </LinearLayout>
+
+        <!-- App-Wechsel Geschwindigkeit -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="App-Wechsel Geschwindigkeit"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verzögerung beim Wechsel zur vorherigen App (Doppelklick)"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:layout_marginBottom="24dp">
+
+            <SeekBar
+                android:id="@+id/timeout_seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:min="50"
+                android:max="300"
+                android:progress="100"
+                android:contentDescription="App-Wechsel Geschwindigkeit einstellen"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/timeout_value_text"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="100 ms"
+                android:textSize="18sp"
+                android:textAlignment="textEnd"
+                android:textColor="?android:attr/textColorPrimary"
+                android:layout_marginStart="16dp" />
+        </LinearLayout>
+
+        <!-- Farbe Auswahl -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Farbe"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wählen Sie die Farbe des Punktes"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Theme Farben -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Theme-Farben"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/color_theme_primary"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Primär"
+                android:textSize="16sp"
+                android:contentDescription="Primäre Theme-Farbe wählen"
+                android:minHeight="56dp" />
+
+            <Button
+                android:id="@+id/color_theme_secondary"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Akzent"
+                android:textSize="16sp"
+                android:contentDescription="Akzent Theme-Farbe wählen"
+                android:minHeight="56dp" />
+        </LinearLayout>
+
+        <!-- Vordefinierte Farben -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vordefinierte Farben"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/color_blue"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#2196F3"
+                android:contentDescription="Blaue Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/color_red"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#F44336"
+                android:contentDescription="Rote Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/color_green"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4CAF50"
+                android:contentDescription="Grüne Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/color_orange"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:backgroundTint="#FF9800"
+                android:contentDescription="Orange Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/color_purple"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#9C27B0"
+                android:contentDescription="Lila Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/color_cyan"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#00BCD4"
+                android:contentDescription="Cyan Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/color_yellow"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#FFEB3B"
+                android:contentDescription="Gelbe Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/color_gray"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:backgroundTint="#607D8B"
+                android:contentDescription="Graue Farbe wählen"
+                android:minHeight="56dp"
+                android:text="" />
+        </LinearLayout>
+
+        <!-- Eigene Farbe -->
+        <Button
+            android:id="@+id/color_custom"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Eigene Farbe wählen..."
+            android:textSize="16sp"
+            android:contentDescription="Eigene Farbe mit Farbwähler auswählen"
+            android:minHeight="56dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Vorschau -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vorschau"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="So sieht der Punkt aus"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginBottom="12dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="#F0F0F0"
+            android:contentDescription="Vorschau des Punktes">
+
+            <View
+                android:id="@+id/preview_dot"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:background="@drawable/floating_dot_background"
+                android:contentDescription="Punkt Vorschau" />
+        </FrameLayout>
+
+    </LinearLayout>
+</ScrollView>

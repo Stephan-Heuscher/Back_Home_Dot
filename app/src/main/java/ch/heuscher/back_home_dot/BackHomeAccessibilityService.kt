@@ -13,9 +13,12 @@ import android.view.accessibility.AccessibilityEvent
 class BackHomeAccessibilityService : AccessibilityService() {
 
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var settings: OverlaySettings
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+
+        settings = OverlaySettings(this)
 
         // Configure service info
         serviceInfo = AccessibilityServiceInfo().apply {
@@ -57,12 +60,14 @@ class BackHomeAccessibilityService : AccessibilityService() {
 
     /**
      * Switch to previous app using double-tap recents
+     * Uses configurable timeout from settings
      */
     fun performRecentsAction() {
         performGlobalAction(GLOBAL_ACTION_RECENTS)
+        val delay = settings.recentsTimeout
         handler.postDelayed({
             performGlobalAction(GLOBAL_ACTION_RECENTS)
-        }, RECENTS_DOUBLE_TAP_DELAY)
+        }, delay)
     }
 
     /**
@@ -73,8 +78,6 @@ class BackHomeAccessibilityService : AccessibilityService() {
     }
 
     companion object {
-        private const val RECENTS_DOUBLE_TAP_DELAY = 100L
-
         var instance: BackHomeAccessibilityService? = null
             private set
 
