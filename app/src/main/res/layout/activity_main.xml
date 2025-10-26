@@ -282,11 +282,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle Apps\n• 4x tippen = Einstellungen\n• Lang drücken = Startseite"
+                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle Apps\n• 4x tippen = App öffnen\n• Lang drücken = Startseite"
                     android:textSize="16sp"
                     android:lineSpacingExtra="4dp"
                     android:textColor="#1565C0"
-                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle Apps, Viermal tippen für Einstellungen, Lang drücken für Startseite" />
+                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle Apps, Viermal tippen für App öffnen, Lang drücken für Startseite" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

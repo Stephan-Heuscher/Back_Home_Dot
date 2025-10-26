@@ -92,18 +92,18 @@ class OverlayService : Service() {
                 BackHomeAccessibilityService.instance?.performRecentsOverviewAction()
             }
             else -> {
-                // 4+ clicks - open settings
+                // 4+ clicks - open main app
                 if (clickCount >= 4) {
                     performHapticFeedback()
-                    openSettings()
+                    openMainActivity()
                 }
             }
         }
         clickCount = 0
     }
 
-    private fun openSettings() {
-        val intent = Intent(this, SettingsActivity::class.java).apply {
+    private fun openMainActivity() {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
@@ -143,7 +143,10 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             layoutType,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+            WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
