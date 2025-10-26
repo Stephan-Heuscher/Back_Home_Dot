@@ -83,14 +83,12 @@ class OverlayService : Service() {
         // Get the dot size (assuming 80dp as defined in overlay_layout.xml)
         val dotSize = (80 * displayMetrics.density).toInt()
 
-        // Constrain X position (allow negative for left edge, but keep visible)
-        val constrainedX = x.coerceIn(-dotSize / 2, screenWidth - dotSize / 2)
+        // Constrain so that no pixel of the dot goes off screen
+        // X: from 0 to screenWidth - dotSize (keeps entire dot visible)
+        val constrainedX = x.coerceIn(0, screenWidth - dotSize)
 
-        // Constrain Y position (keep within screen, accounting for status bar and nav bar)
-        // Leave some margin at top and bottom
-        val topMargin = (24 * displayMetrics.density).toInt() // Status bar area
-        val bottomMargin = (100 * displayMetrics.density).toInt() // Nav bar area + safety
-        val constrainedY = y.coerceIn(topMargin, screenHeight - dotSize - bottomMargin)
+        // Y: from 0 to screenHeight - dotSize (keeps entire dot visible)
+        val constrainedY = y.coerceIn(0, screenHeight - dotSize)
 
         return Pair(constrainedX, constrainedY)
     }
