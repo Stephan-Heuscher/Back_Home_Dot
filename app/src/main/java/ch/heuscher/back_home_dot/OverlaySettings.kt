@@ -14,6 +14,10 @@ class OverlaySettings(context: Context) {
         private const val KEY_ALPHA = "overlay_alpha"
         private const val KEY_POSITION_X = "position_x"
         private const val KEY_POSITION_Y = "position_y"
+        private const val KEY_POSITION_X_PERCENT = "position_x_percent"
+        private const val KEY_POSITION_Y_PERCENT = "position_y_percent"
+        private const val KEY_SCREEN_WIDTH = "screen_width"
+        private const val KEY_SCREEN_HEIGHT = "screen_height"
         private const val KEY_RECENTS_TIMEOUT = "recents_timeout"
 
         private const val DEFAULT_COLOR = 0xFF2196F3.toInt() // Blue
@@ -46,6 +50,22 @@ class OverlaySettings(context: Context) {
     var recentsTimeout: Long
         get() = prefs.getLong(KEY_RECENTS_TIMEOUT, DEFAULT_RECENTS_TIMEOUT.toLong())
         set(value) = prefs.edit().putLong(KEY_RECENTS_TIMEOUT, value.coerceIn(50, 300)).apply()
+
+    var positionXPercent: Float
+        get() = prefs.getFloat(KEY_POSITION_X_PERCENT, 0.1f)
+        set(value) = prefs.edit().putFloat(KEY_POSITION_X_PERCENT, value).apply()
+
+    var positionYPercent: Float
+        get() = prefs.getFloat(KEY_POSITION_Y_PERCENT, 0.1f)
+        set(value) = prefs.edit().putFloat(KEY_POSITION_Y_PERCENT, value).apply()
+
+    var screenWidth: Int
+        get() = prefs.getInt(KEY_SCREEN_WIDTH, 1080)
+        set(value) = prefs.edit().putInt(KEY_SCREEN_WIDTH, value).apply()
+
+    var screenHeight: Int
+        get() = prefs.getInt(KEY_SCREEN_HEIGHT, 1920)
+        set(value) = prefs.edit().putInt(KEY_SCREEN_HEIGHT, value).apply()
 
     fun getColorWithAlpha(): Int {
         val baseColor = color

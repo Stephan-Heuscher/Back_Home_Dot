@@ -135,9 +135,28 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.TYPE_PHONE
         }
 
-        // Load saved position or use default
-        val savedX = settings.positionX
-        val savedY = settings.positionY
+        // Get current screen dimensions
+        val displayMetrics = resources.displayMetrics
+        val currentWidth = displayMetrics.widthPixels
+        val currentHeight = displayMetrics.heightPixels
+
+        // Load saved position using percentages for rotation stability
+        val savedX: Int
+        val savedY: Int
+
+        if (settings.screenWidth > 0 && settings.screenHeight > 0) {
+            // Convert saved percentages to current screen coordinates
+            savedX = (settings.positionXPercent * currentWidth).toInt()
+            savedY = (settings.positionYPercent * currentHeight).toInt()
+        } else {
+            // First run - use default pixel position
+            savedX = settings.positionX
+            savedY = settings.positionY
+        }
+
+        // Save current screen dimensions
+        settings.screenWidth = currentWidth
+        settings.screenHeight = currentHeight
 
         params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -196,8 +215,20 @@ class OverlayService : Service() {
                         // Save position if moved
                         if (hasMoved) {
                             params?.let {
+                                // Save as both pixels and percentages
                                 settings.positionX = it.x
                                 settings.positionY = it.y
+
+                                // Get current screen dimensions
+                                val displayMetrics = resources.displayMetrics
+                                val currentWidth = displayMetrics.widthPixels
+                                val currentHeight = displayMetrics.heightPixels
+
+                                // Save position as percentage for rotation stability
+                                settings.positionXPercent = it.x.toFloat() / currentWidth
+                                settings.positionYPercent = it.y.toFloat() / currentHeight
+                                settings.screenWidth = currentWidth
+                                settings.screenHeight = currentHeight
                             }
                         }
 
