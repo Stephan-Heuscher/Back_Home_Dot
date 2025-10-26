@@ -16,6 +16,7 @@ import android.os.Looper
 import android.view.Display
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.Surface
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -124,22 +125,66 @@ class OverlayService : Service() {
         return Pair(constrainedX, constrainedY)
     }
 
+    private fun transformPosition(
+        x: Int, y: Int,
+        fromWidth: Int, fromHeight: Int, fromRotation: Int,
+        toRotation: Int
+    ): Pair<Int, Int> {
+        // Calculate rotation difference (each step is 90° CCW)
+        val rotationDiff = (toRotation - fromRotation + 4) % 4
+
+        if (rotationDiff == 0) {
+            // No rotation change
+            return Pair(x, y)
+        }
+
+        var newX = x
+        var newY = y
+        var currentWidth = fromWidth
+        var currentHeight = fromHeight
+
+        // Apply 90° CCW rotation for each step
+        repeat(rotationDiff) {
+            val tempX = newX
+            val tempY = newY
+
+            // 90° CCW rotation transformation
+            newX = tempY
+            newY = currentWidth - tempX
+
+            // Swap dimensions for next iteration
+            val temp = currentWidth
+            currentWidth = currentHeight
+            currentHeight = temp
+        }
+
+        return Pair(newX, newY)
+    }
+
     private fun handleConfigurationChange() {
-        // Keep the dot at the same physical position (same pixel coordinates)
+        // Keep the dot at the same physical position on screen
         params?.let { layoutParams ->
             val size = getUsableScreenSize()
             val newWidth = size.x
             val newHeight = size.y
 
-            // Only update if screen size actually changed (rotation)
-            if (newWidth != settings.screenWidth || newHeight != settings.screenHeight) {
-                // Use the SAME absolute position (same physical location on screen)
-                // This keeps the dot at e.g. (100, 200) in both portrait and landscape
-                val savedX = settings.positionX
-                val savedY = settings.positionY
+            @Suppress("DEPRECATION")
+            val newRotation = windowManager.defaultDisplay.rotation
+
+            // Only update if screen size or rotation changed
+            if (newWidth != settings.screenWidth || newHeight != settings.screenHeight || newRotation != settings.rotation) {
+                // Transform position based on rotation change
+                val (transformedX, transformedY) = transformPosition(
+                    settings.positionX,
+                    settings.positionY,
+                    settings.screenWidth,
+                    settings.screenHeight,
+                    settings.rotation,
+                    newRotation
+                )
 
                 // Apply bounds checking to ensure it's still visible
-                val (constrainedX, constrainedY) = constrainPositionToBounds(savedX, savedY)
+                val (constrainedX, constrainedY) = constrainPositionToBounds(transformedX, transformedY)
 
                 layoutParams.x = constrainedX
                 layoutParams.y = constrainedY
@@ -149,9 +194,10 @@ class OverlayService : Service() {
                     windowManager.updateViewLayout(view, layoutParams)
                 }
 
-                // Save new screen dimensions and constrained position
+                // Save new screen dimensions, rotation, and constrained position
                 settings.screenWidth = newWidth
                 settings.screenHeight = newHeight
+                settings.rotation = newRotation
                 settings.positionX = constrainedX
                 settings.positionY = constrainedY
             }
@@ -223,10 +269,13 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.TYPE_PHONE
         }
 
-        // Get current screen dimensions
+        // Get current screen dimensions and rotation
         val size = getUsableScreenSize()
         val currentWidth = size.x
         val currentHeight = size.y
+
+        @Suppress("DEPRECATION")
+        val currentRotation = windowManager.defaultDisplay.rotation
 
         // Load saved absolute position (same physical location)
         val savedX = settings.positionX
@@ -235,9 +284,10 @@ class OverlayService : Service() {
         // Apply bounds checking to ensure dot is visible
         val (constrainedX, constrainedY) = constrainPositionToBounds(savedX, savedY)
 
-        // Save current screen dimensions and constrained position
+        // Save current screen dimensions, rotation, and constrained position
         settings.screenWidth = currentWidth
         settings.screenHeight = currentHeight
+        settings.rotation = currentRotation
         settings.positionX = constrainedX
         settings.positionY = constrainedY
 

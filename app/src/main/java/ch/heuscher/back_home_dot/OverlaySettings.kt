@@ -18,6 +18,7 @@ class OverlaySettings(context: Context) {
         private const val KEY_POSITION_Y_PERCENT = "position_y_percent"
         private const val KEY_SCREEN_WIDTH = "screen_width"
         private const val KEY_SCREEN_HEIGHT = "screen_height"
+        private const val KEY_ROTATION = "rotation"
         private const val KEY_RECENTS_TIMEOUT = "recents_timeout"
 
         private const val DEFAULT_COLOR = 0xFF2196F3.toInt() // Blue
@@ -66,6 +67,10 @@ class OverlaySettings(context: Context) {
     var screenHeight: Int
         get() = prefs.getInt(KEY_SCREEN_HEIGHT, 1920)
         set(value) = prefs.edit().putInt(KEY_SCREEN_HEIGHT, value).apply()
+
+    var rotation: Int
+        get() = prefs.getInt(KEY_ROTATION, 0)
+        set(value) = prefs.edit().putInt(KEY_ROTATION, value).apply()
 
     fun getColorWithAlpha(): Int {
         val baseColor = color
