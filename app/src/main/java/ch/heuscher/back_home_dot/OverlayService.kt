@@ -66,11 +66,47 @@ class OverlayService : Service() {
     private fun applyColorSettings() {
         val dotView = floatingView?.findViewById<View>(R.id.floating_dot)
         dotView?.let {
-            val drawable = GradientDrawable()
-            drawable.shape = GradientDrawable.OVAL
-            drawable.setColor(settings.getColorWithAlpha())
-            drawable.setStroke(2, android.graphics.Color.WHITE)
-            it.background = drawable
+            try {
+                val drawable = GradientDrawable()
+                drawable.shape = GradientDrawable.OVAL
+
+                // Get color with alpha, but ensure minimum visibility
+                val colorWithAlpha = settings.getColorWithAlpha()
+                val alpha = android.graphics.Color.alpha(colorWithAlpha)
+
+                // If alpha is too low, increase it to ensure visibility
+                val finalColor = if (alpha < 50) {
+                    android.graphics.Color.argb(
+                        100, // Minimum 100 alpha for visibility
+                        android.graphics.Color.red(settings.color),
+                        android.graphics.Color.green(settings.color),
+                        android.graphics.Color.blue(settings.color)
+                    )
+                } else {
+                    colorWithAlpha
+                }
+
+                drawable.setColor(finalColor)
+                drawable.setStroke(3, android.graphics.Color.WHITE)
+                it.background = drawable
+
+                // Ensure view is visible
+                it.visibility = View.VISIBLE
+                it.alpha = 1.0f
+
+                // Force layout update
+                it.requestLayout()
+            } catch (e: Exception) {
+                // Fallback: use default blue color if something goes wrong
+                val fallbackDrawable = GradientDrawable()
+                fallbackDrawable.shape = GradientDrawable.OVAL
+                fallbackDrawable.setColor(0xFF2196F3.toInt()) // Blue with full alpha
+                fallbackDrawable.setStroke(3, android.graphics.Color.WHITE)
+                it.background = fallbackDrawable
+                it.visibility = View.VISIBLE
+                it.alpha = 1.0f
+                it.requestLayout()
+            }
         }
     }
 
