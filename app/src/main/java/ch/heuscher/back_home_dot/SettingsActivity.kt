@@ -18,7 +18,10 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var alphaValueText: TextView
     private lateinit var timeoutSeekBar: SeekBar
     private lateinit var timeoutValueText: TextView
-    private lateinit var previewDot: View
+    private lateinit var advancedToggleCard: androidx.cardview.widget.CardView
+    private lateinit var advancedContent: android.widget.LinearLayout
+    private lateinit var advancedArrow: TextView
+    private var isAdvancedExpanded = false
 
     private lateinit var settings: OverlaySettings
 
@@ -26,32 +29,17 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // Enable back button in action bar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Zurück"
+        // Hide action bar since we have custom back button
+        supportActionBar?.hide()
 
         settings = OverlaySettings(this)
 
         initializeViews()
+        setupBackButton()
+        setupAdvancedToggle()
         setupAlphaSeekBar()
         setupTimeoutSeekBar()
         setupColorButtons()
-        updatePreview()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun initializeViews() {
@@ -59,7 +47,27 @@ class SettingsActivity : AppCompatActivity() {
         alphaValueText = findViewById(R.id.alpha_value_text)
         timeoutSeekBar = findViewById(R.id.timeout_seekbar)
         timeoutValueText = findViewById(R.id.timeout_value_text)
-        previewDot = findViewById(R.id.preview_dot)
+        advancedToggleCard = findViewById(R.id.advanced_toggle_card)
+        advancedContent = findViewById(R.id.advanced_content)
+        advancedArrow = findViewById(R.id.advanced_arrow)
+    }
+
+    private fun setupBackButton() {
+        findViewById<Button>(R.id.back_button).setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupAdvancedToggle() {
+        advancedToggleCard.setOnClickListener {
+            toggleAdvanced()
+        }
+    }
+
+    private fun toggleAdvanced() {
+        isAdvancedExpanded = !isAdvancedExpanded
+        advancedContent.visibility = if (isAdvancedExpanded) View.VISIBLE else View.GONE
+        advancedArrow.text = if (isAdvancedExpanded) "▲" else "▼"
     }
 
     private fun setupAlphaSeekBar() {
@@ -70,7 +78,6 @@ class SettingsActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 settings.alpha = progress
                 updateAlphaText(progress)
-                updatePreview()
                 notifyOverlayService()
             }
 
@@ -148,21 +155,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setColor(color: Int) {
         settings.color = color
-        updatePreview()
         notifyOverlayService()
-    }
-
-    private fun updatePreview() {
-        val drawable = previewDot.background as? GradientDrawable
-        if (drawable != null) {
-            drawable.setColor(settings.getColorWithAlpha())
-        } else {
-            val newDrawable = GradientDrawable()
-            newDrawable.shape = GradientDrawable.OVAL
-            newDrawable.setColor(settings.getColorWithAlpha())
-            newDrawable.setStroke(2, Color.WHITE)
-            previewDot.background = newDrawable
-        }
     }
 
     private fun notifyOverlayService() {
