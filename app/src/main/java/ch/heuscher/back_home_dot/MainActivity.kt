@@ -166,35 +166,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStopServiceDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("App beenden")
-            .setMessage("Wollen Sie die App wirklich beenden?\n\nDer AssistiPunkt wird ausgeschaltet.")
-            .setPositiveButton("Beenden") { _, _ ->
-                // Disable overlay
-                settings.isEnabled = false
-                overlaySwitch.isChecked = false
-                stopOverlayService()
-                updateUI()
-
-                // Show info about accessibility service
-                AlertDialog.Builder(this)
-                    .setTitle("App beendet")
-                    .setMessage("AssistiPunkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"Assistive Tap\" in den Einstellungen.")
-                    .setPositiveButton("Einstellungen") { _, _ ->
-                        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                        startActivity(intent)
-                        closeApp()
-                    }
-                    .setNegativeButton("Schließen") { _, _ ->
-                        closeApp()
-                    }
-                    .setOnDismissListener {
-                        closeApp()
-                    }
-                    .show()
-            }
-            .setNegativeButton("Abbrechen", null)
-            .show()
+        // Einfach App beenden ohne AssistiPunkt zu deaktivieren
+        closeApp()
     }
 
     private fun closeApp() {
