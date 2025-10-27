@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Hintergrund -->
+    <path
+        android:pathData="M22,0 L78,0 Q100,0 100,22 L100,78 Q100,100 78,100 L22,100 Q0,100 0,78 L0,22 Q0,0 22,0 Z"
+        android:fillColor="#FFECB3"/>
+
+    <!-- Palm -->
+    <path
+        android:pathData="M 30,90 C 40,70 60,70 70,90 Z"
+        android:fillColor="#FFA726"/>
+
+    <!-- Finger 1 (links) -->
+    <path
+        android:pathData="M 25,50 L 25,75 L 35,75 L 35,50 Q 35,45 30,45 Q 25,45 25,50 Z"
+        android:fillColor="#FFA726"/>
+
+    <!-- Finger 2 -->
+    <path
+        android:pathData="M 40,45 L 40,75 L 50,75 L 50,45 Q 50,40 45,40 Q 40,40 40,45 Z"
+        android:fillColor="#FFA726"/>
+
+    <!-- Finger 3 -->
+    <path
+        android:pathData="M 55,45 L 55,75 L 65,75 L 65,45 Q 65,40 60,40 Q 55,40 55,45 Z"
+        android:fillColor="#FFA726"/>
+
+    <!-- Finger 4 (rechts) -->
+    <path
+        android:pathData="M 70,50 L 70,75 L 80,75 L 80,50 Q 80,45 75,45 Q 70,45 70,50 Z"
+        android:fillColor="#FFA726"/>
+
+    <!-- Daumen -->
+    <path
+        android:pathData="M 20,70 L 20,80 L 40,80 L 40,70 Q 40,65 30,65 Q 20,65 20,70 Z"
+        android:fillColor="#FFA726"/>
+
+    <!-- Der schwebende Punkt -->
+    <path
+        android:pathData="M 50,55 m -12,0 a 12,12 0 1,1 24,0 a 12,12 0 1,1 -24,0"
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFA726"
+        android:strokeWidth="2"/>
+</vector>
