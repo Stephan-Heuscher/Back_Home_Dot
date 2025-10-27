@@ -1,10 +1,10 @@
 # Release Notes - AssistiPunkt
 
-## Version 1.0.0 (2025-10-27)
+## Version v0.2.1-beta (2025-10-27)
 
-### Erstveröffentlichung
+### Beta-Version
 
-Wir freuen uns, die erste öffentliche Version von **AssistiPunkt** (international: **Assistive Tap**) vorzustellen - Ihre barrierefreie Android-App für intuitive Navigation!
+Wir freuen uns, die Beta-Version von **AssistiPunkt** (international: **Assistive Tap**) vorzustellen - Ihre barrierefreie Android-App für intuitive Navigation!
 
 ---
 

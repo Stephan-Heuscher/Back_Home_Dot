@@ -1,10 +1,10 @@
 # Release Notes - Assistive Tap
 
-## Version 1.0.0 (2025-10-27)
+## Version v0.2.1-beta (2025-10-27)
 
-### Initial Release
+### Beta Release
 
-We are excited to announce the first public release of **Assistive Tap** (German: **AssistiPunkt**) - your accessible Android app for intuitive navigation!
+We are excited to announce the beta release of **Assistive Tap** (German: **AssistiPunkt**) - your accessible Android app for intuitive navigation!
 
 ---
 
