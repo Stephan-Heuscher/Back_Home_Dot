@@ -21,7 +21,7 @@ Ihre App nutzt AccessibilityService, ist aber **kein primäres Accessibility-Too
 - [x] ProGuard/R8 aktiviert in `build.gradle.kts`
 - [x] Resource Shrinking aktiviert
 - [x] ProGuard Rules konfiguriert für AccessibilityService
-- [x] Version Name auf "1.0.0" gesetzt
+- [x] Version Name auf "0.2.1-beta" gesetzt
 
 ---
 
