@@ -166,7 +166,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStopServiceDialog() {
-        // Einfach App beenden ohne AssistiPunkt zu deaktivieren
+        // Stoppe Services, aber ändere den gespeicherten Status nicht
+        // So bleibt beim nächsten App-Start der Switch-Status erhalten
+        stopOverlayService()
         closeApp()
     }
 
