@@ -1,9 +1,89 @@
 <resources>
+    <!-- App Name -->
     <string name="app_name">Assistive Tap</string>
-    <string name="accessibility_service_description">Ermöglicht der Assistive Tap App, Navigationstasten und App-Wechsel auszuführen</string>
-    <string name="overlay_permission_needed">Overlay-Berechtigung erforderlich</string>
-    <string name="accessibility_service_needed">Accessibility Service erforderlich</string>
-    <string name="please_enable_overlay">Bitte aktivieren Sie die Overlay-Berechtigung für diese App</string>
-    <string name="please_enable_accessibility">Bitte aktivieren Sie den Accessibility Service für diese App in den Einstellungen</string>
-    <string name="open_settings">Einstellungen öffnen</string>
+
+    <!-- Permissions -->
+    <string name="accessibility_service_description">Allows the Assistive Tap app to execute navigation buttons and app switching</string>
+    <string name="overlay_permission_needed">Overlay permission required</string>
+    <string name="accessibility_service_needed">Accessibility service required</string>
+    <string name="please_enable_overlay">Please enable the overlay permission for this app</string>
+    <string name="please_enable_accessibility">Please enable the accessibility service for this app in settings</string>
+    <string name="open_settings">Open settings</string>
+
+    <!-- Main Screen -->
+    <string name="app_title">Assistive Tap</string>
+    <string name="app_subtitle">Your tap helper for navigation</string>
+    <string name="missing_permissions">Missing permissions</string>
+
+    <!-- Permission Cards -->
+    <string name="show_assistipoint">Show Assistive Tap</string>
+    <string name="shows_assistipoint_over_apps">Shows Assistive Tap over apps</string>
+    <string name="allow">Allow</string>
+    <string name="allow_navigation">Allow navigation</string>
+    <string name="for_back_home_app_switch">For Back, Home and App Switch</string>
+
+    <!-- Main Switch -->
+    <string name="assistipoint_on_off">Assistive Tap On/Off</string>
+    <string name="shows_the_assistipoint">Shows the Assistive Tap</string>
+
+    <!-- Buttons -->
+    <string name="settings">⚙ Settings</string>
+    <string name="stop_app">⛔ Stop app</string>
+
+    <!-- Help Section -->
+    <string name="how_it_works">ℹ️ How it works</string>
+    <string name="instructions">• Tap once = Back\n• Tap twice = Recent app\n• Tap 3 times = All open apps\n• Tap 4 times = Open Assistive Tap\n• Long press = Home screen</string>
+
+    <!-- Ad Button -->
+    <string name="watch_ad">📺 Play ad\nThank you for your support!</string>
+    <string name="ad_loading">📺 Ad loading…\nOne moment please</string>
+
+    <!-- Settings Screen -->
+    <string name="back">Back</string>
+    <string name="settings_title">Settings</string>
+    <string name="color">Color</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_red">Red</string>
+    <string name="color_green">Green</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_purple">Purple</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_yellow">Yellow</string>
+    <string name="color_gray">Gray</string>
+    <string name="custom_color">Custom color</string>
+
+    <!-- Advanced Settings -->
+    <string name="for_experts">For experts</string>
+    <string name="transparency">Transparency</string>
+    <string name="how_transparent_the_point_is">How transparent the point is</string>
+    <string name="switch_speed">Switch speed</string>
+    <string name="wait_time_for_app_switch">Wait time for app switch</string>
+
+    <!-- Dialogs -->
+    <string name="allow_assistipoint_display">Allow Assistive Tap display</string>
+    <string name="allow_assistipoint_message">Allow Assistive Tap to be displayed over other apps.</string>
+    <string name="allow_navigation_title">Allow navigation</string>
+    <string name="allow_navigation_message">Allow the app to navigate for you (Back, Home, App Switch).\n\nTurn on \"Assistive Tap\".</string>
+    <string name="open">Open</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_custom_color">Choose custom color</string>
+    <string name="ok">OK</string>
+
+    <!-- Toast Messages -->
+    <string name="thanks_for_watching">Thanks for watching! 😊</string>
+    <string name="ad_is_loading">Ad is loading…</string>
+
+    <!-- Content Descriptions -->
+    <string name="assistipoint_app">Assistive Tap app</string>
+    <string name="your_tap_helper_for_navigation">Your tap helper for navigation</string>
+    <string name="allow_assistipoint_over_apps">Allow Assistive Tap to display over apps</string>
+    <string name="allow_navigation_desc">Allow navigation</string>
+    <string name="switch_assistipoint_on_off">Switch Assistive Tap on or off</string>
+    <string name="adjust_color_and_speed">Adjust color and speed</string>
+    <string name="instructions_desc">How it works: Tap once for Back, Tap twice for recent app, Tap 3 times for all open apps, Tap 4 times to open Assistive Tap, Long press for home screen</string>
+    <string name="watch_ad_desc">Play ad</string>
+    <string name="stop_app_desc">Stop app</string>
+    <string name="choose_custom_color_desc">Choose custom color</string>
+    <string name="transparency_desc">Transparency</string>
+    <string name="switch_speed_desc">Switch speed</string>
 </resources>

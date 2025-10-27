@@ -133,16 +133,16 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder(this)
-                    .setTitle("AssistiPunkt anzeigen erlauben")
-                    .setMessage("Erlauben Sie, dass der AssistiPunkt über anderen Apps angezeigt wird.")
-                    .setPositiveButton("Öffnen") { _, _ ->
+                    .setTitle(getString(R.string.allow_assistipoint_display))
+                    .setMessage(getString(R.string.allow_assistipoint_message))
+                    .setPositiveButton(getString(R.string.open)) { _, _ ->
                         val intent = Intent(
                             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:$packageName")
                         )
                         startActivity(intent)
                     }
-                    .setNegativeButton("Abbrechen", null)
+                    .setNegativeButton(getString(R.string.cancel), null)
                     .show()
             }
         }
@@ -150,13 +150,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun openAccessibilitySettings() {
         AlertDialog.Builder(this)
-            .setTitle("Navigation erlauben")
-            .setMessage("Erlauben Sie, dass die App für Sie navigiert (Zurück, Home, App-Wechsel).\n\nSchalten Sie \"Assistive Tap\" ein.")
-            .setPositiveButton("Öffnen") { _, _ ->
+            .setTitle(getString(R.string.allow_navigation_title))
+            .setMessage(getString(R.string.allow_navigation_message))
+            .setPositiveButton(getString(R.string.open)) { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 startActivity(intent)
             }
-            .setNegativeButton("Abbrechen", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
@@ -166,35 +166,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStopServiceDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("App beenden")
-            .setMessage("Wollen Sie die App wirklich beenden?\n\nDer AssistiPunkt wird ausgeschaltet.")
-            .setPositiveButton("Beenden") { _, _ ->
-                // Disable overlay
-                settings.isEnabled = false
-                overlaySwitch.isChecked = false
-                stopOverlayService()
-                updateUI()
-
-                // Show info about accessibility service
-                AlertDialog.Builder(this)
-                    .setTitle("App beendet")
-                    .setMessage("AssistiPunkt ist aus.\n\nUm die Navigation auszuschalten, deaktivieren Sie \"Assistive Tap\" in den Einstellungen.")
-                    .setPositiveButton("Einstellungen") { _, _ ->
-                        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                        startActivity(intent)
-                        closeApp()
-                    }
-                    .setNegativeButton("Schließen") { _, _ ->
-                        closeApp()
-                    }
-                    .setOnDismissListener {
-                        closeApp()
-                    }
-                    .show()
-            }
-            .setNegativeButton("Abbrechen", null)
-            .show()
+        // Stoppe Services, aber ändere den gespeicherten Status nicht
+        // So bleibt beim nächsten App-Start der Switch-Status erhalten
+        stopOverlayService()
+        closeApp()
     }
 
     private fun closeApp() {
@@ -267,11 +242,11 @@ class MainActivity : AppCompatActivity() {
                 val rewardAmount = rewardItem.amount
                 val rewardType = rewardItem.type
                 Log.d(TAG, "User earned reward: $rewardAmount $rewardType")
-                Toast.makeText(this, "Danke fürs Ansehen! 😊", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.thanks_for_watching), Toast.LENGTH_SHORT).show()
             }
         } else {
             Log.d(TAG, "Rewarded Ad not ready yet")
-            Toast.makeText(this, "Werbung wird geladen...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.ad_is_loading), Toast.LENGTH_SHORT).show()
             loadRewardedAd()
         }
     }
@@ -280,9 +255,9 @@ class MainActivity : AppCompatActivity() {
         if (::rewardedAdButton.isInitialized) {
             rewardedAdButton.isEnabled = rewardedAd != null
             rewardedAdButton.text = if (rewardedAd != null) {
-                "📺 App unterstützen\nDanke für Ihre Unterstützung!"
+                getString(R.string.watch_ad)
             } else {
-                "📺 Werbung lädt...\nEinen Moment bitte"
+                getString(R.string.ad_loading)
             }
         }
     }
