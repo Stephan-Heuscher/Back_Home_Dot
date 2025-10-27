@@ -1,0 +1,28 @@
+en-US
+
+What's New in v0.2.1-beta:
+
+✨ NEW FEATURES
+• Gesture navigation: Single tap (back), double tap (last app), triple tap (all apps), quadruple tap (open app), long press (home)
+• Full customization: Choose color, transparency (0-100%), and position
+• Design gallery with color inspiration
+• Internationalization: German and English support
+
+♿ ACCESSIBILITY
+• WCAG 2.1 Level AA compliant
+• TalkBack support for screen readers
+• Large text and high contrast UI
+• Simple, clear language
+
+🔧 IMPROVEMENTS
+• Screen rotation: Dot stays at same physical position
+• Dark mode support
+• Smart permission display
+• More reliable service management
+
+🎨 DESIGN
+• New modern app icon
+• Material Design 3 interface
+• Intuitive settings layout
+
+This beta version is feature-complete and ready for testing. Your feedback helps us improve!

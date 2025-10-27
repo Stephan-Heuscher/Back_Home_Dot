@@ -1,0 +1,28 @@
+de-DE
+
+Neu in v0.2.1-beta:
+
+✨ NEUE FUNKTIONEN
+• Gesten-Navigation: Einfachklick (zurück), Doppelklick (letzte App), Dreifachklick (alle Apps), Vierfachklick (App öffnen), Langes Drücken (Startseite)
+• Vollständig anpassbar: Farbe, Durchsichtigkeit (0-100%) und Position frei wählbar
+• Design-Galerie mit Farbinspirationen
+• Mehrsprachig: Deutsche und englische Unterstützung
+
+♿ BARRIEREFREIHEIT
+• WCAG 2.1 Level AA konform
+• TalkBack-Unterstützung für Screen-Reader
+• Große Schrift und hoher Kontrast
+• Einfache, klare Sprache
+
+🔧 VERBESSERUNGEN
+• Bildschirm-Rotation: Punkt bleibt an gleicher Position
+• Dark Mode Unterstützung
+• Intelligente Berechtigungsanzeige
+• Zuverlässigeres Service-Management
+
+🎨 DESIGN
+• Neues modernes App-Icon
+• Material Design 3 Oberfläche
+• Intuitive Einstellungen
+
+Diese Beta-Version ist feature-komplett und bereit zum Testen. Ihr Feedback hilft uns, die App zu verbessern!
