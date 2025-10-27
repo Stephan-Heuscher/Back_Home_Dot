@@ -198,13 +198,13 @@ class SettingsActivity : AppCompatActivity() {
         })
 
         AlertDialog.Builder(this)
-            .setTitle("Eigene Farbe wählen")
+            .setTitle(getString(R.string.choose_custom_color))
             .setView(dialogView)
-            .setPositiveButton("OK") { _, _ ->
+            .setPositiveButton(getString(R.string.ok)) { _, _ ->
                 val selectedColor = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
                 setColor(0xFF000000.toInt() or selectedColor)
             }
-            .setNegativeButton("Abbrechen", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 }

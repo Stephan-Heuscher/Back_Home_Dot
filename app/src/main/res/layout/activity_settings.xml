@@ -31,7 +31,7 @@
                 android:text="←"
                 android:textSize="24sp"
                 android:textColor="?android:attr/textColorPrimary"
-                android:contentDescription="Zurück"
+                android:contentDescription="@string/back"
                 style="?android:attr/borderlessButtonStyle"
                 android:padding="0dp" />
 
@@ -39,7 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Einstellungen"
+                android:text="@string/settings_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
@@ -50,7 +50,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Farbe"
+            android:text="@string/color"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
@@ -70,7 +70,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#2196F3"
-                android:contentDescription="Blau"
+                android:contentDescription="@string/color_blue"
                 android:minHeight="64dp"
                 android:text="" />
 
@@ -82,7 +82,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#F44336"
-                android:contentDescription="Rot"
+                android:contentDescription="@string/color_red"
                 android:minHeight="64dp"
                 android:text="" />
 
@@ -94,7 +94,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#4CAF50"
-                android:contentDescription="Grün"
+                android:contentDescription="@string/color_green"
                 android:minHeight="64dp"
                 android:text="" />
 
@@ -105,7 +105,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
                 android:backgroundTint="#FF9800"
-                android:contentDescription="Orange"
+                android:contentDescription="@string/color_orange"
                 android:minHeight="64dp"
                 android:text="" />
         </LinearLayout>
@@ -123,7 +123,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#9C27B0"
-                android:contentDescription="Lila"
+                android:contentDescription="@string/color_purple"
                 android:minHeight="64dp"
                 android:text="" />
 
@@ -135,7 +135,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#00BCD4"
-                android:contentDescription="Cyan"
+                android:contentDescription="@string/color_cyan"
                 android:minHeight="64dp"
                 android:text="" />
 
@@ -147,7 +147,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:backgroundTint="#FFEB3B"
-                android:contentDescription="Gelb"
+                android:contentDescription="@string/color_yellow"
                 android:minHeight="64dp"
                 android:text="" />
 
@@ -158,7 +158,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
                 android:backgroundTint="#607D8B"
-                android:contentDescription="Grau"
+                android:contentDescription="@string/color_gray"
                 android:minHeight="64dp"
                 android:text="" />
         </LinearLayout>
@@ -168,9 +168,9 @@
             android:id="@+id/color_custom"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Eigene Farbe"
+            android:text="@string/custom_color"
             android:textSize="18sp"
-            android:contentDescription="Eigene Farbe wählen"
+            android:contentDescription="@string/choose_custom_color_desc"
             android:minHeight="64dp"
             android:layout_marginBottom="32dp" />
 
@@ -198,7 +198,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Für Experten"
+                    android:text="@string/for_experts"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColorPrimary" />
@@ -225,7 +225,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Durchsichtigkeit"
+                android:text="@string/transparency"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
@@ -234,7 +234,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Wie durchsichtig der Punkt ist"
+                android:text="@string/how_transparent_the_point_is"
                 android:textSize="16sp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:layout_marginBottom="12dp" />
@@ -254,7 +254,7 @@
                     android:layout_weight="1"
                     android:max="255"
                     android:progress="255"
-                    android:contentDescription="Durchsichtigkeit"
+                    android:contentDescription="@string/transparency_desc"
                     android:minHeight="48dp" />
 
                 <TextView
@@ -272,7 +272,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Wechsel-Geschwindigkeit"
+                android:text="@string/switch_speed"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
@@ -281,7 +281,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Wartezeit beim App-Wechsel"
+                android:text="@string/wait_time_for_app_switch"
                 android:textSize="16sp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:layout_marginBottom="12dp" />
@@ -302,7 +302,7 @@
                     android:min="50"
                     android:max="300"
                     android:progress="100"
-                    android:contentDescription="Wechsel-Geschwindigkeit"
+                    android:contentDescription="@string/switch_speed_desc"
                     android:minHeight="48dp" />
 
                 <TextView

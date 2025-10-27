@@ -21,22 +21,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AssistiPunkt"
+            android:text="@string/app_title"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
             android:gravity="center"
-            android:contentDescription="AssistiPunkt App"
+            android:contentDescription="@string/assistipoint_app"
             android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ihr Tipp-Helfer zur Navigation"
+            android:text="@string/app_subtitle"
             android:textSize="18sp"
             android:textColor="?android:attr/textColorSecondary"
             android:gravity="center"
-            android:contentDescription="Ihr Tipp-Helfer zur Navigation"
+            android:contentDescription="@string/your_tap_helper_for_navigation"
             android:layout_marginBottom="32dp" />
 
         <!-- Berechtigungen Section -->
@@ -49,7 +49,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fehlende Berechtigungen"
+                android:text="@string/missing_permissions"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
@@ -91,7 +91,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="AssistiPunkt anzeigen"
+                            android:text="@string/show_assistipoint"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="?android:attr/textColorPrimary" />
@@ -100,7 +100,7 @@
                             android:id="@+id/overlay_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Zeigt den AssistiPunkt über Apps"
+                            android:text="@string/shows_assistipoint_over_apps"
                             android:textSize="14sp"
                             android:textColor="?android:attr/textColorSecondary"
                             android:layout_marginTop="2dp" />
@@ -110,9 +110,9 @@
                         android:id="@+id/overlay_permission_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Erlauben"
+                        android:text="@string/allow"
                         android:textSize="16sp"
-                        android:contentDescription="AssistiPunkt über Apps anzeigen erlauben"
+                        android:contentDescription="@string/allow_assistipoint_over_apps"
                         android:minHeight="48dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -153,7 +153,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Navigation erlauben"
+                        android:text="@string/allow_navigation"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="?android:attr/textColorPrimary" />
@@ -162,7 +162,7 @@
                         android:id="@+id/accessibility_status_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Für Zurück, Home und App-Wechsel"
+                        android:text="@string/for_back_home_app_switch"
                         android:textSize="14sp"
                         android:textColor="?android:attr/textColorSecondary"
                         android:layout_marginTop="2dp" />
@@ -172,9 +172,9 @@
                     android:id="@+id/accessibility_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Erlauben"
+                    android:text="@string/allow"
                     android:textSize="16sp"
-                    android:contentDescription="Navigation erlauben"
+                    android:contentDescription="@string/allow_navigation_desc"
                     android:minHeight="48dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -206,7 +206,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AssistiPunkt Ein/Aus"
+                        android:text="@string/assistipoint_on_off"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="?android:attr/textColorPrimary" />
@@ -214,7 +214,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Zeigt den AssistiPunkt an"
+                        android:text="@string/shows_the_assistipoint"
                         android:textSize="16sp"
                         android:textColor="?android:attr/textColorSecondary"
                         android:layout_marginTop="4dp" />
@@ -224,7 +224,7 @@
                     android:id="@+id/overlay_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="AssistiPunkt ein oder aus schalten"
+                    android:contentDescription="@string/switch_assistipoint_on_off"
                     android:minHeight="48dp"
                     android:minWidth="48dp"
                     android:layout_marginStart="16dp"
@@ -239,9 +239,9 @@
             android:id="@+id/settings_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="⚙ Einstellungen"
+            android:text="@string/settings"
             android:textSize="18sp"
-            android:contentDescription="Farbe und Geschwindigkeit einstellen"
+            android:contentDescription="@string/adjust_color_and_speed"
             android:minHeight="64dp"
             android:layout_marginBottom="24dp"
             android:paddingVertical="16dp" />
@@ -263,7 +263,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ℹ️ So funktioniert es"
+                    android:text="@string/how_it_works"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#1976D2"
@@ -272,11 +272,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="• 1x tippen = Zurück\n• 2x tippen = Letzte App\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm"
+                    android:text="@string/instructions"
                     android:textSize="16sp"
                     android:lineSpacingExtra="4dp"
                     android:textColor="#1565C0"
-                    android:contentDescription="So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle offenen Apps, Viermal tippen für AssistiPunkt öffnen, Lang drücken für Start-Bildschirm" />
+                    android:contentDescription="@string/instructions_desc" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -285,9 +285,9 @@
             android:id="@+id/rewarded_ad_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="📺 Werbung abspielen\nDanke für Ihre Unterstützung!"
+            android:text="@string/watch_ad"
             android:textSize="16sp"
-            android:contentDescription="Werbung abspielen"
+            android:contentDescription="@string/watch_ad_desc"
             android:minHeight="64dp"
             android:layout_marginTop="24dp"
             android:paddingVertical="16dp"
@@ -298,11 +298,11 @@
             android:id="@+id/stop_service_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="⛔ App beenden"
+            android:text="@string/stop_app"
             android:textSize="18sp"
             android:backgroundTint="#D32F2F"
             android:textColor="#FFFFFF"
-            android:contentDescription="App beenden"
+            android:contentDescription="@string/stop_app_desc"
             android:minHeight="64dp"
             android:layout_marginTop="16dp"
             android:paddingVertical="16dp" />
