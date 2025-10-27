@@ -255,7 +255,7 @@ class MainActivity : AppCompatActivity() {
         if (::rewardedAdButton.isInitialized) {
             rewardedAdButton.isEnabled = rewardedAd != null
             rewardedAdButton.text = if (rewardedAd != null) {
-                "📺 App unterstützen\nDanke für Ihre Unterstützung!"
+                "📺 Werbung abspielen\nDanke für Ihre Unterstützung!"
             } else {
                 "📺 Werbung lädt...\nEinen Moment bitte"
             }
