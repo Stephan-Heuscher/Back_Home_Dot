@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Hintergrund -->
+    <path
+        android:pathData="M22,0 L78,0 Q100,0 100,22 L100,78 Q100,100 78,100 L22,100 Q0,100 0,78 L0,22 Q0,0 22,0 Z"
+        android:fillColor="#ECEFF1"/>
+
+    <!-- Äußerer Ring des Punktes -->
+    <path
+        android:pathData="M 50,50 m -18,0 a 18,18 0 1,1 36,0 a 18,18 0 1,1 -36,0"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Innerer Punkt -->
+    <path
+        android:pathData="M 50,50 m -12,0 a 12,12 0 1,1 24,0 a 12,12 0 1,1 -24,0"
+        android:fillColor="#00ACC1"/>
+
+    <!-- Abstrakter Zeiger -->
+    <path
+        android:pathData="M 30,70 L 50,50 L 70,70 L 60,80 L 40,80 Z"
+        android:fillColor="#546E7A"/>
+</vector>
