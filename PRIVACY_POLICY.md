@@ -10,7 +10,7 @@ Assistive Tap ("we," "our," or "the app") is committed to protecting your privac
 
 - **App Name**: Assistive Tap (AssistiPunkt)
 - **Developer**: Stephan Heuscher
-- **Contact Email**: s.heuscher@gmail.com
+- **Contact Email**: stv.heuscher@gmail.com
 - **GitHub**: https://github.com/Stephan-Heuscher/Back_Home_Dot
 
 ## Data Collection and Usage
