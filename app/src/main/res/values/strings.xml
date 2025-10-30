@@ -73,7 +73,6 @@
     <string name="switch_assistipoint_on_off">Switch Assistive Tap on or off</string>
     <string name="adjust_color_and_speed">Adjust color and speed</string>
     <string name="instructions_desc">How it works: Tap once for Back, Tap twice for recent app, Tap 3 times for all open apps, Tap 4 times to open Assistive Tap, Long press for home screen</string>
-    <string name="watch_ad_desc">Play ad</string>
     <string name="stop_app_desc">Stop app</string>
     <string name="choose_custom_color_desc">Choose custom color</string>
     <string name="transparency_desc">Transparency</string>
