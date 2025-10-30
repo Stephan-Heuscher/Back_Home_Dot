@@ -280,18 +280,15 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Rewarded Ad Button -->
-        <Button
-            android:id="@+id/rewarded_ad_button"
-            android:layout_width="match_parent"
+        <!-- Banner Ad -->
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/watch_ad"
-            android:textSize="16sp"
-            android:contentDescription="@string/watch_ad_desc"
-            android:minHeight="64dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:paddingVertical="16dp"
-            android:backgroundTint="#4CAF50" />
+            app:adSize="BANNER"
+            app:adUnitId="@string/banner_ad_unit_id" />
 
         <!-- Service beenden Button -->
         <Button

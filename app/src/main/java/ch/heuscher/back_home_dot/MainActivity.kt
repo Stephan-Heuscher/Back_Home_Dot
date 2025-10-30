@@ -5,23 +5,17 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
-import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,15 +31,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var overlaySwitch: SwitchCompat
     private lateinit var settingsButton: Button
     private lateinit var stopServiceButton: Button
-    private lateinit var rewardedAdButton: Button
+    private lateinit var adView: AdView
 
     private lateinit var settings: OverlaySettings
     private lateinit var permissionManager: PermissionManager
-    private var rewardedAd: RewardedAd? = null
 
     companion object {
         private const val TAG = "MainActivity"
-        private const val REWARDED_AD_UNIT_ID = "ca-app-pub-5567609971256551/3813904922"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         initializeViews()
         setupClickListeners()
         updateUI()
-        loadRewardedAd()
+        loadBannerAd()
     }
 
     override fun onResume() {
@@ -87,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         overlaySwitch = findViewById(R.id.overlay_switch)
         settingsButton = findViewById(R.id.settings_button)
         stopServiceButton = findViewById(R.id.stop_service_button)
-        rewardedAdButton = findViewById(R.id.rewarded_ad_button)
+        adView = findViewById(R.id.adView)
     }
 
     private fun setupClickListeners() {
@@ -95,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         accessibilityButton.setOnClickListener { openAccessibilitySettings() }
         stopServiceButton.setOnClickListener { showStopServiceDialog() }
         settingsButton.setOnClickListener { openSettings() }
-        rewardedAdButton.setOnClickListener { showRewardedAd() }
 
         overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
             settings.isEnabled = isChecked
@@ -190,75 +181,8 @@ class MainActivity : AppCompatActivity() {
         stopService(serviceIntent)
     }
 
-    private fun loadRewardedAd() {
+    private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
-        RewardedAd.load(this, REWARDED_AD_UNIT_ID, adRequest, object : RewardedAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d(TAG, "Rewarded Ad failed to load: ${adError.message}")
-                rewardedAd = null
-                updateRewardedAdButton()
-            }
-
-            override fun onAdLoaded(ad: RewardedAd) {
-                Log.d(TAG, "Rewarded Ad loaded successfully")
-                rewardedAd = ad
-                updateRewardedAdButton()
-
-                // Set fullscreen content callback
-                rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                    override fun onAdClicked() {
-                        Log.d(TAG, "Rewarded Ad was clicked")
-                    }
-
-                    override fun onAdDismissedFullScreenContent() {
-                        Log.d(TAG, "Rewarded Ad dismissed")
-                        rewardedAd = null
-                        updateRewardedAdButton()
-                        // Load next ad
-                        loadRewardedAd()
-                    }
-
-                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                        Log.d(TAG, "Rewarded Ad failed to show: ${adError.message}")
-                        rewardedAd = null
-                        updateRewardedAdButton()
-                    }
-
-                    override fun onAdImpression() {
-                        Log.d(TAG, "Rewarded Ad impression recorded")
-                    }
-
-                    override fun onAdShowedFullScreenContent() {
-                        Log.d(TAG, "Rewarded Ad showed fullscreen content")
-                    }
-                }
-            }
-        })
-    }
-
-    private fun showRewardedAd() {
-        if (rewardedAd != null) {
-            rewardedAd?.show(this) { rewardItem ->
-                val rewardAmount = rewardItem.amount
-                val rewardType = rewardItem.type
-                Log.d(TAG, "User earned reward: $rewardAmount $rewardType")
-                Toast.makeText(this, getString(R.string.thanks_for_watching), Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Log.d(TAG, "Rewarded Ad not ready yet")
-            Toast.makeText(this, getString(R.string.ad_is_loading), Toast.LENGTH_SHORT).show()
-            loadRewardedAd()
-        }
-    }
-
-    private fun updateRewardedAdButton() {
-        if (::rewardedAdButton.isInitialized) {
-            rewardedAdButton.isEnabled = rewardedAd != null
-            rewardedAdButton.text = if (rewardedAd != null) {
-                getString(R.string.watch_ad)
-            } else {
-                getString(R.string.ad_loading)
-            }
-        }
+        adView.loadAd(adRequest)
     }
 }
