@@ -69,10 +69,6 @@
     <string name="choose_custom_color">Eigene Farbe wählen</string>
     <string name="ok">OK</string>
 
-    <!-- Toast Messages -->
-    <string name="thanks_for_watching">Danke fürs Ansehen! 😊</string>
-    <string name="ad_is_loading">Werbung wird geladen…</string>
-
     <!-- Content Descriptions -->
     <string name="assistipoint_app">AssistiPunkt App</string>
     <string name="your_tap_helper_for_navigation">Ihr Tipp-Helfer zur Navigation</string>
