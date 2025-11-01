@@ -42,11 +42,11 @@ class OverlaySettings(context: Context) {
 
     var positionX: Int
         get() = prefs.getInt(KEY_POSITION_X, DEFAULT_POSITION_X)
-        set(value) = prefs.edit().putInt(KEY_POSITION_X, value).apply()
+        set(value) = prefs.edit().putInt(KEY_POSITION_X, value.coerceAtLeast(0)).apply()
 
     var positionY: Int
         get() = prefs.getInt(KEY_POSITION_Y, DEFAULT_POSITION_Y)
-        set(value) = prefs.edit().putInt(KEY_POSITION_Y, value).apply()
+        set(value) = prefs.edit().putInt(KEY_POSITION_Y, value.coerceAtLeast(0)).apply()
 
     var recentsTimeout: Long
         get() = prefs.getLong(KEY_RECENTS_TIMEOUT, DEFAULT_RECENTS_TIMEOUT.toLong())
@@ -54,19 +54,19 @@ class OverlaySettings(context: Context) {
 
     var positionXPercent: Float
         get() = prefs.getFloat(KEY_POSITION_X_PERCENT, 0.1f)
-        set(value) = prefs.edit().putFloat(KEY_POSITION_X_PERCENT, value).apply()
+        set(value) = prefs.edit().putFloat(KEY_POSITION_X_PERCENT, value.coerceIn(0f, 1f)).apply()
 
     var positionYPercent: Float
         get() = prefs.getFloat(KEY_POSITION_Y_PERCENT, 0.1f)
-        set(value) = prefs.edit().putFloat(KEY_POSITION_Y_PERCENT, value).apply()
+        set(value) = prefs.edit().putFloat(KEY_POSITION_Y_PERCENT, value.coerceIn(0f, 1f)).apply()
 
     var screenWidth: Int
         get() = prefs.getInt(KEY_SCREEN_WIDTH, 1080)
-        set(value) = prefs.edit().putInt(KEY_SCREEN_WIDTH, value).apply()
+        set(value) = prefs.edit().putInt(KEY_SCREEN_WIDTH, value.coerceAtLeast(0)).apply()
 
     var screenHeight: Int
         get() = prefs.getInt(KEY_SCREEN_HEIGHT, 1920)
-        set(value) = prefs.edit().putInt(KEY_SCREEN_HEIGHT, value).apply()
+        set(value) = prefs.edit().putInt(KEY_SCREEN_HEIGHT, value.coerceAtLeast(0)).apply()
 
     var rotation: Int
         get() = prefs.getInt(KEY_ROTATION, 0)

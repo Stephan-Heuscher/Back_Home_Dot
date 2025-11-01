@@ -288,7 +288,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
             app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-5567609971256551/9228246659" />
+            app:adUnitId="@string/banner_ad_unit_id" />
 
         <!-- Service beenden Button -->
         <Button

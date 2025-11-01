@@ -3,87 +3,72 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="20dp">
 
-    <!-- Color Preview -->
     <View
         android:id="@+id/color_preview"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginBottom="24dp"
-        android:background="#2196F3" />
-
-    <!-- Red Slider -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Rot"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp" />
+        android:layout_height="60dp"
+        android:layout_marginBottom="20dp"
+        android:background="@android:color/black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="Red"
+            android:textSize="16sp" />
 
         <SeekBar
             android:id="@+id/red_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="255"
-            android:progress="33" />
+            android:max="255" />
 
         <TextView
             android:id="@+id/red_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="33"
-            android:textAlignment="textEnd"
-            android:layout_marginStart="8dp" />
+            android:text="0"
+            android:textSize="16sp"
+            android:textAlignment="textEnd" />
     </LinearLayout>
-
-    <!-- Green Slider -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Grün"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="Green"
+            android:textSize="16sp" />
 
         <SeekBar
             android:id="@+id/green_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="255"
-            android:progress="150" />
+            android:max="255" />
 
         <TextView
             android:id="@+id/green_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="150"
-            android:textAlignment="textEnd"
-            android:layout_marginStart="8dp" />
+            android:text="0"
+            android:textSize="16sp"
+            android:textAlignment="textEnd" />
     </LinearLayout>
-
-    <!-- Blue Slider -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Blau"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,21 +76,25 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="Blue"
+            android:textSize="16sp" />
+
         <SeekBar
             android:id="@+id/blue_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="255"
-            android:progress="243" />
+            android:max="255" />
 
         <TextView
             android:id="@+id/blue_value"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="243"
-            android:textAlignment="textEnd"
-            android:layout_marginStart="8dp" />
+            android:text="0"
+            android:textSize="16sp"
+            android:textAlignment="textEnd" />
     </LinearLayout>
-
 </LinearLayout>
