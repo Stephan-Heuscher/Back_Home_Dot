@@ -498,36 +498,14 @@ class OverlayViewManager(
 
     /**
      * Shows or hides the halo effect for drag mode.
+     * Halo is disabled - always keep it hidden.
      */
     fun setDragMode(enabled: Boolean) {
         floatingDotHalo?.let { haloView ->
-            if (enabled) {
-                // Create halo drawable (72dp, 1.5x button size)
-                val drawable = GradientDrawable().apply {
-                    shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 14f * context.resources.displayMetrics.density
-                    setColor(android.graphics.Color.argb(80, 255, 255, 255))
-                }
-                haloView.background = drawable
-                haloView.visibility = View.VISIBLE
-
-                // Animate the halo (pulsing effect)
-                haloAnimator?.cancel()
-                haloAnimator = ValueAnimator.ofFloat(0.3f, 0.7f).apply {
-                    duration = 800
-                    repeatMode = ValueAnimator.REVERSE
-                    repeatCount = ValueAnimator.INFINITE
-                    addUpdateListener { animator ->
-                        haloView.alpha = animator.animatedValue as Float
-                    }
-                    start()
-                }
-            } else {
-                // Hide halo
-                haloAnimator?.cancel()
-                haloAnimator = null
-                haloView.visibility = View.GONE
-            }
+            // Always hide halo - no visual feedback for drag mode
+            haloAnimator?.cancel()
+            haloAnimator = null
+            haloView.visibility = View.GONE
         }
     }
 }
