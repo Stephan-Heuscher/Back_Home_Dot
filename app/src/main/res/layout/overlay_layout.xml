@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="128dp"
     android:layout_height="128dp"
-    android:clickable="true"
+    android:clickable="false"
     android:focusable="false">
 
     <!-- Halo effect (shown during long-press drag mode) -->

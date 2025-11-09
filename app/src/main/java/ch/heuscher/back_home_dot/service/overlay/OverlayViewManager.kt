@@ -83,7 +83,7 @@ class OverlayViewManager(
         windowManager.addView(floatingView, layoutParams)
 
         touchListener?.let { listener ->
-            floatingView?.setOnTouchListener(listener)
+            // Only attach touch listener to the button itself, not the container
             floatingDot?.setOnTouchListener(listener)
         }
 
@@ -205,10 +205,11 @@ class OverlayViewManager(
 
     /**
      * Registers a touch listener for gesture detection on overlay elements.
+     * Only attaches to the button itself, not the container.
      */
     fun setTouchListener(listener: View.OnTouchListener) {
         touchListener = listener
-        floatingView?.setOnTouchListener(listener)
+        // Only attach touch listener to the button itself, not the container
         floatingDot?.setOnTouchListener(listener)
     }
 
