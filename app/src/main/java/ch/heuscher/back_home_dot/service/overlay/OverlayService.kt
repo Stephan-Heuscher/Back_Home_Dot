@@ -1,10 +1,15 @@
 package ch.heuscher.back_home_dot.service.overlay
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
 import android.graphics.Point
 import android.os.Build
 import android.os.Handler
@@ -13,6 +18,8 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import ch.heuscher.back_home_dot.BackHomeAccessibilityService
+import ch.heuscher.back_home_dot.MainActivity
+import ch.heuscher.back_home_dot.R
 import ch.heuscher.back_home_dot.di.ServiceLocator
 import ch.heuscher.back_home_dot.domain.model.DotPosition
 import ch.heuscher.back_home_dot.domain.model.Gesture
@@ -38,6 +45,11 @@ class OverlayService : Service() {
         private const val ORIENTATION_CHANGE_INITIAL_DELAY_MS = 16L  // One frame (60fps)
         private const val ORIENTATION_CHANGE_RETRY_DELAY_MS = 16L    // Check every frame
         private const val ORIENTATION_CHANGE_MAX_ATTEMPTS = 20       // Max 320ms total
+
+        // Notification constants
+        private const val NOTIFICATION_ID = 1
+        private const val CHANNEL_ID = "overlay_service_channel"
+        private const val CHANNEL_NAME = "Assistive Tap Service"
     }
 
     // Core dependencies
@@ -136,10 +148,72 @@ class OverlayService : Service() {
 
         // Start keyboard monitoring
         keyboardManager.startMonitoring()
+
+        // Start foreground service with notification
+        startForegroundService()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Call startForeground immediately to avoid crash
+        startForegroundService()
+        return START_STICKY
+    }
+
+    private fun startForegroundService() {
+        // Create notification channel (required for Android O+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = getString(R.string.accessibility_service_description)
+                setShowBadge(false)
+            }
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Create notification with pending intent to open the app
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(this, CHANNEL_ID)
+        } else {
+            @Suppress("DEPRECATION")
+            Notification.Builder(this)
+        }.apply {
+            setContentTitle(getString(R.string.app_name))
+            setContentText(getString(R.string.shows_the_assistipoint))
+            setSmallIcon(R.mipmap.ic_launcher)
+            setContentIntent(pendingIntent)
+            setOngoing(true)
+        }.build()
+
+        // Start foreground with appropriate type for Android Q+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+
+        // Stop foreground service
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } else {
+            @Suppress("DEPRECATION")
+            stopForeground(true)
+        }
 
         // Clean up
         keyboardManager.stopMonitoring()
