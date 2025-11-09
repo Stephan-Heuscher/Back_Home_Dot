@@ -66,7 +66,6 @@ class OverlayViewManager(
 
         floatingView = LayoutInflater.from(context).inflate(R.layout.overlay_layout, null)
         floatingDot = floatingView?.findViewById<View>(R.id.floating_dot)
-        floatingDotHalo = floatingView?.findViewById<View>(R.id.floating_dot_halo)
 
         // Listen for insets to get accurate nav bar height
         floatingView?.setOnApplyWindowInsetsListener { view, insets ->
@@ -103,7 +102,6 @@ class OverlayViewManager(
         floatingView?.let { windowManager.removeView(it) }
         floatingView = null
         floatingDot = null
-        floatingDotHalo = null
         layoutParams = null
     }
 
