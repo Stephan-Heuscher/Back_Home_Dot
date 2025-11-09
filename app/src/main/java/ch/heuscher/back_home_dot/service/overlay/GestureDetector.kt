@@ -27,9 +27,11 @@ class GestureDetector(
     private var initialY = 0f
     private var lastX = 0f
     private var lastY = 0f
+    private var totalDragDistance = 0f
 
     // Configuration
     private val touchSlop = viewConfiguration.scaledTouchSlop
+    private val minimalDragThreshold = touchSlop * 3 // Minimal drag threshold (~3x touchSlop)
     private val doubleTapTimeout = AppConstants.GESTURE_DOUBLE_TAP_TIMEOUT_MS
     private val longPressTimeout = AppConstants.GESTURE_LONG_PRESS_TIMEOUT_MS
 
@@ -92,6 +94,7 @@ class GestureDetector(
         lastY = initialY
         isLongPress = false
         hasMoved = false
+        totalDragDistance = 0f
 
         // Start long press timer
         mainHandler.postDelayed(longPressRunnable, longPressTimeout)
@@ -135,6 +138,10 @@ class GestureDetector(
         val deltaX = event.rawX - lastX
         val deltaY = event.rawY - lastY
 
+        // Track total drag distance
+        val movementDistance = Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble()).toFloat()
+        totalDragDistance += movementDistance
+
         onPositionChanged?.invoke(deltaX.toInt(), deltaY.toInt())
         onGesture?.invoke(Gesture.DRAG_MOVE)
 
@@ -147,9 +154,22 @@ class GestureDetector(
         mainHandler.removeCallbacks(longPressRunnable)
 
         if (hasMoved) {
-            // Drag ended
-            onGesture?.invoke(Gesture.DRAG_END)
-        } else if (!isLongPress) {
+            // Check if drag was minimal in SAFE_HOME mode
+            if (requiresLongPressToDrag && isLongPress && totalDragDistance < minimalDragThreshold) {
+                // Long press with minimal drag - trigger home action
+                onGesture?.invoke(Gesture.TAP)
+            } else {
+                // Drag ended normally
+                onGesture?.invoke(Gesture.DRAG_END)
+            }
+        } else if (isLongPress) {
+            // Long press without drag
+            if (requiresLongPressToDrag) {
+                // In SAFE_HOME mode: trigger home action
+                onGesture?.invoke(Gesture.TAP)
+            }
+            // In other modes: LONG_PRESS gesture was already invoked during the press
+        } else {
             // Handle click
             handleClick()
         }
