@@ -24,7 +24,7 @@ Und weil so ein Punkt praktisch ist, habe ich ihn für Ein-Daumen-Bedienung erwe
 - **Alle Taps** → Home (Oma kommt immer nach Hause)
 - **Viereck-Design** → Wie Android-Navigation
 - **Lang drücken + Ziehen** → Button verschieben (überall möglich)
-- **Halo-Effekt** → Zeigt, wann der Button verschoben werden kann
+- **Geschützt** → Verhindert versehentliches Verschieben
 
 Alles mit einem Daumen, ohne das Handy umzugreifen.
 
@@ -63,7 +63,7 @@ Alles mit einem Daumen, ohne das Handy umzugreifen.
 2. **Modus wählen**: Standard oder Safe-Home in den Einstellungen
 3. **Punkt verschieben**:
    - **Standard-Modus**: Punkt sofort ziehen
-   - **Safe-Home-Modus**: Punkt 500ms lang drücken (Halo erscheint), dann ziehen
+   - **Safe-Home-Modus**: Punkt 500ms lang drücken, dann ziehen
 4. **Navigieren**:
    - **Standard**: 1x tippen = Home, 2x tippen = Zurück
    - **Safe-Home**: Alle Taps = Home (für maximale Sicherheit)
@@ -260,17 +260,16 @@ Das Projekt folgt **Clean Architecture** Prinzipien:
 - **`util/`**: Hilfsfunktionen und Konstanten
 - **`di/`**: Dependency Injection (ServiceLocator + Hilt-Module)
 
-### 🔄 Aktuelle Verbesserungen (v2.1.0)
+### 🔄 Aktuelle Verbesserungen (v2.0.0)
 
-**Safe-Home-Modus & UX-Verbesserungen 2025**
+**Clean Architecture & Komponenten-Refactoring 2025**
 
 - ✅ **Safe-Home-Modus**: Neuer Modus für maximale Sicherheit - alle Taps führen nach Hause
 - ✅ **Viereck-Design**: Button wird im Safe-Home-Modus zum Viereck (wie Android-Navigation)
 - ✅ **Long-Press Drag**: Im Safe-Home-Modus nur nach langem Drücken verschiebbar
-- ✅ **Halo-Effekt**: Pulsierender 128dp Halo zeigt, wann der Button verschoben werden kann
 - ✅ **Modus-basiertes Design**: Kreis (Standard/Navi) vs. Viereck (Safe-Home)
-- ✅ **Auto-Restart nach Update**: App startet automatisch nach Updates neu
-- ✅ **Tablet-Fix**: Button kann jetzt über den gesamten Bildschirm verschoben werden
+- ✅ **Geschütztes Verschieben**: Verhindert versehentliche Bewegung im Safe-Home-Modus
+- ✅ **Minimaler Drag-Threshold**: Kurze Drags lösen Home aus, lange Drags verschieben den Button
 - ✅ **Architektur-Überarbeitung**: Von monolithischem Service zu komponentenbasierter Architektur
 - ✅ **Spezialisierte Komponenten**: Extrahierte KeyboardManager (273L), PositionAnimator (86L), OrientationHandler (97L)
 - ✅ **Code-Reduktion**: OverlayService von 670 auf ~459 Zeilen reduziert (31%)
