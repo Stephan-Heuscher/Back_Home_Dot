@@ -85,50 +85,54 @@ class SharedPreferencesDataSource(
 
     override fun getPositionX(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_POSITION_X, AppConstants.DEFAULT_POSITION_X_PX) { prefs, key, default ->
-            val value = prefs.getInt(key, default)
-            Log.d(TAG, "getPositionX: $value (default=$default)")
-            value
+            prefs.getInt(key, default)
         }
 
     override suspend fun setPositionX(x: Int) {
-        Log.d(TAG, "setPositionX: $x")
-        prefs.edit().putInt(AppConstants.KEY_POSITION_X, x).apply()
+        val oldValue = prefs.getInt(AppConstants.KEY_POSITION_X, -1)
+        if (oldValue != x) {
+            Log.d(TAG, "setPositionX: $oldValue -> $x")
+            prefs.edit().putInt(AppConstants.KEY_POSITION_X, x).apply()
+        }
     }
 
     override fun getPositionY(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_POSITION_Y, AppConstants.DEFAULT_POSITION_Y_PX) { prefs, key, default ->
-            val value = prefs.getInt(key, default)
-            Log.d(TAG, "getPositionY: $value (default=$default)")
-            value
+            prefs.getInt(key, default)
         }
 
     override suspend fun setPositionY(y: Int) {
-        Log.d(TAG, "setPositionY: $y")
-        prefs.edit().putInt(AppConstants.KEY_POSITION_Y, y).apply()
+        val oldValue = prefs.getInt(AppConstants.KEY_POSITION_Y, -1)
+        if (oldValue != y) {
+            Log.d(TAG, "setPositionY: $oldValue -> $y")
+            prefs.edit().putInt(AppConstants.KEY_POSITION_Y, y).apply()
+        }
     }
 
     override fun getPositionXPercent(): Flow<Float> =
         getPreferenceFlow(AppConstants.KEY_POSITION_X_PERCENT, AppConstants.DEFAULT_POSITION_X_PERCENT) { prefs, key, default ->
-            val value = prefs.getFloat(key, default)
-            Log.d(TAG, "getPositionXPercent: $value (default=$default)")
-            value
+            prefs.getFloat(key, default)
         }
 
     override suspend fun setPositionXPercent(percent: Float) {
-        Log.d(TAG, "setPositionXPercent: $percent")
-        prefs.edit().putFloat(AppConstants.KEY_POSITION_X_PERCENT, percent).apply()
+        val oldValue = prefs.getFloat(AppConstants.KEY_POSITION_X_PERCENT, -1f)
+        if (oldValue != percent) {
+            Log.d(TAG, "setPositionXPercent: $oldValue -> $percent")
+            prefs.edit().putFloat(AppConstants.KEY_POSITION_X_PERCENT, percent).apply()
+        }
     }
 
     override fun getPositionYPercent(): Flow<Float> =
         getPreferenceFlow(AppConstants.KEY_POSITION_Y_PERCENT, AppConstants.DEFAULT_POSITION_Y_PERCENT) { prefs, key, default ->
-            val value = prefs.getFloat(key, default)
-            Log.d(TAG, "getPositionYPercent: $value (default=$default)")
-            value
+            prefs.getFloat(key, default)
         }
 
     override suspend fun setPositionYPercent(percent: Float) {
-        Log.d(TAG, "setPositionYPercent: $percent")
-        prefs.edit().putFloat(AppConstants.KEY_POSITION_Y_PERCENT, percent).apply()
+        val oldValue = prefs.getFloat(AppConstants.KEY_POSITION_Y_PERCENT, -1f)
+        if (oldValue != percent) {
+            Log.d(TAG, "setPositionYPercent: $oldValue -> $percent")
+            prefs.edit().putFloat(AppConstants.KEY_POSITION_Y_PERCENT, percent).apply()
+        }
     }
 
     override fun getRecentsTimeout(): Flow<Long> =
@@ -160,37 +164,40 @@ class SharedPreferencesDataSource(
 
     override fun getScreenWidth(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_SCREEN_WIDTH, AppConstants.DEFAULT_SCREEN_WIDTH) { prefs, key, default ->
-            val value = prefs.getInt(key, default)
-            Log.d(TAG, "getScreenWidth: $value (default=$default)")
-            value
+            prefs.getInt(key, default)
         }
 
     override suspend fun setScreenWidth(width: Int) {
-        Log.d(TAG, "setScreenWidth: $width")
-        prefs.edit().putInt(AppConstants.KEY_SCREEN_WIDTH, width).apply()
+        val oldValue = prefs.getInt(AppConstants.KEY_SCREEN_WIDTH, -1)
+        if (oldValue != width) {
+            Log.d(TAG, "setScreenWidth: $oldValue -> $width")
+            prefs.edit().putInt(AppConstants.KEY_SCREEN_WIDTH, width).apply()
+        }
     }
 
     override fun getScreenHeight(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_SCREEN_HEIGHT, AppConstants.DEFAULT_SCREEN_HEIGHT) { prefs, key, default ->
-            val value = prefs.getInt(key, default)
-            Log.d(TAG, "getScreenHeight: $value (default=$default)")
-            value
+            prefs.getInt(key, default)
         }
 
     override suspend fun setScreenHeight(height: Int) {
-        Log.d(TAG, "setScreenHeight: $height")
-        prefs.edit().putInt(AppConstants.KEY_SCREEN_HEIGHT, height).apply()
+        val oldValue = prefs.getInt(AppConstants.KEY_SCREEN_HEIGHT, -1)
+        if (oldValue != height) {
+            Log.d(TAG, "setScreenHeight: $oldValue -> $height")
+            prefs.edit().putInt(AppConstants.KEY_SCREEN_HEIGHT, height).apply()
+        }
     }
 
     override fun getRotation(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_ROTATION, 0) { prefs, key, default ->
-            val value = prefs.getInt(key, default)
-            Log.d(TAG, "getRotation: $value (default=$default)")
-            value
+            prefs.getInt(key, default)
         }
 
     override suspend fun setRotation(rotation: Int) {
-        Log.d(TAG, "setRotation: $rotation")
-        prefs.edit().putInt(AppConstants.KEY_ROTATION, rotation).apply()
+        val oldValue = prefs.getInt(AppConstants.KEY_ROTATION, -1)
+        if (oldValue != rotation) {
+            Log.d(TAG, "setRotation: $oldValue -> $rotation")
+            prefs.edit().putInt(AppConstants.KEY_ROTATION, rotation).apply()
+        }
     }
 }
