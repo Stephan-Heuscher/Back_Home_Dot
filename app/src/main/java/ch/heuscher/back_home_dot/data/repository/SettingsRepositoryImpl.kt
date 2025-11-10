@@ -94,21 +94,18 @@ class SettingsRepositoryImpl(
     override fun getScreenWidth(): Flow<Int> = dataSource.getScreenWidth()
 
     override suspend fun setScreenWidth(width: Int) {
-        Log.d(TAG, "setScreenWidth: $width")
         dataSource.setScreenWidth(width)
     }
 
     override fun getScreenHeight(): Flow<Int> = dataSource.getScreenHeight()
 
     override suspend fun setScreenHeight(height: Int) {
-        Log.d(TAG, "setScreenHeight: $height")
         dataSource.setScreenHeight(height)
     }
 
     override fun getRotation(): Flow<Int> = dataSource.getRotation()
 
     override suspend fun setRotation(rotation: Int) {
-        Log.d(TAG, "setRotation: $rotation")
         dataSource.setRotation(rotation)
     }
 
