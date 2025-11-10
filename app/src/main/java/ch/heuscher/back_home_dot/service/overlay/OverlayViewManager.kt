@@ -67,6 +67,9 @@ class OverlayViewManager(
         floatingView = LayoutInflater.from(context).inflate(R.layout.overlay_layout, null)
         floatingDot = floatingView?.findViewById<View>(R.id.floating_dot)
 
+        // Start invisible - will be shown after position is set
+        floatingView?.visibility = View.INVISIBLE
+
         // Listen for insets to get accurate nav bar height
         floatingView?.setOnApplyWindowInsetsListener { view, insets ->
             // Clear cache so next call to getNavigationBarHeight recalculates

@@ -280,6 +280,8 @@ class OverlayService : Service() {
                     isFirstEmission = false
                     updateOverlayAppearance()
                     updateGestureMode(settings.tapBehavior)
+                    // Fade in after position is set
+                    viewManager.fadeIn(duration = 300L)
                 } else {
                     // Subsequent emissions: Preserve current position to prevent jumping
                     val currentPosition = viewManager.getCurrentPosition()
