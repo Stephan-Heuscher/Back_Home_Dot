@@ -12,7 +12,7 @@ object AppConstants {
     const val DOT_STROKE_WIDTH_DP = 3
 
     // Navigation bar margins
-    const val NAV_BAR_SAFETY_MARGIN_DP = 16  // Extra spacing above nav bar
+    const val NAV_BAR_SAFETY_MARGIN_DP = 8  // Extra spacing above nav bar
     const val NAV_BAR_MIN_HEIGHT_DP = 64    // Fallback when detection fails (gesture nav)
 
     // Gesture timeouts (milliseconds)
@@ -23,7 +23,7 @@ object AppConstants {
     const val KEYBOARD_CHECK_INTERVAL_MS = 100L
     const val KEYBOARD_HEIGHT_ESTIMATE_PERCENT = 0.38f
     const val KEYBOARD_THRESHOLD_PERCENT = 0.15f
-    const val KEYBOARD_MARGIN_MULTIPLIER = 1.0f
+    const val KEYBOARD_MARGIN_MULTIPLIER = 1.5f
 
     // Animation and timing
     const val RECENTS_TIMEOUT_DEFAULT_MS = 100L
