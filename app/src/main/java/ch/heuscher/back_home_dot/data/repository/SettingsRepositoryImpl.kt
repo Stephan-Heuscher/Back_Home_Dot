@@ -1,5 +1,6 @@
 package ch.heuscher.back_home_dot.data.repository
 
+import android.util.Log
 import ch.heuscher.back_home_dot.data.local.SettingsDataSource
 import ch.heuscher.back_home_dot.domain.model.DotPosition
 import ch.heuscher.back_home_dot.domain.model.DotPositionPercent
@@ -15,6 +16,10 @@ import kotlinx.coroutines.flow.combine
 class SettingsRepositoryImpl(
     private val dataSource: SettingsDataSource
 ) : SettingsRepository {
+
+    companion object {
+        private const val TAG = "SettingsRepositoryImpl"
+    }
 
     override fun isOverlayEnabled(): Flow<Boolean> = dataSource.isOverlayEnabled()
 
@@ -45,12 +50,14 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun setPosition(position: DotPosition) {
+        Log.d(TAG, "setPosition called: (${position.x}, ${position.y}) screen=${position.screenWidth}x${position.screenHeight} rotation=${position.rotation}")
         dataSource.setPositionX(position.x)
         dataSource.setPositionY(position.y)
         dataSource.setScreenWidth(position.screenWidth)
         dataSource.setScreenHeight(position.screenHeight)
         dataSource.setRotation(position.rotation)
         val percent = position.toPercentages()
+        Log.d(TAG, "setPosition percentages: (${percent.xPercent}, ${percent.yPercent})")
         setPositionPercent(percent)
     }
 
@@ -87,18 +94,21 @@ class SettingsRepositoryImpl(
     override fun getScreenWidth(): Flow<Int> = dataSource.getScreenWidth()
 
     override suspend fun setScreenWidth(width: Int) {
+        Log.d(TAG, "setScreenWidth: $width")
         dataSource.setScreenWidth(width)
     }
 
     override fun getScreenHeight(): Flow<Int> = dataSource.getScreenHeight()
 
     override suspend fun setScreenHeight(height: Int) {
+        Log.d(TAG, "setScreenHeight: $height")
         dataSource.setScreenHeight(height)
     }
 
     override fun getRotation(): Flow<Int> = dataSource.getRotation()
 
     override suspend fun setRotation(rotation: Int) {
+        Log.d(TAG, "setRotation: $rotation")
         dataSource.setRotation(rotation)
     }
 

@@ -303,15 +303,26 @@ class OverlayService : Service() {
         serviceScope.launch {
             val size = orientationHandler.getUsableScreenSize()
             val rotation = orientationHandler.getCurrentRotation()
+
+            // Get current saved values before updating
+            val savedSettings = settingsRepository.getAllSettings().first()
+            Log.d(TAG, "initializeScreenDimensions: Current screen=${size.x}x${size.y}, rotation=$rotation")
+            Log.d(TAG, "initializeScreenDimensions: Saved screen=${savedSettings.screenWidth}x${savedSettings.screenHeight}, rotation=${savedSettings.rotation}")
+            Log.d(TAG, "initializeScreenDimensions: Saved position=(${savedSettings.position.x}, ${savedSettings.position.y})")
+            Log.d(TAG, "initializeScreenDimensions: Saved position percent=(${savedSettings.positionPercent.xPercent}, ${savedSettings.positionPercent.yPercent})")
+
             settingsRepository.setScreenWidth(size.x)
             settingsRepository.setScreenHeight(size.y)
             settingsRepository.setRotation(rotation)
-            Log.d(TAG, "initializeScreenDimensions: width=${size.x}, height=${size.y}, rotation=$rotation")
+            Log.d(TAG, "initializeScreenDimensions: Updated screen dimensions and rotation")
         }
     }
 
     private suspend fun updateOverlayAppearance() {
         val settings = settingsRepository.getAllSettings().first()
+        Log.d(TAG, "updateOverlayAppearance: Settings loaded - position=(${settings.position.x}, ${settings.position.y})")
+        Log.d(TAG, "updateOverlayAppearance: Settings screen=${settings.screenWidth}x${settings.screenHeight}, rotation=${settings.rotation}")
+
         viewManager.updateAppearance(settings)
 
         val screenSize = orientationHandler.getUsableScreenSize()
@@ -328,11 +339,12 @@ class OverlayService : Service() {
         val constrainedPosition = DotPosition(constrainedX, constrainedY)
 
         Log.d(TAG, "updateOverlayAppearance: screenSize=${screenSize.x}x${screenSize.y}, layoutSize=$layoutSize, buttonSize=$buttonSize, offset=$offset")
-        Log.d(TAG, "updateOverlayAppearance: navBarMargin=$navBarMargin (detected height + 8dp safety)")
+        Log.d(TAG, "updateOverlayAppearance: navBarMargin=$navBarMargin (detected height + 48dp safety)")
         Log.d(TAG, "updateOverlayAppearance: savedPosition=(${settings.position.x},${settings.position.y}) -> constrainedPosition=($constrainedX,$constrainedY)")
         Log.d(TAG, "updateOverlayAppearance: maxX=${screenSize.x - buttonSize - offset}, maxY=${screenSize.y - buttonSize - offset - navBarMargin}")
 
         viewManager.updatePosition(constrainedPosition)
+        Log.d(TAG, "updateOverlayAppearance: Position updated to ($constrainedX, $constrainedY)")
     }
 
     private fun handleGesture(gesture: Gesture) {
