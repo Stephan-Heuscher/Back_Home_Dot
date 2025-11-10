@@ -196,11 +196,11 @@ class GestureDetector(
     }
 
     private fun processClicks() {
-        val gesture = when (clickCount) {
-            1 -> Gesture.TAP
-            2 -> Gesture.DOUBLE_TAP
-            3 -> Gesture.TRIPLE_TAP
-            4 -> Gesture.QUADRUPLE_TAP
+        val gesture = when {
+            clickCount == 1 -> Gesture.TAP
+            clickCount == 2 -> Gesture.DOUBLE_TAP
+            clickCount == 3 -> Gesture.TRIPLE_TAP
+            clickCount >= 4 -> Gesture.QUADRUPLE_TAP
             else -> return
         }
 
