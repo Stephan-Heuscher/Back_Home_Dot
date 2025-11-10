@@ -271,22 +271,29 @@ class OverlayService : Service() {
 
     private fun observeSettings() {
         serviceScope.launch {
+            var isFirstEmission = true
             settingsRepository.getAllSettings().collectLatest { settings ->
                 Log.d(TAG, "observeSettings: Settings changed, tapBehavior=${settings.tapBehavior}")
 
-                // Get current position before updating appearance
-                val currentPosition = viewManager.getCurrentPosition()
-                Log.d(TAG, "observeSettings: currentPosition before update=(${currentPosition?.x}, ${currentPosition?.y})")
+                if (isFirstEmission) {
+                    // First emission: Load saved position from settings
+                    isFirstEmission = false
+                    updateOverlayAppearance()
+                    updateGestureMode(settings.tapBehavior)
+                } else {
+                    // Subsequent emissions: Preserve current position to prevent jumping
+                    val currentPosition = viewManager.getCurrentPosition()
+                    Log.d(TAG, "observeSettings: currentPosition before update=(${currentPosition?.x}, ${currentPosition?.y})")
 
-                updateOverlayAppearance()
-                updateGestureMode(settings.tapBehavior)
+                    updateOverlayAppearance()
+                    updateGestureMode(settings.tapBehavior)
 
-                // Restore position after appearance update to prevent jumping
-                // Always restore the position, constrained to bounds if needed
-                currentPosition?.let { pos ->
-                    val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(pos.x, pos.y)
-                    Log.d(TAG, "observeSettings: restoring position from (${pos.x}, ${pos.y}) to ($constrainedX, $constrainedY)")
-                    viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+                    // Restore position after appearance update to prevent jumping
+                    currentPosition?.let { pos ->
+                        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(pos.x, pos.y)
+                        Log.d(TAG, "observeSettings: restoring position from (${pos.x}, ${pos.y}) to ($constrainedX, $constrainedY)")
+                        viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+                    }
                 }
             }
         }
