@@ -12,7 +12,7 @@ object AppConstants {
     const val DOT_STROKE_WIDTH_DP = 3
 
     // Navigation bar margins
-    const val NAV_BAR_SAFETY_MARGIN_DP = 8  // Extra spacing above nav bar
+    const val NAV_BAR_SAFETY_MARGIN_DP = 48  // Extra spacing above nav bar (1 circle diameter)
     const val NAV_BAR_MIN_HEIGHT_DP = 64    // Fallback when detection fails (gesture nav)
 
     // Gesture timeouts (milliseconds)
