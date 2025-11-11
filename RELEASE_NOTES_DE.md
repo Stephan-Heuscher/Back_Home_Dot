@@ -1,5 +1,43 @@
 # Release Notes - AssistiPunkt
 
+## Version 2.1.0 (2025-11-11)
+
+### Safe-Home-Modus als Standard & Verbesserter Farbwähler
+
+Wir freuen uns, **AssistiPunkt v2.1.0** vorzustellen, das die Benutzerfreundlichkeit mit **Safe-Home als Standard-Modus** und einem **intuitiven Farbwähler** weiter verbessert!
+
+#### 🏠 Safe-Home-Modus Jetzt Standard
+- **Sicherheit zuerst**: Safe-Home ist nun der Standard-Modus für alle Nutzer
+- **Standard-Modus entfernt**: Der alte Standard-Modus wurde aus der UI entfernt (bleibt im Code für Abwärtskompatibilität)
+- **Automatische Migration**: Nutzer mit dem alten Standard-Modus werden automatisch zu Safe-Home migriert
+- **Vereinfachte Auswahl**: Nur noch zwei Modi zur Auswahl: Safe-Home (Standard) und Navi
+
+#### 🎨 Verbesserter Farbwähler
+- **HSV statt RGB**: Intuitive Farbwahl mit Farbton, Intensität und Helligkeit
+- **Größere Vorschau**: 120dp hohe Farbvorschau mit Elevation für bessere Sichtbarkeit
+- **Bessere Beschriftungen**:
+  - "Farbton" statt "Rot, Grün, Blau"
+  - "Farbintensität" für Sättigung
+  - "Helligkeit" für Wert
+- **Seniorenfreundlich**: Keine technischen RGB-Werte mehr
+- **Echtzeit-Vorschau**: Farbe wird während der Anpassung live aktualisiert
+- **Barrierefreie Touch-Targets**: Alle Schieberegler mit 48dp Mindesthöhe
+
+#### 🔧 Technische Änderungen
+- `AppConstants.DEFAULT_TAP_BEHAVIOR` auf "SAFE_HOME" geändert
+- `SettingsActivity` nutzt jetzt `Color.HSVToColor()` und `Color.colorToHSV()`
+- `color_picker_dialog.xml` Layout komplett überarbeitet
+- Radio-Button für Standard-Modus aus `activity_settings.xml` entfernt
+- Migration-Logik in SettingsActivity hinzugefügt
+
+#### 🎯 Vorteile für Nutzer
+- **Mehr Sicherheit**: Standard-Modus stellt sicher, dass Nutzer immer nach Hause kommen
+- **Einfachere Anpassung**: Farbwähler ist intuitiver und visueller
+- **Weniger Verwirrung**: Weniger Modi zur Auswahl
+- **Bessere Barrierefreiheit**: Größere Touch-Targets und klarere Beschriftung
+
+---
+
 ## Version 2.0.0 (2025-11-05)
 
 ### Großes Refactoring - Clean Architecture & Safe-Home-Modus

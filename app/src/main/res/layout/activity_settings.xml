@@ -85,10 +85,10 @@
                     android:layout_height="wrap_content">
 
                     <RadioButton
-                        android:id="@+id/tap_behavior_standard"
+                        android:id="@+id/tap_behavior_safe_home"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tap_behavior_standard"
+                        android:text="@string/tap_behavior_safe_home"
                         android:textSize="18sp"
                         android:checked="true"
                         android:minHeight="48dp"
@@ -99,15 +99,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tap_behavior_back"
-                        android:textSize="18sp"
-                        android:minHeight="48dp"
-                        android:paddingVertical="8dp" />
-
-                    <RadioButton
-                        android:id="@+id/tap_behavior_safe_home"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/tap_behavior_safe_home"
                         android:textSize="18sp"
                         android:minHeight="48dp"
                         android:paddingVertical="8dp" />

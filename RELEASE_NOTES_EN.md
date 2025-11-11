@@ -1,5 +1,43 @@
 # Release Notes - Assistive Tap
 
+## Version 2.1.0 (2025-11-11)
+
+### Safe-Home Mode as Default & Improved Color Picker
+
+We are excited to announce **Assistive Tap v2.1.0**, which further enhances user experience with **Safe-Home as the default mode** and an **intuitive color picker**!
+
+#### 🏠 Safe-Home Mode Now Default
+- **Safety First**: Safe-Home is now the default mode for all users
+- **Standard Mode Removed**: The old Standard mode has been removed from the UI (kept in code for backward compatibility)
+- **Automatic Migration**: Users with the old Standard mode will be automatically migrated to Safe-Home
+- **Simplified Selection**: Only two modes to choose from: Safe-Home (default) and Navi
+
+#### 🎨 Improved Color Picker
+- **HSV Instead of RGB**: Intuitive color selection with Hue, Saturation, and Brightness
+- **Larger Preview**: 120dp tall color preview with elevation for better visibility
+- **Better Labels**:
+  - "Color Type" instead of "Red, Green, Blue"
+  - "Color Intensity" for saturation
+  - "Brightness" for value
+- **Senior-Friendly**: No more technical RGB values
+- **Real-Time Preview**: Color updates live as sliders are adjusted
+- **Accessible Touch Targets**: All sliders with 48dp minimum height
+
+#### 🔧 Technical Changes
+- Changed `AppConstants.DEFAULT_TAP_BEHAVIOR` to "SAFE_HOME"
+- `SettingsActivity` now uses `Color.HSVToColor()` and `Color.colorToHSV()`
+- Completely redesigned `color_picker_dialog.xml` layout
+- Removed Standard mode radio button from `activity_settings.xml`
+- Added migration logic in SettingsActivity
+
+#### 🎯 Benefits for Users
+- **More Safety**: Default mode ensures users always return home
+- **Easier Customization**: Color picker is more intuitive and visual
+- **Less Confusion**: Fewer modes to choose from
+- **Better Accessibility**: Larger touch targets and clearer labeling
+
+---
+
 ## Version 2.0.0 (2025-11-05)
 
 ### Major Refactoring - Clean Architecture & Safe-Home Mode

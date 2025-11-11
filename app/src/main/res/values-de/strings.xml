@@ -36,7 +36,7 @@
 
     <!-- Help Section -->
     <string name="how_it_works">ℹ️ So funktioniert es</string>
-    <string name="instructions">• 1x tippen = Home\n• 2x tippen = Zurück\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm</string>
+    <string name="instructions">• Alle Taps = Home\n• Lang drücken + ziehen zum Verschieben (Halo zeigt Bereitschaft)\n• Viereck-Design für Sicherheit\n• 4x tippen = AssistiPunkt öffnen</string>
     <string name="instructions_normal_mode">• 1x tippen = Home\n• 2x tippen = Zurück\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm</string>
     <string name="instructions_back_mode">• 1x tippen = Zurück\n• 2x tippen = Zu vorheriger App wechseln\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm</string>
 
@@ -91,9 +91,9 @@
     <string name="ok">OK</string>
 
     <!-- Color Picker -->
-    <string name="color_component_red">Rot</string>
-    <string name="color_component_green">Grün</string>
-    <string name="color_component_blue">Blau</string>
+    <string name="color_type">Farbton</string>
+    <string name="color_intensity">Farbintensität</string>
+    <string name="color_brightness">Helligkeit</string>
 
     <!-- Content Descriptions -->
     <string name="assistipoint_app">AssistiPunkt App</string>

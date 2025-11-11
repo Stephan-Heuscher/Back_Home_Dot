@@ -112,19 +112,20 @@ System navigation actions:
 
 ## Key Features & Behavior Modes
 
-### Three Tap Behavior Modes
+### Two Tap Behavior Modes
 
 | Mode | 1x Tap | 2x Tap | 3x Tap | 4+ Tap | Long Press |
 |------|--------|--------|--------|--------|------------|
-| **STANDARD** | Home | Back | Recents | Open app | Home |
+| **SAFE_HOME** (Default) | Home | Home | Home | Open app | Home |
 | **NAVI** | Back | Previous app | Recents | Open app | Home |
-| **SAFE_HOME** | Home | Home | Home | Home | Home |
+
+**Note:** The STANDARD mode has been replaced with SAFE_HOME as the default mode for improved safety and simplicity for elderly users. Existing users with STANDARD mode will be automatically migrated to SAFE_HOME.
 
 ### Smart Features
 - **Keyboard Avoidance** - Auto-moves dot above keyboard
 - **Position Persistence** - Saves position as percentage (device-independent)
 - **Orientation Handling** - Maintains relative position across rotations
-- **Customization** - Color, transparency, timeout settings
+- **Customization** - Color (with user-friendly HSV picker), transparency, timeout settings
 
 ---
 
@@ -319,15 +320,17 @@ app/src/main/java/ch/heuscher/back_home_dot/
 ### Design Constraints
 - **Touch Targets:** Minimum 48dp (accessibility standard)
 - **Text Size:** 16-28sp (large, readable)
-- **Colors:** High contrast, customizable
+- **Colors:** High contrast, customizable with user-friendly HSV color picker
 - **Language:** Simplified German (target audience)
 - **TalkBack:** Full screen reader support
 
 ### Simplified UI
 - Large buttons with clear labels
 - Minimal settings (avoid overwhelming users)
-- Color-coded modes (visual differentiation)
+- User-friendly color picker using HSV (Hue, Saturation, Brightness) instead of technical RGB
+- Large 120dp color preview with elevation for better visibility
 - Direct navigation (no nested menus)
+- Safe Home mode as default for maximum safety
 
 ---
 
@@ -344,7 +347,9 @@ app/src/main/java/ch/heuscher/back_home_dot/
 1. Update `TapBehavior` enum (`domain/model/TapBehavior.kt`)
 2. Modify `OverlayService.handleGesture()` switch cases
 3. Update SettingsActivity UI for new option
-4. Update localization strings (`res/values/strings.xml`, `res/values-de/strings.xml`)
+4. Update layout file (`activity_settings.xml`) to add/remove radio buttons
+5. Update AppConstants if changing default behavior
+6. Update localization strings (`res/values/strings.xml`, `res/values-de/strings.xml`)
 
 ### Adding Settings
 1. Add property to `OverlaySettings` data class
@@ -437,9 +442,40 @@ app/src/main/java/ch/heuscher/back_home_dot/
 
 ---
 
+## Recent Changes (v2.1.0)
+
+### Safe Home Mode Now Default
+- **SAFE_HOME** is now the default tap behavior mode for enhanced safety
+- STANDARD mode has been removed from the UI (kept in enum for backward compatibility)
+- Users upgrading from STANDARD mode will be automatically migrated to SAFE_HOME
+- Settings UI now shows SAFE_HOME first, followed by NAVI mode
+- Updated default in `AppConstants.DEFAULT_TAP_BEHAVIOR`
+
+### Improved Color Picker
+- Replaced technical RGB sliders with intuitive HSV (Hue, Saturation, Brightness) controls
+- Larger color preview (120dp height with CardView elevation)
+- Better labels: "Color Type", "Color Intensity", "Brightness"
+- Simplified interface more suitable for elderly users
+- Each slider clearly shows what it controls with 48dp minimum touch target
+- Real-time color preview updates as sliders are adjusted
+
+### Technical Changes
+- Modified `SettingsActivity.showColorPickerDialog()` to use `Color.HSVToColor()` and `Color.colorToHSV()`
+- Updated `color_picker_dialog.xml` layout with new SeekBar IDs
+- Removed `tapBehaviorStandard` references from SettingsActivity
+- Updated migration logic to convert STANDARD to SAFE_HOME on load
+
+### Benefits for Users
+- **Safety First:** Default mode ensures users always return home, reducing confusion
+- **Easier Customization:** Color picker is now more intuitive and visual
+- **Reduced Complexity:** Fewer mode options to choose from
+- **Better Accessibility:** Larger touch targets and clearer labeling
+
+---
+
 ## Git Workflow
 
-**Current Branch:** `claude/create-project-documentation-011CV2YRsQKqYp5Hftj9wYmu`
+**Current Branch:** `claude/safe-home-mode-color-picker-011CV2dBsyFQXT1CmbJzqetR`
 
 ### Branch Naming Convention
 - Feature branches: `claude/<description>-<session-id>`

@@ -13,18 +13,18 @@ Stell dir vor, deine Oma hätte Probleme, die Handy-Tasten unten zu erreichen. M
 
 Und weil so ein Punkt praktisch ist, habe ich ihn für Ein-Daumen-Bedienung erweitert:
 
-### Standard-Modus
-- **1x tippen** → Home
-- **2x tippen** → Zurück
-- **3x tippen** → Offene Apps
-- **Lang drücken** → Home
-- **Verschieben** → Sofort ziehbar
-
-### Safe-Home-Modus (für maximale Sicherheit)
+### Safe-Home-Modus (Standard - für maximale Sicherheit)
 - **Alle Taps** → Home (Oma kommt immer nach Hause)
 - **Viereck-Design** → Wie Android-Navigation
 - **Lang drücken + Ziehen** → Button verschieben (überall möglich)
 - **Geschützt** → Verhindert versehentliches Verschieben
+
+### Navi-Modus (für fortgeschrittene Nutzer)
+- **1x tippen** → Zurück
+- **2x tippen** → Zu vorheriger App wechseln
+- **3x tippen** → Offene Apps
+- **Lang drücken** → Home
+- **Verschieben** → Sofort ziehbar
 
 Alles mit einem Daumen, ohne das Handy umzugreifen.
 
@@ -60,14 +60,14 @@ Alles mit einem Daumen, ohne das Handy umzugreifen.
 ## 🎮 So funktioniert's
 
 1. **Punkt einschalten**: Schalter in der App aktivieren
-2. **Modus wählen**: Standard oder Safe-Home in den Einstellungen
+2. **Modus wählen**: Safe-Home (Standard) oder Navi in den Einstellungen
 3. **Punkt verschieben**:
-   - **Standard-Modus**: Punkt sofort ziehen
    - **Safe-Home-Modus**: Punkt 500ms lang drücken, dann ziehen
+   - **Navi-Modus**: Punkt sofort ziehen
 4. **Navigieren**:
-   - **Standard**: 1x tippen = Home, 2x tippen = Zurück
    - **Safe-Home**: Alle Taps = Home (für maximale Sicherheit)
-5. **Anpassen**: Farbe, Durchsichtigkeit und Modus in den Einstellungen ändern
+   - **Navi**: 1x tippen = Zurück, 2x tippen = Zu vorheriger App wechseln
+5. **Anpassen**: Farbe mit intuitivem Farbwähler (Farbton, Intensität, Helligkeit), Durchsichtigkeit und Modus in den Einstellungen ändern
 
 Der Punkt weicht automatisch der Tastatur aus und bleibt auch beim Drehen des Handys an der richtigen Stelle.
 

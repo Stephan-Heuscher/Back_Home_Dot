@@ -23,7 +23,6 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var timeoutValueText: TextView
     private lateinit var keyboardAvoidanceSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var tapBehaviorRadioGroup: android.widget.RadioGroup
-    private lateinit var tapBehaviorStandard: android.widget.RadioButton
     private lateinit var tapBehaviorBack: android.widget.RadioButton
     private lateinit var tapBehaviorSafeHome: android.widget.RadioButton
     private lateinit var advancedToggleCard: androidx.cardview.widget.CardView
@@ -38,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
     private var currentTimeout = 100L
     private var currentColor = 0xFF2196F3.toInt()
     private var keyboardAvoidanceEnabled = false
-    private var currentTapBehavior = "NAVI"
+    private var currentTapBehavior = "SAFE_HOME"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +65,6 @@ class SettingsActivity : AppCompatActivity() {
         timeoutValueText = findViewById(R.id.timeout_value_text)
         keyboardAvoidanceSwitch = findViewById(R.id.keyboard_avoidance_switch)
         tapBehaviorRadioGroup = findViewById(R.id.tap_behavior_radio_group)
-        tapBehaviorStandard = findViewById(R.id.tap_behavior_standard)
         tapBehaviorBack = findViewById(R.id.tap_behavior_back)
         tapBehaviorSafeHome = findViewById(R.id.tap_behavior_safe_home)
         advancedToggleCard = findViewById(R.id.advanced_toggle_card)
@@ -146,10 +144,9 @@ class SettingsActivity : AppCompatActivity() {
     private fun setupTapBehaviorRadioGroup() {
         tapBehaviorRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             val behavior = when (checkedId) {
-                R.id.tap_behavior_standard -> "STANDARD"
                 R.id.tap_behavior_back -> "NAVI"
                 R.id.tap_behavior_safe_home -> "SAFE_HOME"
-                else -> "NAVI"
+                else -> "SAFE_HOME"
             }
             currentTapBehavior = behavior
             lifecycleScope.launch {
@@ -205,9 +202,10 @@ class SettingsActivity : AppCompatActivity() {
             settingsRepository.getTapBehavior().collect { behavior ->
                 currentTapBehavior = behavior
                 when (behavior) {
-                    "STANDARD" -> tapBehaviorStandard.isChecked = true
                     "NAVI" -> tapBehaviorBack.isChecked = true
                     "SAFE_HOME" -> tapBehaviorSafeHome.isChecked = true
+                    "STANDARD" -> tapBehaviorSafeHome.isChecked = true // Migrate old standard mode to safe home
+                    else -> tapBehaviorSafeHome.isChecked = true
                 }
             }
         }
@@ -229,24 +227,26 @@ class SettingsActivity : AppCompatActivity() {
     private fun showColorPickerDialog() {
         val dialogView = layoutInflater.inflate(R.layout.color_picker_dialog, null)
         val colorPreview = dialogView.findViewById<View>(R.id.color_preview)
-        val redSeekBar = dialogView.findViewById<SeekBar>(R.id.red_seekbar)
-        val greenSeekBar = dialogView.findViewById<SeekBar>(R.id.green_seekbar)
-        val blueSeekBar = dialogView.findViewById<SeekBar>(R.id.blue_seekbar)
-        val redValue = dialogView.findViewById<TextView>(R.id.red_value)
-        val greenValue = dialogView.findViewById<TextView>(R.id.green_value)
-        val blueValue = dialogView.findViewById<TextView>(R.id.blue_value)
+        val hueSeekBar = dialogView.findViewById<SeekBar>(R.id.hue_seekbar)
+        val saturationSeekBar = dialogView.findViewById<SeekBar>(R.id.saturation_seekbar)
+        val brightnessSeekBar = dialogView.findViewById<SeekBar>(R.id.brightness_seekbar)
 
+        // Convert current color from RGB to HSV
         val currentColor = this@SettingsActivity.currentColor
-        redSeekBar.progress = Color.red(currentColor)
-        greenSeekBar.progress = Color.green(currentColor)
-        blueSeekBar.progress = Color.blue(currentColor)
+        val hsv = FloatArray(3)
+        Color.colorToHSV(currentColor, hsv)
+
+        // Set initial values
+        hueSeekBar.progress = hsv[0].toInt()
+        saturationSeekBar.progress = (hsv[1] * 100).toInt()
+        brightnessSeekBar.progress = (hsv[2] * 100).toInt()
 
         fun updateColor() {
-            val color = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
+            val hue = hueSeekBar.progress.toFloat()
+            val saturation = saturationSeekBar.progress / 100f
+            val brightness = brightnessSeekBar.progress / 100f
+            val color = Color.HSVToColor(floatArrayOf(hue, saturation, brightness))
             colorPreview.setBackgroundColor(color)
-            redValue.text = redSeekBar.progress.toString()
-            greenValue.text = greenSeekBar.progress.toString()
-            blueValue.text = blueSeekBar.progress.toString()
         }
         updateColor()
 
@@ -257,15 +257,18 @@ class SettingsActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         }
-        redSeekBar.setOnSeekBarChangeListener(seekBarListener)
-        greenSeekBar.setOnSeekBarChangeListener(seekBarListener)
-        blueSeekBar.setOnSeekBarChangeListener(seekBarListener)
+        hueSeekBar.setOnSeekBarChangeListener(seekBarListener)
+        saturationSeekBar.setOnSeekBarChangeListener(seekBarListener)
+        brightnessSeekBar.setOnSeekBarChangeListener(seekBarListener)
 
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.choose_custom_color))
             .setView(dialogView)
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                val selectedColor = Color.rgb(redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress)
+                val hue = hueSeekBar.progress.toFloat()
+                val saturation = saturationSeekBar.progress / 100f
+                val brightness = brightnessSeekBar.progress / 100f
+                val selectedColor = Color.HSVToColor(floatArrayOf(hue, saturation, brightness))
                 setColor(selectedColor)
             }
             .setNegativeButton(getString(R.string.cancel), null)
