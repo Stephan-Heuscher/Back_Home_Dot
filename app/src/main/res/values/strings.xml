@@ -117,4 +117,13 @@
     <string name="contact_content">For questions, problems, or feedback:\n\nEmail: s.heuscher@gmail.com\nGitHub: https://github.com/Stephan-Heuscher/Back_Home_Dot\n\nI strive to respond to inquiries within 48 hours.</string>
     <string name="open_source_title">Open Source</string>
     <string name="open_source_content">This app is open source and licensed under the MIT License. The source code is available on GitHub:\n\nhttps://github.com/Stephan-Heuscher/Back_Home_Dot\n\nContributions and suggestions for improvement are welcome!</string>
+
+    <!-- Action Descriptions (Tooltips) -->
+    <string name="action_home">Home</string>
+    <string name="action_back">Back</string>
+    <string name="action_recents">Recent apps</string>
+    <string name="action_recents_overview">All apps</string>
+    <string name="action_switch_to_previous">Switch to previous app</string>
+    <string name="action_open_app">Open Assistive Tap</string>
+    <string name="action_drag_mode">Drag mode active</string>
 </resources>

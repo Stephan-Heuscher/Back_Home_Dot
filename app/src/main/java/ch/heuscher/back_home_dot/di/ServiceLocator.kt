@@ -14,6 +14,7 @@ import ch.heuscher.back_home_dot.service.overlay.KeyboardManager
 import ch.heuscher.back_home_dot.service.overlay.OrientationHandler
 import ch.heuscher.back_home_dot.service.overlay.OverlayViewManager
 import ch.heuscher.back_home_dot.service.overlay.PositionAnimator
+import ch.heuscher.back_home_dot.service.overlay.TooltipManager
 
 /**
  * Simple service locator for dependency injection.
@@ -99,6 +100,21 @@ object ServiceLocator {
         return PositionAnimator(
             onPositionUpdate = onPositionUpdate,
             onAnimationComplete = onAnimationComplete
+        )
+    }
+
+    /**
+     * Create a new TooltipManager instance for a service
+     */
+    fun createTooltipManager(
+        context: Context,
+        getCurrentPosition: () -> DotPosition?,
+        getScreenSize: () -> Point
+    ): TooltipManager {
+        return TooltipManager(
+            context = context,
+            getCurrentPosition = getCurrentPosition,
+            getScreenSize = getScreenSize
         )
     }
 
