@@ -1,7 +1,6 @@
 package ch.heuscher.back_home_dot.service.overlay
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.Point
@@ -20,8 +19,7 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 
 /**
  * Manages tooltip display that shows action descriptions beside the button.
- * On first interaction, shows a large overlay with all possible interactions.
- * On subsequent interactions, shows current action for 500ms.
+ * Always shows a large overlay with all possible interactions.
  */
 class TooltipManager(
     private val context: Context,
@@ -30,8 +28,7 @@ class TooltipManager(
 ) {
     companion object {
         private const val TAG = "TooltipManager"
-        private const val TOOLTIP_DISPLAY_DURATION_MS = 500L
-        private const val FIRST_TIME_DISPLAY_DURATION_MS = 5000L
+        private const val TOOLTIP_DISPLAY_DURATION_MS = 5000L
         private const val TOOLTIP_PADDING_DP = 16
         private const val TOOLTIP_TEXT_SIZE_SP = 18f
         private const val TOOLTIP_TITLE_SIZE_SP = 20f
@@ -39,43 +36,30 @@ class TooltipManager(
         private const val TOOLTIP_ALPHA = 0.92f
         private const val TOOLTIP_MARGIN_FROM_BUTTON_DP = 12
         private const val TOOLTIP_MAX_WIDTH_DP = 280
-
-        private const val PREFS_NAME = "tooltip_preferences"
-        private const val KEY_FIRST_INTERACTION = "first_interaction_shown"
     }
 
     private var tooltipView: View? = null
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val handler = Handler(Looper.getMainLooper())
     private var hideTooltipRunnable: Runnable? = null
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     /**
-     * Shows a tooltip with the action description beside the button.
-     * On first interaction, shows all possible actions.
+     * Shows a tooltip with all possible action descriptions beside the button.
+     * Always shows comprehensive help overlay.
      * Automatically hides after duration.
      */
     fun showTooltip(gesture: Gesture, tapBehavior: String) {
         // Cancel any pending hide operation
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
 
-        val isFirstTime = !prefs.getBoolean(KEY_FIRST_INTERACTION, false)
-
-        if (isFirstTime) {
-            // Show comprehensive help on first interaction
-            showFirstTimeHelp(tapBehavior)
-            // Mark as shown
-            prefs.edit().putBoolean(KEY_FIRST_INTERACTION, true).apply()
-        } else {
-            // Show quick action tooltip
-            showQuickTooltip(gesture, tapBehavior)
-        }
+        // Always show comprehensive help
+        showComprehensiveHelp(tapBehavior)
     }
 
     /**
-     * Shows comprehensive help overlay with all interactions on first use.
+     * Shows comprehensive help overlay with all interactions.
      */
-    private fun showFirstTimeHelp(tapBehavior: String) {
+    private fun showComprehensiveHelp(tapBehavior: String) {
         // Remove existing tooltip if present
         removeTooltip()
 
@@ -157,94 +141,18 @@ class TooltipManager(
         try {
             windowManager.addView(tooltipView, params)
             positionTooltip()
-            Log.d(TAG, "First-time help overlay shown")
+            Log.d(TAG, "Comprehensive help overlay shown")
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to add first-time help overlay", e)
+            Log.e(TAG, "Failed to add comprehensive help overlay", e)
             tooltipView = null
             return
         }
-
-        // Schedule auto-hide after longer duration
-        hideTooltipRunnable = Runnable {
-            removeTooltip()
-        }
-        handler.postDelayed(hideTooltipRunnable!!, FIRST_TIME_DISPLAY_DURATION_MS)
-    }
-
-    /**
-     * Shows quick single-action tooltip for subsequent interactions.
-     */
-    private fun showQuickTooltip(gesture: Gesture, tapBehavior: String) {
-        val actionText = getActionDescription(gesture, tapBehavior)
-        if (actionText.isEmpty()) {
-            Log.d(TAG, "No action text for gesture=$gesture, behavior=$tapBehavior")
-            return
-        }
-
-        // Remove existing tooltip if present
-        removeTooltip()
-
-        // Create and show new tooltip
-        createQuickTooltipView(actionText)
-        positionTooltip()
 
         // Schedule auto-hide
         hideTooltipRunnable = Runnable {
             removeTooltip()
         }
         handler.postDelayed(hideTooltipRunnable!!, TOOLTIP_DISPLAY_DURATION_MS)
-
-        Log.d(TAG, "Showing quick tooltip: '$actionText' for gesture=$gesture")
-    }
-
-    /**
-     * Creates a quick single-action tooltip view.
-     */
-    private fun createQuickTooltipView(text: String) {
-        val density = context.resources.displayMetrics.density
-        val paddingPx = (TOOLTIP_PADDING_DP * density).toInt()
-
-        tooltipView = TextView(context).apply {
-            this.text = text
-            textSize = TOOLTIP_TEXT_SIZE_SP
-            setTextColor(Color.WHITE)
-            setBackgroundColor(Color.parseColor("#2D2D2D"))
-            alpha = TOOLTIP_ALPHA
-            setPadding(paddingPx, paddingPx / 2, paddingPx, paddingPx / 2)
-            gravity = Gravity.CENTER
-            elevation = 10f * density
-        }
-
-        // Measure the view to get its size
-        tooltipView?.measure(
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                @Suppress("DEPRECATION")
-                WindowManager.LayoutParams.TYPE_PHONE
-            },
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            PixelFormat.TRANSLUCENT
-        )
-
-        params.gravity = Gravity.TOP or Gravity.START
-
-        try {
-            windowManager.addView(tooltipView, params)
-            Log.d(TAG, "Quick tooltip view added to window")
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to add quick tooltip view", e)
-            tooltipView = null
-        }
     }
 
     /**
@@ -257,21 +165,23 @@ class TooltipManager(
                 "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_back)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
                 "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
-                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}"
+                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
+                "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             "NAVI" -> listOf(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_back)}",
                 "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_switch_to_previous)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
                 "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
-                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}"
+                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
+                "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             "SAFE_HOME" -> listOf(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
-                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_drag_mode)}"
+                "• ${context.getString(R.string.tooltip_long_press_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             else -> listOf()
         }
@@ -349,38 +259,6 @@ class TooltipManager(
     }
 
     /**
-     * Returns the localized action description based on gesture and tap behavior.
-     */
-    private fun getActionDescription(gesture: Gesture, tapBehavior: String): String {
-        return when (gesture) {
-            Gesture.TAP -> when (tapBehavior) {
-                "STANDARD" -> context.getString(R.string.action_home)
-                "NAVI" -> context.getString(R.string.action_back)
-                "SAFE_HOME" -> context.getString(R.string.action_home)
-                else -> context.getString(R.string.action_back)
-            }
-            Gesture.DOUBLE_TAP -> when (tapBehavior) {
-                "STANDARD" -> context.getString(R.string.action_back)
-                "NAVI" -> context.getString(R.string.action_switch_to_previous)
-                "SAFE_HOME" -> context.getString(R.string.action_home)
-                else -> context.getString(R.string.action_recents)
-            }
-            Gesture.TRIPLE_TAP -> if (tapBehavior == "SAFE_HOME") {
-                context.getString(R.string.action_home)
-            } else {
-                context.getString(R.string.action_recents_overview)
-            }
-            Gesture.QUADRUPLE_TAP -> context.getString(R.string.action_open_app)
-            Gesture.LONG_PRESS -> if (tapBehavior == "SAFE_HOME") {
-                context.getString(R.string.action_drag_mode)
-            } else {
-                context.getString(R.string.action_home)
-            }
-            else -> "" // DRAG gestures don't show tooltips
-        }
-    }
-
-    /**
      * Removes the tooltip from the screen.
      */
     fun removeTooltip() {
@@ -395,14 +273,6 @@ class TooltipManager(
         }
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
         hideTooltipRunnable = null
-    }
-
-    /**
-     * Resets the first-time help flag (for testing or user preference).
-     */
-    fun resetFirstTimeHelp() {
-        prefs.edit().putBoolean(KEY_FIRST_INTERACTION, false).apply()
-        Log.d(TAG, "First-time help flag reset")
     }
 
     /**
