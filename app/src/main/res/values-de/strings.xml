@@ -126,4 +126,13 @@
     <string name="action_switch_to_previous">Zu vorheriger App wechseln</string>
     <string name="action_open_app">AssistiPunkt öffnen</string>
     <string name="action_drag_mode">Verschiebe-Modus aktiv</string>
+
+    <!-- Tooltip Comprehensive Help -->
+    <string name="tooltip_all_actions_title">So funktioniert es:</string>
+    <string name="tooltip_tap_once">1x tippen</string>
+    <string name="tooltip_tap_twice">2x tippen</string>
+    <string name="tooltip_tap_three">3x tippen</string>
+    <string name="tooltip_tap_four">4x tippen</string>
+    <string name="tooltip_long_press">Lang drücken</string>
+    <string name="tooltip_auto_dismiss">Diese Hilfe verschwindet in 5 Sekunden</string>
 </resources>

@@ -126,4 +126,13 @@
     <string name="action_switch_to_previous">Switch to previous app</string>
     <string name="action_open_app">Open Assistive Tap</string>
     <string name="action_drag_mode">Drag mode active</string>
+
+    <!-- Tooltip Comprehensive Help -->
+    <string name="tooltip_all_actions_title">How to use:</string>
+    <string name="tooltip_tap_once">Tap once</string>
+    <string name="tooltip_tap_twice">Tap twice</string>
+    <string name="tooltip_tap_three">Tap 3 times</string>
+    <string name="tooltip_tap_four">Tap 4 times</string>
+    <string name="tooltip_long_press">Long press</string>
+    <string name="tooltip_auto_dismiss">This help will auto-hide in 5 seconds</string>
 </resources>
