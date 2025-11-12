@@ -61,6 +61,7 @@ class OverlayService : Service() {
     private lateinit var keyboardManager: KeyboardManager
     private lateinit var positionAnimator: PositionAnimator
     private lateinit var orientationHandler: OrientationHandler
+    private lateinit var tooltipManager: TooltipManager
 
     // Service scope for coroutines
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -129,6 +130,12 @@ class OverlayService : Service() {
         positionAnimator = ServiceLocator.createPositionAnimator(
             onPositionUpdate = { position -> viewManager.updatePosition(position) },
             onAnimationComplete = { position -> onAnimationComplete(position) }
+        )
+
+        tooltipManager = ServiceLocator.createTooltipManager(
+            context = this,
+            getCurrentPosition = { viewManager.getCurrentPosition() },
+            getScreenSize = { orientationHandler.getUsableScreenSize() }
         )
 
         // Create overlay view
@@ -218,6 +225,7 @@ class OverlayService : Service() {
         // Clean up
         keyboardManager.stopMonitoring()
         positionAnimator.cancel()
+        tooltipManager.cleanup()
         serviceScope.cancel()
         updateHandler.removeCallbacksAndMessages(null)
 
@@ -395,6 +403,7 @@ class OverlayService : Service() {
     private fun handleTap() {
         serviceScope.launch {
             val tapBehavior = settingsRepository.getTapBehavior().first()
+            tooltipManager.showTooltip(Gesture.TAP, tapBehavior)
             when (tapBehavior) {
                 "STANDARD" -> BackHomeAccessibilityService.instance?.performHomeAction()
                 "NAVI" -> BackHomeAccessibilityService.instance?.performBackAction()
@@ -407,6 +416,7 @@ class OverlayService : Service() {
     private fun handleDoubleTap() {
         serviceScope.launch {
             val tapBehavior = settingsRepository.getTapBehavior().first()
+            tooltipManager.showTooltip(Gesture.DOUBLE_TAP, tapBehavior)
             when (tapBehavior) {
                 "STANDARD" -> BackHomeAccessibilityService.instance?.performBackAction()
                 "NAVI" -> BackHomeAccessibilityService.instance?.performRecentsAction()
@@ -419,6 +429,7 @@ class OverlayService : Service() {
     private fun handleTripleTap() {
         serviceScope.launch {
             val tapBehavior = settingsRepository.getTapBehavior().first()
+            tooltipManager.showTooltip(Gesture.TRIPLE_TAP, tapBehavior)
             if (tapBehavior == "SAFE_HOME") {
                 BackHomeAccessibilityService.instance?.performHomeAction()
             } else {
@@ -428,6 +439,10 @@ class OverlayService : Service() {
     }
 
     private fun handleQuadrupleTap() {
+        serviceScope.launch {
+            val tapBehavior = settingsRepository.getTapBehavior().first()
+            tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, tapBehavior)
+        }
         val intent = Intent(this, ch.heuscher.back_home_dot.MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
@@ -437,6 +452,7 @@ class OverlayService : Service() {
     private fun handleLongPress() {
         serviceScope.launch {
             val tapBehavior = settingsRepository.getTapBehavior().first()
+            tooltipManager.showTooltip(Gesture.LONG_PRESS, tapBehavior)
             if (tapBehavior == "SAFE_HOME") {
                 // Safe-Home mode: Long press activates drag mode
                 // The drag mode is already activated by GestureDetector's onDragModeChanged callback
