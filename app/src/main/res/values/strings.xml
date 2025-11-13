@@ -36,9 +36,9 @@
 
     <!-- Help Section -->
     <string name="how_it_works">ℹ️ How it works</string>
-    <string name="instructions">• All taps = Home\n• Long-press + drag to move (halo shows when ready)\n• Square design for safety\n• Tap 4 times = Open Assistive Tap</string>
-    <string name="instructions_normal_mode">• Tap once = Home\n• Tap twice = Back\n• Tap 3 times = All open apps\n• Tap 4 times = Open Assistive Tap\n• Long press = Home screen</string>
-    <string name="instructions_back_mode">• Tap once = Back\n• Tap twice = Switch to previous app\n• Tap 3 times = All open apps\n• Tap 4 times = Open Assistive Tap\n• Long press = Home screen</string>
+    <string name="instructions">• Tap once = Home\n• Tap twice = Back\n• Tap 3 times = All open apps\n• Tap 4 times = Open Assistive Tap\n• Long press = Home screen\n• Drag = Move dot</string>
+    <string name="instructions_normal_mode">• Tap once = Home\n• Tap twice = Back\n• Tap 3 times = All open apps\n• Tap 4 times = Open Assistive Tap\n• Long press = Home screen\n• Drag = Move dot</string>
+    <string name="instructions_back_mode">• Tap once = Back\n• Tap twice = Switch to previous app\n• Tap 3 times = All open apps\n• Tap 4 times = Open Assistive Tap\n• Long press = Home screen\n• Drag = Move dot</string>
 
     <!-- Settings Screen -->
     <string name="back">Back</string>
@@ -71,7 +71,7 @@
     <string name="tap_behavior_standard_description">1 tap = Home, 2 taps = Back</string>
     <string name="tap_behavior_back_description">1 tap = Back, 2 taps = Switch to previous app</string>
     <string name="tap_behavior_safe_home_description">All taps = Home, long-press + drag to move</string>
-    <string name="instructions_safe_home_mode">• All taps = Home\n• Long-press + drag to move (halo shows when ready)\n• Square design for safety</string>
+    <string name="instructions_safe_home_mode">• All taps = Home\n• Tap 4 times = Open Assistive Tap\n• Long-press + drag to move (halo shows when ready)\n• Square design for safety</string>
 
     <!-- Advanced Settings -->
     <string name="for_experts">More settings</string>
@@ -134,5 +134,8 @@
     <string name="tooltip_tap_three">Tap 3 times</string>
     <string name="tooltip_tap_four">Tap 4 times</string>
     <string name="tooltip_long_press">Long press</string>
+    <string name="tooltip_long_press_drag">Long press + drag</string>
+    <string name="tooltip_drag">Drag</string>
+    <string name="action_move_dot">Move dot</string>
     <string name="tooltip_auto_dismiss">This help will auto-hide in 5 seconds</string>
 </resources>
