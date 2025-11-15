@@ -36,9 +36,9 @@
 
     <!-- Help Section -->
     <string name="how_it_works">ℹ️ So funktioniert es</string>
-    <string name="instructions">• 1x tippen = Home\n• 2x tippen = Zurück\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm\n• Ziehen = Punkt verschieben</string>
-    <string name="instructions_normal_mode">• 1x tippen = Home\n• 2x tippen = Zurück\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm\n• Ziehen = Punkt verschieben</string>
-    <string name="instructions_back_mode">• 1x tippen = Zurück\n• 2x tippen = Zu vorheriger App wechseln\n• 3x tippen = Alle offenen Apps\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken = Start-Bildschirm\n• Ziehen = Punkt verschieben</string>
+    <string name="instructions">• 1 Tap = Home\n• 2 Taps = Zurück\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Ziehen = Verschieben</string>
+    <string name="instructions_normal_mode">• 1 Tap = Home\n• 2 Taps = Zurück\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Ziehen = Verschieben</string>
+    <string name="instructions_back_mode">• 1 Tap = Zurück\n• 2 Taps = Vorherige App\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Ziehen = Verschieben</string>
 
     <!-- Settings Screen -->
     <string name="back">Zurück</string>
@@ -71,7 +71,7 @@
     <string name="tap_behavior_standard_description">1x tippen = Home, 2x tippen = Zurück</string>
     <string name="tap_behavior_back_description">1x tippen = Zurück, 2x tippen = Zu vorheriger App wechseln</string>
     <string name="tap_behavior_safe_home_description">Alle Taps = Home, lang drücken + ziehen zum Verschieben</string>
-    <string name="instructions_safe_home_mode">• Alle Taps = Home\n• 4x tippen = AssistiPunkt öffnen\n• Lang drücken + ziehen zum Verschieben (Halo zeigt Bereitschaft)\n• Viereck-Design für Sicherheit</string>
+    <string name="instructions_safe_home_mode">• Alle Taps = Home\n• 4 Taps = App öffnen\n• Lang drücken + ziehen = Verschieben\n• Viereck-Design für Sicherheit</string>
 
     <!-- Advanced Settings -->
     <string name="for_experts">Mehr Einstellungen</string>
