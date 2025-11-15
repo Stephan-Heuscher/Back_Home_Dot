@@ -173,9 +173,8 @@ class TooltipManager(
     }
 
     /**
-     * Positions the tooltip beside the button where it's most visible.
-     * Prefers horizontal placement (left/right) over vertical (above/below).
-     * Chooses left vs right based on which side has more space.
+     * Positions the tooltip below the button by default.
+     * Falls back to above, left, or right if there's not enough space below.
      */
     private fun positionTooltip() {
         val tooltip = tooltipView ?: return
@@ -198,51 +197,42 @@ class TooltipManager(
         val spaceBelow = screenSize.y - (buttonPos.y + buttonSizePx)
         val spaceAbove = buttonPos.y
 
-        // Prefer horizontal placement (left/right) - choose side with more space
-        val canFitRight = spaceRight >= tooltipWidth + marginPx
-        val canFitLeft = spaceLeft >= tooltipWidth + marginPx
+        // Check if tooltip can fit on each side
         val canFitBelow = spaceBelow >= tooltipHeight + marginPx
         val canFitAbove = spaceAbove >= tooltipHeight + marginPx
+        val canFitRight = spaceRight >= tooltipWidth + marginPx
+        val canFitLeft = spaceLeft >= tooltipWidth + marginPx
 
         val (tooltipX, tooltipY) = when {
-            // If both horizontal sides can fit, choose the one with more space
-            canFitRight && canFitLeft -> {
-                if (spaceRight >= spaceLeft) {
-                    // Right side has more space
-                    val x = buttonPos.x + buttonSizePx + marginPx
-                    val y = buttonCenterY - tooltipHeight / 2
-                    Pair(x, y.coerceIn(0, screenSize.y - tooltipHeight))
-                } else {
-                    // Left side has more space
-                    val x = buttonPos.x - tooltipWidth - marginPx
-                    val y = buttonCenterY - tooltipHeight / 2
-                    Pair(x, y.coerceIn(0, screenSize.y - tooltipHeight))
-                }
+            // Prefer below the button
+            canFitBelow -> {
+                val x = buttonCenterX - tooltipWidth / 2
+                val y = buttonPos.y + buttonSizePx + marginPx
+                Pair(x.coerceIn(0, screenSize.x - tooltipWidth), y)
             }
-            // Only right fits
-            canFitRight -> {
-                val x = buttonPos.x + buttonSizePx + marginPx
-                val y = buttonCenterY - tooltipHeight / 2
-                Pair(x, y.coerceIn(0, screenSize.y - tooltipHeight))
+            // Try above
+            canFitAbove -> {
+                val x = buttonCenterX - tooltipWidth / 2
+                val y = buttonPos.y - tooltipHeight - marginPx
+                Pair(x.coerceIn(0, screenSize.x - tooltipWidth), y)
             }
-            // Only left fits
+            // Try left side
             canFitLeft -> {
                 val x = buttonPos.x - tooltipWidth - marginPx
                 val y = buttonCenterY - tooltipHeight / 2
                 Pair(x, y.coerceIn(0, screenSize.y - tooltipHeight))
             }
-            // Neither horizontal side fits - try vertical, but still prefer horizontal with overlap
-            spaceLeft > spaceRight -> {
-                // More space on left, use left even if it doesn't fully fit
-                val x = buttonPos.x - tooltipWidth - marginPx
-                val y = buttonCenterY - tooltipHeight / 2
-                Pair(x.coerceAtLeast(0), y.coerceIn(0, screenSize.y - tooltipHeight))
-            }
-            // More space on right or equal, use right even if it doesn't fully fit
-            else -> {
+            // Try right side
+            canFitRight -> {
                 val x = buttonPos.x + buttonSizePx + marginPx
                 val y = buttonCenterY - tooltipHeight / 2
-                Pair(x.coerceAtMost(screenSize.x - tooltipWidth), y.coerceIn(0, screenSize.y - tooltipHeight))
+                Pair(x, y.coerceIn(0, screenSize.y - tooltipHeight))
+            }
+            // Default: below even if it doesn't fully fit
+            else -> {
+                val x = buttonCenterX - tooltipWidth / 2
+                val y = buttonPos.y + buttonSizePx + marginPx
+                Pair(x.coerceIn(0, screenSize.x - tooltipWidth), y.coerceAtMost(screenSize.y - tooltipHeight))
             }
         }
 
@@ -253,7 +243,7 @@ class TooltipManager(
 
         try {
             windowManager.updateViewLayout(tooltip, params)
-            Log.d(TAG, "Tooltip positioned at ($tooltipX, $tooltipY) - spaceLeft=$spaceLeft, spaceRight=$spaceRight")
+            Log.d(TAG, "Tooltip positioned at ($tooltipX, $tooltipY) - below button")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to update tooltip position", e)
         }
