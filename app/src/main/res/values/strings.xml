@@ -129,12 +129,12 @@
     <string name="action_drag_mode">Drag mode active</string>
 
     <!-- Tooltip Comprehensive Help -->
-    <string name="tooltip_all_actions_title">How to use:</string>
-    <string name="tooltip_tap_once">Tap once</string>
-    <string name="tooltip_tap_twice">Tap twice</string>
-    <string name="tooltip_tap_three">Tap 3 times</string>
+    <string name="tooltip_all_actions_title">How it works:</string>
+    <string name="tooltip_tap_once">1 Tap</string>
+    <string name="tooltip_tap_twice">2 Taps</string>
+    <string name="tooltip_tap_three">3 Taps</string>
     <string name="tooltip_tap_any">Any tap</string>
-    <string name="tooltip_tap_four">Tap 4 times</string>
+    <string name="tooltip_tap_four">4 Taps</string>
     <string name="tooltip_long_press">Long press</string>
     <string name="tooltip_long_press_drag">Long press + drag</string>
     <string name="tooltip_drag">Drag</string>

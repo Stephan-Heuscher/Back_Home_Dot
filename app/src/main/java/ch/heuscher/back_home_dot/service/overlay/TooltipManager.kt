@@ -27,7 +27,8 @@ class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
     private val getScreenSize: () -> Point,
-    private val getButtonWindowToken: () -> IBinder?
+    private val getButtonWindowToken: () -> IBinder?,
+    private val bringButtonToFront: () -> Unit
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -139,14 +140,14 @@ class TooltipManager(
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            // Attach to button's window token to ensure tooltip appears below button in Z-order
-            token = getButtonWindowToken()
         }
 
         try {
             windowManager.addView(tooltipView, params)
             positionTooltip()
-            Log.d(TAG, "Comprehensive help overlay shown")
+            // Bring button to front to ensure it's always on top of tooltip
+            bringButtonToFront()
+            Log.d(TAG, "Comprehensive help overlay shown, button brought to front")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to add comprehensive help overlay", e)
             tooltipView = null

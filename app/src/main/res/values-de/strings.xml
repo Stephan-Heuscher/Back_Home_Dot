@@ -130,11 +130,11 @@
 
     <!-- Tooltip Comprehensive Help -->
     <string name="tooltip_all_actions_title">So funktioniert es:</string>
-    <string name="tooltip_tap_once">1x tippen</string>
-    <string name="tooltip_tap_twice">2x tippen</string>
-    <string name="tooltip_tap_three">3x tippen</string>
-    <string name="tooltip_tap_any">Beliebig tippen</string>
-    <string name="tooltip_tap_four">4x tippen</string>
+    <string name="tooltip_tap_once">1 Tap</string>
+    <string name="tooltip_tap_twice">2 Taps</string>
+    <string name="tooltip_tap_three">3 Taps</string>
+    <string name="tooltip_tap_any">Beliebig Taps</string>
+    <string name="tooltip_tap_four">4 Taps</string>
     <string name="tooltip_long_press">Lang drücken</string>
     <string name="tooltip_long_press_drag">Lang drücken + ziehen</string>
     <string name="tooltip_drag">Ziehen</string>

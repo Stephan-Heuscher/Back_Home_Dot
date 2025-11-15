@@ -147,6 +147,25 @@ class OverlayViewManager(
     }
 
     /**
+     * Brings the button overlay to front by re-adding it to the window manager.
+     * This ensures the button stays visually on top of other overlays like tooltips.
+     */
+    fun bringToFront() {
+        floatingView?.let { view ->
+            layoutParams?.let { params ->
+                try {
+                    // Remove and re-add to bring to front
+                    windowManager.removeView(view)
+                    windowManager.addView(view, params)
+                    Log.d(TAG, "Button brought to front in Z-order")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to bring button to front", e)
+                }
+            }
+        }
+    }
+
+    /**
      * Sets the visibility of the overlay view.
      */
     fun setVisibility(visibility: Int) {
