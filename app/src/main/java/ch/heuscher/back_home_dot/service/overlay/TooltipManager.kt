@@ -6,6 +6,7 @@ import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.view.Gravity
@@ -20,11 +21,13 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 /**
  * Manages tooltip display that shows action descriptions beside the button.
  * Shows comprehensive overlay on interaction and hides 2.5s after last interaction.
+ * Tooltip appears below the button in Z-order to keep button always clickable.
  */
 class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
-    private val getScreenSize: () -> Point
+    private val getScreenSize: () -> Point,
+    private val getButtonWindowToken: () -> IBinder?
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -131,11 +134,14 @@ class TooltipManager(
             },
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
-        )
-
-        params.gravity = Gravity.TOP or Gravity.START
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            // Attach to button's window token to ensure tooltip appears below button in Z-order
+            token = getButtonWindowToken()
+        }
 
         try {
             windowManager.addView(tooltipView, params)

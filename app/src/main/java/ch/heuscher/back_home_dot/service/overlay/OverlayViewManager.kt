@@ -140,6 +140,13 @@ class OverlayViewManager(
     }
 
     /**
+     * Gets the window token of the button view for Z-ordering.
+     */
+    fun getWindowToken(): android.os.IBinder? {
+        return floatingView?.windowToken
+    }
+
+    /**
      * Sets the visibility of the overlay view.
      */
     fun setVisibility(visibility: Int) {
