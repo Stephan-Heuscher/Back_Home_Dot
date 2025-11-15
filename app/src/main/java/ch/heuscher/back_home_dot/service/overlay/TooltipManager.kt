@@ -19,7 +19,7 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 
 /**
  * Manages tooltip display that shows action descriptions beside the button.
- * Shows comprehensive overlay on interaction and hides 500ms after last interaction.
+ * Shows comprehensive overlay on interaction and hides 2.5s after last interaction.
  */
 class TooltipManager(
     private val context: Context,
@@ -28,7 +28,7 @@ class TooltipManager(
 ) {
     companion object {
         private const val TAG = "TooltipManager"
-        private const val TOOLTIP_DISPLAY_DURATION_MS = 500L
+        private const val TOOLTIP_DISPLAY_DURATION_MS = 2500L
         private const val TOOLTIP_PADDING_DP = 16
         private const val TOOLTIP_TEXT_SIZE_SP = 18f
         private const val TOOLTIP_TITLE_SIZE_SP = 20f
@@ -46,7 +46,7 @@ class TooltipManager(
     /**
      * Shows a tooltip with all possible action descriptions beside the button.
      * Resets the hide timer on each interaction.
-     * Automatically hides 500ms after last interaction.
+     * Automatically hides 2.5s after last interaction.
      */
     fun showTooltip(gesture: Gesture, tapBehavior: String) {
         // Cancel any pending hide operation to reset timer
@@ -137,7 +137,7 @@ class TooltipManager(
             return
         }
 
-        // Schedule auto-hide 500ms after this interaction
+        // Schedule auto-hide 2.5s after this interaction
         hideTooltipRunnable = Runnable {
             removeTooltip()
         }
