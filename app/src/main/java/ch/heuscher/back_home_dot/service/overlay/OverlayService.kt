@@ -251,6 +251,14 @@ class OverlayService : Service() {
             viewManager.setDragMode(enabled)
         }
 
+        gestureDetector.onTouchDown = {
+            // Show tooltip immediately on first touch
+            serviceScope.launch {
+                val tapBehavior = settingsRepository.getTapBehavior().first()
+                tooltipManager.showTooltip(Gesture.TAP, tapBehavior)
+            }
+        }
+
         val listener = View.OnTouchListener { _, event ->
             gestureDetector.onTouch(event)
         }

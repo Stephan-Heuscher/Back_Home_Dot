@@ -42,6 +42,7 @@ class GestureDetector(
     var onGesture: ((Gesture) -> Unit)? = null
     var onPositionChanged: ((Int, Int) -> Unit)? = null
     var onDragModeChanged: ((Boolean) -> Unit)? = null
+    var onTouchDown: (() -> Unit)? = null
 
     /**
      * Sets whether long-press is required to enable dragging.
@@ -95,6 +96,9 @@ class GestureDetector(
         isLongPress = false
         hasMoved = false
         totalDragDistance = 0f
+
+        // Notify immediate touch for tooltip display
+        onTouchDown?.invoke()
 
         // Start long press timer
         mainHandler.postDelayed(longPressRunnable, longPressTimeout)
