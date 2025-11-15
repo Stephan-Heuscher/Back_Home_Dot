@@ -153,15 +153,13 @@ class TooltipManager(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_back)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
-                "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
                 "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             "NAVI" -> listOf(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_back)}",
-                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_switch_to_previous)}",
+                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_previous_app)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
-                "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
                 "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
@@ -169,7 +167,6 @@ class TooltipManager(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
                 "• ${context.getString(R.string.tooltip_long_press_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             else -> listOf()
