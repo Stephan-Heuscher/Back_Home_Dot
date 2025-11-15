@@ -42,6 +42,7 @@ class TooltipManager(
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val handler = Handler(Looper.getMainLooper())
     private var hideTooltipRunnable: Runnable? = null
+    private var currentTapBehavior: String? = null
 
     /**
      * Shows a tooltip with all possible action descriptions beside the button.
@@ -52,8 +53,16 @@ class TooltipManager(
         // Cancel any pending hide operation to reset timer
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
 
-        // Show comprehensive help (or refresh if already showing)
-        showComprehensiveHelp(tapBehavior)
+        // Only recreate if tooltip doesn't exist or tap behavior changed
+        if (tooltipView == null || currentTapBehavior != tapBehavior) {
+            showComprehensiveHelp(tapBehavior)
+        }
+
+        // Schedule auto-hide 2.5s after this interaction
+        hideTooltipRunnable = Runnable {
+            removeTooltip()
+        }
+        handler.postDelayed(hideTooltipRunnable!!, TOOLTIP_DISPLAY_DURATION_MS)
     }
 
     /**
@@ -103,6 +112,7 @@ class TooltipManager(
         }
 
         tooltipView = container
+        currentTapBehavior = tapBehavior
 
         // Measure the view
         container.measure(
@@ -134,14 +144,9 @@ class TooltipManager(
         } catch (e: Exception) {
             Log.e(TAG, "Failed to add comprehensive help overlay", e)
             tooltipView = null
+            currentTapBehavior = null
             return
         }
-
-        // Schedule auto-hide 2.5s after this interaction
-        hideTooltipRunnable = Runnable {
-            removeTooltip()
-        }
-        handler.postDelayed(hideTooltipRunnable!!, TOOLTIP_DISPLAY_DURATION_MS)
     }
 
     /**
@@ -267,6 +272,7 @@ class TooltipManager(
             }
             tooltipView = null
         }
+        currentTapBehavior = null
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
         hideTooltipRunnable = null
     }
