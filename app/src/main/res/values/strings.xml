@@ -124,6 +124,7 @@
     <string name="action_recents">Recent apps</string>
     <string name="action_recents_overview">All apps</string>
     <string name="action_switch_to_previous">Switch to previous app</string>
+    <string name="action_previous_app">Previous app</string>
     <string name="action_open_app">Open Assistive Tap</string>
     <string name="action_drag_mode">Drag mode active</string>
 
@@ -132,6 +133,7 @@
     <string name="tooltip_tap_once">Tap once</string>
     <string name="tooltip_tap_twice">Tap twice</string>
     <string name="tooltip_tap_three">Tap 3 times</string>
+    <string name="tooltip_tap_any">Any tap</string>
     <string name="tooltip_tap_four">Tap 4 times</string>
     <string name="tooltip_long_press">Long press</string>
     <string name="tooltip_long_press_drag">Long press + drag</string>

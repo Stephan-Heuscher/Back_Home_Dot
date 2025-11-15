@@ -124,6 +124,7 @@
     <string name="action_recents">Letzte Apps</string>
     <string name="action_recents_overview">Alle Apps</string>
     <string name="action_switch_to_previous">Zu vorheriger App wechseln</string>
+    <string name="action_previous_app">Vorherige App</string>
     <string name="action_open_app">AssistiPunkt öffnen</string>
     <string name="action_drag_mode">Verschiebe-Modus aktiv</string>
 
@@ -132,6 +133,7 @@
     <string name="tooltip_tap_once">1x tippen</string>
     <string name="tooltip_tap_twice">2x tippen</string>
     <string name="tooltip_tap_three">3x tippen</string>
+    <string name="tooltip_tap_any">Beliebig tippen</string>
     <string name="tooltip_tap_four">4x tippen</string>
     <string name="tooltip_long_press">Lang drücken</string>
     <string name="tooltip_long_press_drag">Lang drücken + ziehen</string>

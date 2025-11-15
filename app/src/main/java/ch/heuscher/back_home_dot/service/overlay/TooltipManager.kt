@@ -19,7 +19,7 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 
 /**
  * Manages tooltip display that shows action descriptions beside the button.
- * Always shows a large overlay with all possible interactions.
+ * Shows comprehensive overlay on interaction and hides 500ms after last interaction.
  */
 class TooltipManager(
     private val context: Context,
@@ -28,7 +28,7 @@ class TooltipManager(
 ) {
     companion object {
         private const val TAG = "TooltipManager"
-        private const val TOOLTIP_DISPLAY_DURATION_MS = 5000L
+        private const val TOOLTIP_DISPLAY_DURATION_MS = 500L
         private const val TOOLTIP_PADDING_DP = 16
         private const val TOOLTIP_TEXT_SIZE_SP = 18f
         private const val TOOLTIP_TITLE_SIZE_SP = 20f
@@ -45,14 +45,14 @@ class TooltipManager(
 
     /**
      * Shows a tooltip with all possible action descriptions beside the button.
-     * Always shows comprehensive help overlay.
-     * Automatically hides after duration.
+     * Resets the hide timer on each interaction.
+     * Automatically hides 500ms after last interaction.
      */
     fun showTooltip(gesture: Gesture, tapBehavior: String) {
-        // Cancel any pending hide operation
+        // Cancel any pending hide operation to reset timer
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
 
-        // Always show comprehensive help
+        // Show comprehensive help (or refresh if already showing)
         showComprehensiveHelp(tapBehavior)
     }
 
@@ -102,17 +102,6 @@ class TooltipManager(
             container.addView(textView)
         }
 
-        // Add dismissal hint at bottom
-        val hint = TextView(context).apply {
-            text = context.getString(R.string.tooltip_auto_dismiss)
-            textSize = TOOLTIP_TEXT_SIZE_SP - 2
-            setTextColor(Color.parseColor("#999999"))
-            setPadding(0, lineSpacingPx * 2, 0, 0)
-            gravity = Gravity.CENTER
-            setTypeface(null, android.graphics.Typeface.ITALIC)
-        }
-        container.addView(hint)
-
         tooltipView = container
 
         // Measure the view
@@ -148,7 +137,7 @@ class TooltipManager(
             return
         }
 
-        // Schedule auto-hide
+        // Schedule auto-hide 500ms after this interaction
         hideTooltipRunnable = Runnable {
             removeTooltip()
         }
@@ -160,30 +149,21 @@ class TooltipManager(
      */
     private fun getAllActionsText(tapBehavior: String): List<String> {
         return when (tapBehavior) {
-            "STANDARD" -> listOf(
-                "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_back)}",
-                "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
-                "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
-                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
-            )
             "NAVI" -> listOf(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_back)}",
-                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_switch_to_previous)}",
+                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_previous_app)}",
                 "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
-                "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
                 "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             "SAFE_HOME" -> listOf(
-                "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_four)} → ${context.getString(R.string.action_open_app)}",
+                "• ${context.getString(R.string.tooltip_tap_any)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_long_press_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
-            else -> listOf()
+            else -> listOf(
+                "• ${context.getString(R.string.tooltip_tap_any)} → ${context.getString(R.string.action_home)}",
+                "• ${context.getString(R.string.tooltip_long_press_drag)} → ${context.getString(R.string.action_move_dot)}"
+            )
         }
     }
 
