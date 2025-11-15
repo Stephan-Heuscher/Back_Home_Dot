@@ -133,6 +133,7 @@
     <string name="tooltip_tap_once">Tap once</string>
     <string name="tooltip_tap_twice">Tap twice</string>
     <string name="tooltip_tap_three">Tap 3 times</string>
+    <string name="tooltip_tap_any">Any tap</string>
     <string name="tooltip_tap_four">Tap 4 times</string>
     <string name="tooltip_long_press">Long press</string>
     <string name="tooltip_long_press_drag">Long press + drag</string>

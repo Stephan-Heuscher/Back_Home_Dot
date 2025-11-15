@@ -149,13 +149,6 @@ class TooltipManager(
      */
     private fun getAllActionsText(tapBehavior: String): List<String> {
         return when (tapBehavior) {
-            "STANDARD" -> listOf(
-                "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_back)}",
-                "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_recents_overview)}",
-                "• ${context.getString(R.string.tooltip_long_press)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
-            )
             "NAVI" -> listOf(
                 "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_back)}",
                 "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_previous_app)}",
@@ -164,12 +157,13 @@ class TooltipManager(
                 "• ${context.getString(R.string.tooltip_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
             "SAFE_HOME" -> listOf(
-                "• ${context.getString(R.string.tooltip_tap_once)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_twice)} → ${context.getString(R.string.action_home)}",
-                "• ${context.getString(R.string.tooltip_tap_three)} → ${context.getString(R.string.action_home)}",
+                "• ${context.getString(R.string.tooltip_tap_any)} → ${context.getString(R.string.action_home)}",
                 "• ${context.getString(R.string.tooltip_long_press_drag)} → ${context.getString(R.string.action_move_dot)}"
             )
-            else -> listOf()
+            else -> listOf(
+                "• ${context.getString(R.string.tooltip_tap_any)} → ${context.getString(R.string.action_home)}",
+                "• ${context.getString(R.string.tooltip_long_press_drag)} → ${context.getString(R.string.action_move_dot)}"
+            )
         }
     }
 
