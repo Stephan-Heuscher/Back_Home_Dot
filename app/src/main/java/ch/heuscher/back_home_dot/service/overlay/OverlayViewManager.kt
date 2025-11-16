@@ -162,15 +162,6 @@ class OverlayViewManager(
     }
 
     /**
-     * Brings the button to front in Z-order.
-     * This is a simple ViewGroup child reordering - no WindowManager operations!
-     */
-    fun bringButtonToFront() {
-        floatingDot?.bringToFront()
-        Log.d(TAG, "Button brought to front using View.bringToFront() - no window manipulation!")
-    }
-
-    /**
      * Sets the visibility of the overlay view.
      */
     fun setVisibility(visibility: Int) {

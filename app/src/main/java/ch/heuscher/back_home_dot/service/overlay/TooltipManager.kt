@@ -17,14 +17,14 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 /**
  * Manages tooltip display that shows action descriptions beside the button.
  * Shows comprehensive overlay on interaction and hides 2.5s after last interaction.
- * Tooltip is added as a child view to the overlay container, ensuring proper Z-order control.
+ * Tooltip is added as a child view to the overlay container.
+ * Button remains on top via XML declaration order (button declared last).
  */
 class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
     private val getScreenSize: () -> Point,
-    private val getTooltipContainer: () -> android.widget.FrameLayout?,
-    private val bringButtonToFront: () -> Unit
+    private val getTooltipContainer: () -> android.widget.FrameLayout?
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -128,14 +128,16 @@ class TooltipManager(
             // Add tooltip as child of overlay container
             tooltipContainer.visibility = View.VISIBLE
             tooltipContainer.removeAllViews()
-            tooltipContainer.addView(container)
 
+            // Ensure tooltip container doesn't intercept touches
+            tooltipContainer.isClickable = false
+            tooltipContainer.isFocusable = false
+
+            tooltipContainer.addView(container)
             positionTooltip()
 
-            // Bring button to front in Z-order (ViewGroup child reordering)
-            bringButtonToFront()
-
-            Log.d(TAG, "Tooltip shown as child view with button in front")
+            // Button is already on top (declared last in XML) - no need to call bringToFront()
+            Log.d(TAG, "Tooltip shown as child view (button already on top by XML declaration order)")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to add tooltip", e)
             tooltipView = null
