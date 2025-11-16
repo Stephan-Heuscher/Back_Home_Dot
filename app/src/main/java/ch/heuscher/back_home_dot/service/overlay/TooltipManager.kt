@@ -21,14 +21,12 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 /**
  * Manages tooltip display that shows action descriptions beside the button.
  * Shows comprehensive overlay on interaction and hides 2.5s after last interaction.
- * Tooltip appears below the button in Z-order to keep button always clickable.
+ * Tooltip has FLAG_NOT_TOUCHABLE so touches pass through to the button below.
  */
 class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
-    private val getScreenSize: () -> Point,
-    private val getButtonWindowToken: () -> IBinder?,
-    private val bringButtonToFront: () -> Unit
+    private val getScreenSize: () -> Point
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -145,9 +143,8 @@ class TooltipManager(
         try {
             windowManager.addView(tooltipView, params)
             positionTooltip()
-            // Bring button to front to ensure it's always on top of tooltip
-            bringButtonToFront()
-            Log.d(TAG, "Comprehensive help overlay shown, button brought to front")
+            // Tooltip has FLAG_NOT_TOUCHABLE, so touches pass through to button
+            Log.d(TAG, "Comprehensive help overlay shown")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to add comprehensive help overlay", e)
             tooltipView = null
