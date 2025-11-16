@@ -180,6 +180,15 @@ class OverlayViewManager(
     }
 
     /**
+     * Cancels any pending bringToFront operations.
+     * Call this when a drag starts to prevent interrupting the drag.
+     */
+    fun cancelPendingBringToFront() {
+        bringToFrontHandler.removeCallbacksAndMessages(null)
+        Log.d(TAG, "Cancelled pending bringToFront operation")
+    }
+
+    /**
      * Sets the visibility of the overlay view.
      */
     fun setVisibility(visibility: Int) {

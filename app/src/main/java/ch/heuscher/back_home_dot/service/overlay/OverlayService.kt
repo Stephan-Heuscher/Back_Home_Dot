@@ -377,6 +377,8 @@ class OverlayService : Service() {
             Gesture.DRAG_START -> {
                 positionAnimator.cancel()
                 isUserDragging = true
+                // Cancel any pending bringToFront to prevent interrupting the drag
+                viewManager.cancelPendingBringToFront()
                 return
             }
 
@@ -384,6 +386,8 @@ class OverlayService : Service() {
                 if (!isUserDragging) {
                     positionAnimator.cancel()
                     isUserDragging = true
+                    // Cancel any pending bringToFront to prevent interrupting the drag
+                    viewManager.cancelPendingBringToFront()
                 }
                 return
             }
