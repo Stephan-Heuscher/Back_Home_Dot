@@ -1,5 +1,62 @@
 # Release Notes - Assistive Tap
 
+## Version 3.0.0 (2025-11-16)
+
+### Interactive Tooltip & Touch Improvements
+
+We are excited to announce **Assistive Tap v3.0.0**, which introduces an **interactive tooltip** to help new users discover gestures and significantly improves touch handling!
+
+#### 🎓 Interactive Tooltip
+- **First-Touch Help**: Tooltip appears on first interaction showing available gestures
+- **Smart Positioning**: Tooltip positions itself below or above button to avoid overlap
+- **Auto-Hide**: Disappears after 2.5 seconds to avoid clutter
+- **Mode-Aware**: Shows gestures appropriate for current mode (Safe-Home or Navi)
+- **Visual Guidance**: Clear instructions for tap, long-press, and drag gestures
+- **Non-Intrusive**: Separate window layer that never blocks button interaction
+
+#### 👆 Touch & Gesture Improvements
+- **Fixed Touch Pass-Through**: Touches now properly pass through to apps below the button
+- **Eliminated Flicker**: Button no longer flickers during interaction
+- **Better Z-Order**: Button always stays visually above tooltip
+- **Improved Responsiveness**: Touch events register more reliably
+- **Smooth Animations**: All transitions are fluid and responsive
+
+#### 📍 Position & Layout Enhancements
+- **Boundary Safety**: Button stays within visible screen bounds
+- **Navigation Bar Awareness**: Maintains safe distance from system navigation bar
+- **Window Sizing**: Optimized window size reduces memory footprint
+- **Edge Access**: Button can reach all screen edges without jumping
+- **Rotation Stability**: Position remains stable during screen rotation
+
+#### ✨ User Experience
+- **Simplified Instructions**: Main screen text is clearer and more concise
+- **Immediate Feedback**: Tooltip shows instantly on first touch
+- **Reduced Confusion**: New users understand gestures right away
+- **Better Onboarding**: No need to remember all gestures upfront
+
+#### 🔧 Technical Changes
+- Implemented separate window for tooltip with `FLAG_NOT_TOUCHABLE`
+- Removed `bringToFront()` mechanism that caused touch interruptions
+- Fixed race conditions in drag end positioning
+- Improved ViewGroup Z-order management
+- Optimized window layout parameters for better touch handling
+- Added comprehensive tooltip lifecycle management
+
+#### 🎯 Benefits for Users
+- **Easier Learning**: New users discover features through tooltip
+- **Better Touch**: More reliable button interaction
+- **Cleaner Interface**: Tooltip only appears when needed
+- **No Confusion**: Clear visual guidance for all gestures
+
+### Bug Fixes
+- Fixed touch events being blocked by overlay window
+- Fixed button flicker during rapid taps
+- Fixed tooltip overlapping button in some screen positions
+- Fixed Z-order issues causing visual layering problems
+- Fixed edge cases in window sizing causing touch loss
+
+---
+
 ## Version 2.1.0 (2025-11-11)
 
 ### Safe-Home Mode as Default & Improved Color Picker

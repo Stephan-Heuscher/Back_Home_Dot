@@ -1,0 +1,10 @@
+Neu in v3.0.0:
+
+🎓 Interaktiver Tooltip - Neue Nutzer sehen hilfreiche Gesten-Hinweise beim ersten Touch
+🎨 Verbesserter Farbwähler - Intuitive HSV-Regler (Farbton, Intensität, Helligkeit)
+🏠 Safe Home als Standard - Maximale Sicherheit, alle Tipps führen nach Hause
+👆 Bessere Touch-Reaktion - Touch-Durchleitung korrigiert
+📍 Verbesserte Positionierung - Button bleibt im sichtbaren Bereich
+✨ Vereinfachte Oberfläche - Klarere Beschriftungen und übersichtliche Einstellungen
+
+Perfekt für Senioren und Nutzer mit motorischen Einschränkungen!

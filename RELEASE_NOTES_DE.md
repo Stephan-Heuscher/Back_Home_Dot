@@ -1,5 +1,62 @@
 # Release Notes - AssistiPunkt
 
+## Version 3.0.0 (2025-11-16)
+
+### Interaktiver Tooltip & Touch-Verbesserungen
+
+Wir freuen uns, **AssistiPunkt v3.0.0** vorzustellen, das einen **interaktiven Tooltip** einführt, um neuen Nutzern Gesten zu zeigen, und die Touch-Verarbeitung deutlich verbessert!
+
+#### 🎓 Interaktiver Tooltip
+- **Hilfe beim ersten Touch**: Tooltip erscheint bei erster Interaktion und zeigt verfügbare Gesten
+- **Intelligente Positionierung**: Tooltip positioniert sich unter oder über dem Button um Überlappung zu vermeiden
+- **Auto-Ausblenden**: Verschwindet nach 2,5 Sekunden um nicht zu stören
+- **Modus-bewusst**: Zeigt Gesten passend zum aktuellen Modus (Safe-Home oder Navi)
+- **Visuelle Anleitung**: Klare Anweisungen für Tippen, langes Drücken und Ziehen
+- **Nicht störend**: Separate Fensterebene die niemals Button-Interaktion blockiert
+
+#### 👆 Touch & Gesten-Verbesserungen
+- **Touch-Durchleitung korrigiert**: Touches werden nun korrekt an Apps unter dem Button weitergegeben
+- **Kein Flackern**: Button flackert nicht mehr während der Interaktion
+- **Bessere Z-Ordnung**: Button bleibt immer visuell über dem Tooltip
+- **Verbesserte Reaktionsfähigkeit**: Touch-Events werden zuverlässiger erkannt
+- **Flüssige Animationen**: Alle Übergänge sind sanft und reaktionsschnell
+
+#### 📍 Positions- & Layout-Verbesserungen
+- **Begrenzungs-Sicherheit**: Button bleibt im sichtbaren Bildschirmbereich
+- **Navigationsleisten-Bewusstsein**: Hält sicheren Abstand zur System-Navigationsleiste
+- **Fenster-Größenoptimierung**: Optimierte Fenstergröße reduziert Speicherverbrauch
+- **Rand-Zugriff**: Button kann alle Bildschirmränder erreichen ohne zu springen
+- **Rotations-Stabilität**: Position bleibt stabil während Bildschirm-Rotation
+
+#### ✨ Benutzererfahrung
+- **Vereinfachte Anweisungen**: Hauptbildschirm-Text ist klarer und prägnanter
+- **Sofortiges Feedback**: Tooltip erscheint sofort beim ersten Touch
+- **Weniger Verwirrung**: Neue Nutzer verstehen Gesten sofort
+- **Besseres Onboarding**: Keine Notwendigkeit alle Gesten im Voraus zu merken
+
+#### 🔧 Technische Änderungen
+- Separates Fenster für Tooltip mit `FLAG_NOT_TOUCHABLE` implementiert
+- `bringToFront()`-Mechanismus entfernt der Touch-Unterbrechungen verursachte
+- Race Conditions bei Drag-End-Positionierung behoben
+- Verbesserte ViewGroup Z-Order-Verwaltung
+- Optimierte Window-Layout-Parameter für bessere Touch-Verarbeitung
+- Umfassendes Tooltip-Lifecycle-Management hinzugefügt
+
+#### 🎯 Vorteile für Nutzer
+- **Einfacheres Lernen**: Neue Nutzer entdecken Funktionen durch Tooltip
+- **Besserer Touch**: Zuverlässigere Button-Interaktion
+- **Sauberere Oberfläche**: Tooltip erscheint nur bei Bedarf
+- **Keine Verwirrung**: Klare visuelle Anleitung für alle Gesten
+
+### Fehlerbehebungen
+- Touch-Events wurden durch Overlay-Fenster blockiert - behoben
+- Button-Flackern bei schnellen Tipps - behoben
+- Tooltip überlappte Button in manchen Bildschirmpositionen - behoben
+- Z-Order-Probleme die visuelle Schichtungs-Probleme verursachten - behoben
+- Randfälle bei Fenster-Größenberechnung die Touch-Verlust verursachten - behoben
+
+---
+
 ## Version 2.1.0 (2025-11-11)
 
 ### Safe-Home-Modus als Standard & Verbesserter Farbwähler
