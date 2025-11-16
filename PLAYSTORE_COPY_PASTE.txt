@@ -1,0 +1,94 @@
+================================================================================
+GOOGLE PLAY STORE - COPY & PASTE REFERENCE
+================================================================================
+
+This file contains all text needed for Play Store listing in ready-to-copy format.
+
+================================================================================
+SHORT DESCRIPTION (ENGLISH) - 80 characters max
+================================================================================
+Accessible floating button for easy one-handed navigation. Perfect for seniors!
+
+================================================================================
+SHORT DESCRIPTION (GERMAN) - 80 characters max
+================================================================================
+Barrierefreier Schaltfläche für einfache Navigation. Perfekt für Senioren!
+
+================================================================================
+APP TITLE (ENGLISH) - 30 characters max
+================================================================================
+Assistive Tap
+
+================================================================================
+APP TITLE (GERMAN) - 30 characters max
+================================================================================
+AssistiPunkt
+
+================================================================================
+FULL DESCRIPTION (ENGLISH)
+================================================================================
+See: PLAYSTORE_DESCRIPTION_EN.md
+
+================================================================================
+FULL DESCRIPTION (GERMAN)
+================================================================================
+See: PLAYSTORE_DESCRIPTION_DE.md
+
+================================================================================
+RELEASE NOTES (ENGLISH) - v3.0.0
+================================================================================
+See: PLAYSTORE_RELEASE_NOTES_EN.txt
+
+================================================================================
+RELEASE NOTES (GERMAN) - v3.0.0
+================================================================================
+See: PLAYSTORE_RELEASE_NOTES_DE.txt
+
+================================================================================
+CATEGORY
+================================================================================
+Tools (or Medical/Accessibility if available)
+
+================================================================================
+CONTENT RATING
+================================================================================
+Everyone
+
+================================================================================
+TAGS/KEYWORDS (separated by commas)
+================================================================================
+accessibility, assistive touch, navigation, seniors, elderly, motor impairment,
+one-handed, floating button, easy navigation, simple, barrier-free, arthritis,
+disability support, accessibility tool, android navigation, home button
+
+================================================================================
+PRIVACY POLICY DECLARATION
+================================================================================
+Advertising ID: NO - App does NOT use advertising ID
+Data Collection: NO - App does NOT collect user data
+Location: NO - App does NOT access location
+Storage: YES - App stores settings locally on device only
+
+Foreground Service: YES
+Type: Special Use
+Justification: This app provides an accessibility overlay button that helps
+users with motor impairments navigate their device. The foreground service is
+required to maintain the floating button on screen while the user interacts
+with other apps. This is essential for the app's core accessibility functionality.
+
+================================================================================
+CONTACT EMAIL
+================================================================================
+[Add your support email here]
+
+================================================================================
+WEBSITE
+================================================================================
+https://github.com/Stephan-Heuscher/Back_Home_Dot
+
+================================================================================
+PRIVACY POLICY URL
+================================================================================
+https://github.com/Stephan-Heuscher/Back_Home_Dot/blob/main/PRIVACY_POLICY.md
+
+================================================================================

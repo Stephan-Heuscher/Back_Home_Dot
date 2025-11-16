@@ -1,6 +1,7 @@
 # Privacy Policy for Assistive Tap (AssistiPunkt)
 
-**Last Updated: October 28, 2025**
+**Last Updated: November 16, 2025**
+**Version: 3.0.0**
 
 ## Introduction
 
@@ -24,22 +25,30 @@ Assistive Tap itself **does not collect, store, or transmit** any personal infor
 - Does not record your screen or app usage
 - Does not access your contacts, photos, or other personal files
 - Does not monitor which apps you use or how you use them
+- **Does not use advertising ID** - We explicitly exclude advertising identifiers
+- Does not contain any advertising or analytics libraries
+- Does not share any data with third parties
 
 ### Information Stored Locally
 
 The app stores the following settings **only on your device**:
 
-- Position of the floating navigation dot
-- Selected color preferences
-- Opacity/transparency settings
+- Position of the floating navigation dot (as screen percentage)
+- Selected color preferences (RGB values)
+- Opacity/transparency settings (0-255 alpha value)
 - Activation status (on/off)
-- App switch speed configuration
+- Tap behavior mode (Safe Home or Navi)
+- Keyboard avoidance preference (on/off)
+- Recent apps switch timeout (milliseconds)
+- Screen dimensions and rotation state
 
 This data:
 - Never leaves your device
 - Is not transmitted to any server
 - Is only accessible by the app itself
+- Is stored in Android's secure SharedPreferences
 - Is automatically deleted when you uninstall the app
+- Cannot be accessed by other apps
 
 ## Permissions Explained
 
@@ -66,13 +75,31 @@ This data:
 
 **Important**: The accessibility service is used exclusively for executing navigation commands when you tap the floating dot. It has no ability to collect or transmit data.
 
-### 3. Usage Access (Optional)
+### 3. Run at Startup (RECEIVE_BOOT_COMPLETED)
 
-**Purpose**: Enables direct app switching when you double-tap the dot.
+**Purpose**: Allows the app to start automatically after device restart (if you had it enabled).
 
-**What We Access**: The ability to identify the most recently used app.
+**What We Access**: Notification when the device boots up.
 
-**What We DON'T Do**: We do not log, store, or transmit any app usage information.
+**What We DON'T Do**: We do not collect any boot-related data or device information.
+
+### 4. Foreground Service
+
+**Purpose**: Keeps the floating navigation dot visible and responsive while you use other apps.
+
+**What We Access**: Permission to run a persistent service with a notification.
+
+**What We DON'T Do**: The service only manages the overlay button and does not collect, monitor, or transmit any data.
+
+**Note**: A persistent notification is required by Android when the app is active. This is a system requirement, not a tracking mechanism.
+
+### 5. Post Notifications (Android 13+)
+
+**Purpose**: Display the required foreground service notification.
+
+**What We Access**: Ability to show a notification that the app is running.
+
+**What We DON'T Do**: We do not send promotional notifications, reminders, or any other messages. The notification only indicates the app is active.
 
 ## Children's Privacy
 
@@ -83,6 +110,9 @@ Assistive Tap does not knowingly collect any personal information from children.
 - All app settings are stored locally using Android's secure SharedPreferences
 - No data is transmitted from the app to external servers
 - The accessibility service operates in a sandboxed environment with minimal permissions
+- No advertising ID is generated or used by this app
+- No analytics or tracking SDKs are included in the app
+- The app does not require internet permission and cannot transmit data
 
 ## Your Rights and Choices
 
@@ -129,11 +159,16 @@ If you have questions, concerns, or requests regarding this Privacy Policy:
 - **Email**: s.heuscher@gmail.com
 - **GitHub Issues**: https://github.com/Stephan-Heuscher/Back_Home_Dot/issues
 
-## Third-Party Links
+## Third-Party Services
 
-For complete information about third-party data practices:
-- **Google Privacy Policy**: https://policies.google.com/privacy
-- **Google GDPR Compliance**: https://privacy.google.com/businesses/compliance/
+**This app does not use any third-party services, SDKs, or libraries that collect data.**
+
+The app uses only standard Android framework libraries that are part of the Android operating system:
+- AndroidX libraries (UI components - no data collection)
+- Material Design components (UI styling - no data collection)
+- Android Accessibility Services (system API - no data transmission)
+
+No third-party analytics, advertising, or tracking services are integrated.
 
 ## Transparency Commitment
 
@@ -142,4 +177,20 @@ https://github.com/Stephan-Heuscher/Back_Home_Dot
 
 ---
 
-**Summary**: Assistive Tap itself collects no personal data. Settings are stored only on your device. You have full control over permissions and can disable features or uninstall at any time.
+## Play Store Data Safety Declaration
+
+For Google Play Store compliance, we declare:
+
+- **Advertising ID**: NOT USED - App explicitly excludes advertising identifiers
+- **Location Data**: NOT COLLECTED
+- **Personal Information**: NOT COLLECTED
+- **Financial Information**: NOT COLLECTED
+- **App Activity**: NOT COLLECTED
+- **Device or Other IDs**: NOT COLLECTED
+- **Data Sharing**: NO DATA SHARED with third parties
+- **Data Encryption**: Settings stored in Android's encrypted SharedPreferences
+- **Data Deletion**: All data deleted upon app uninstall
+
+---
+
+**Summary**: Assistive Tap collects **ZERO** personal data. No advertising ID, no tracking, no analytics, no data transmission. Settings are stored only on your device using Android's secure storage. You have full control over permissions and can disable features or uninstall at any time. This app is completely privacy-focused and designed for accessibility, not data collection.
