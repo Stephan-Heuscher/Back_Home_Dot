@@ -43,10 +43,12 @@ class OverlayViewManager(
         private const val NAV_TAG = "NavBarDebug"  // Easy to filter: adb logcat -s NavBarDebug:D
     }
 
-    private var floatingView: View? = null
-    private var floatingDot: View? = null
+    private var floatingView: View? = null  // The full-screen overlay container
+    private var floatingDot: View? = null  // The button view
     private var floatingDotHalo: View? = null
-    private var layoutParams: WindowManager.LayoutParams? = null
+    private var tooltipContainer: android.widget.FrameLayout? = null  // Container for tooltip
+    private var layoutParams: WindowManager.LayoutParams? = null  // Full-screen window params
+    private var buttonLayoutParams: android.widget.FrameLayout.LayoutParams? = null  // Button position within overlay
     private var touchListener: View.OnTouchListener? = null
     private var fadeAnimator: ValueAnimator? = null
     private var haloAnimator: ValueAnimator? = null
@@ -66,6 +68,18 @@ class OverlayViewManager(
 
         floatingView = LayoutInflater.from(context).inflate(R.layout.overlay_layout, null)
         floatingDot = floatingView?.findViewById<View>(R.id.floating_dot)
+        tooltipContainer = floatingView?.findViewById(R.id.tooltip_container)
+
+        // Initialize button position params (will be updated in updatePosition)
+        buttonLayoutParams = android.widget.FrameLayout.LayoutParams(
+            (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density).toInt(),
+            (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density).toInt()
+        ).apply {
+            gravity = android.view.Gravity.TOP or android.view.Gravity.START
+            leftMargin = 0
+            topMargin = 0
+        }
+        floatingDot?.layoutParams = buttonLayoutParams
 
         // Listen for insets to get accurate nav bar height
         floatingView?.setOnApplyWindowInsetsListener { view, insets ->
@@ -113,15 +127,16 @@ class OverlayViewManager(
     }
 
     /**
-     * Updates the position of the overlay view.
+     * Updates the position of the button within the overlay.
+     * Uses FrameLayout margins to position the button without touching WindowManager.
      */
     fun updatePosition(position: DotPosition) {
-        layoutParams?.let { params ->
-            val oldX = params.x
-            val oldY = params.y
-            params.x = position.x
-            params.y = position.y
-            floatingView?.let { windowManager.updateViewLayout(it, params) }
+        buttonLayoutParams?.let { params ->
+            val oldX = params.leftMargin
+            val oldY = params.topMargin
+            params.leftMargin = position.x
+            params.topMargin = position.y
+            floatingDot?.layoutParams = params
 
             // Log significant position changes
             if (Math.abs(oldX - position.x) > 10 || Math.abs(oldY - position.y) > 10) {
@@ -131,12 +146,28 @@ class OverlayViewManager(
     }
 
     /**
-     * Gets the current position of the overlay.
+     * Gets the current position of the button within the overlay.
      */
     fun getCurrentPosition(): DotPosition? {
-        return layoutParams?.let { params ->
-            DotPosition(params.x, params.y)
+        return buttonLayoutParams?.let { params ->
+            DotPosition(params.leftMargin, params.topMargin)
         }
+    }
+
+    /**
+     * Gets the tooltip container to add tooltip views.
+     */
+    fun getTooltipContainer(): android.widget.FrameLayout? {
+        return tooltipContainer
+    }
+
+    /**
+     * Brings the button to front in Z-order.
+     * This is a simple ViewGroup child reordering - no WindowManager operations!
+     */
+    fun bringButtonToFront() {
+        floatingDot?.bringToFront()
+        Log.d(TAG, "Button brought to front using View.bringToFront() - no window manipulation!")
     }
 
     /**
@@ -240,14 +271,12 @@ class OverlayViewManager(
 
     /**
      * Calculates constrained position within screen bounds.
-     * Accounts for button being centered in larger layout.
+     * Button is now positioned using margins, so bounds are simpler.
      * Adds virtual border at navigation bar to prevent overlap.
      */
     fun constrainPositionToBounds(x: Int, y: Int): Pair<Int, Int> {
         val screenSize = getScreenSize()
-        val layoutSize = (AppConstants.OVERLAY_LAYOUT_SIZE_DP * context.resources.displayMetrics.density).toInt()
         val buttonSize = (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density).toInt()
-        val offset = (layoutSize - buttonSize) / 2
 
         // Get navigation bar margin (actual height + safety margin)
         val navBarMargin = getNavigationBarMargin()
@@ -261,31 +290,31 @@ class OverlayViewManager(
         when (cachedNavBarPosition) {
             NavBarPosition.BOTTOM -> {
                 // Nav bar at bottom - constrain bottom edge
-                minX = -offset
-                maxX = screenSize.x - buttonSize - offset
-                minY = -offset
-                maxY = screenSize.y - buttonSize - offset - navBarMargin
+                minX = 0
+                maxX = screenSize.x - buttonSize
+                minY = 0
+                maxY = screenSize.y - buttonSize - navBarMargin
             }
             NavBarPosition.LEFT -> {
                 // Nav bar on left - constrain left edge
-                minX = -offset + navBarMargin
-                maxX = screenSize.x - buttonSize - offset
-                minY = -offset
-                maxY = screenSize.y - buttonSize - offset
+                minX = navBarMargin
+                maxX = screenSize.x - buttonSize
+                minY = 0
+                maxY = screenSize.y - buttonSize
             }
             NavBarPosition.RIGHT -> {
                 // Nav bar on right - constrain right edge
-                minX = -offset
-                maxX = screenSize.x - buttonSize - offset - navBarMargin
-                minY = -offset
-                maxY = screenSize.y - buttonSize - offset
+                minX = 0
+                maxX = screenSize.x - buttonSize - navBarMargin
+                minY = 0
+                maxY = screenSize.y - buttonSize
             }
             NavBarPosition.NONE -> {
                 // Should not happen (we guess from rotation now), but fallback to bottom
-                minX = -offset
-                maxX = screenSize.x - buttonSize - offset
-                minY = -offset
-                maxY = screenSize.y - buttonSize - offset - navBarMargin
+                minX = 0
+                maxX = screenSize.x - buttonSize
+                minY = 0
+                maxY = screenSize.y - buttonSize - navBarMargin
             }
         }
 
@@ -308,12 +337,10 @@ class OverlayViewManager(
             WindowManager.LayoutParams.TYPE_PHONE
         }
 
-        // Use fixed layout size to prevent button jump when halo appears/disappears
-        val layoutSize = (AppConstants.OVERLAY_LAYOUT_SIZE_DP * context.resources.displayMetrics.density).toInt()
-
+        // Full-screen overlay to contain both button and tooltip
         layoutParams = WindowManager.LayoutParams(
-            layoutSize,
-            layoutSize,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             layoutType,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
@@ -322,6 +349,8 @@ class OverlayViewManager(
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
+            x = 0
+            y = 0
         }
     }
 

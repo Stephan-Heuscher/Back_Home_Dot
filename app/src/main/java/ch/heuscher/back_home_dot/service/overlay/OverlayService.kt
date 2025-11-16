@@ -135,7 +135,9 @@ class OverlayService : Service() {
         tooltipManager = ServiceLocator.createTooltipManager(
             context = this,
             getCurrentPosition = { viewManager.getCurrentPosition() },
-            getScreenSize = { orientationHandler.getUsableScreenSize() }
+            getScreenSize = { orientationHandler.getUsableScreenSize() },
+            getTooltipContainer = { viewManager.getTooltipContainer() },
+            bringButtonToFront = { viewManager.bringButtonToFront() }
         )
 
         // Create overlay view
@@ -348,23 +350,11 @@ class OverlayService : Service() {
 
         viewManager.updateAppearance(settings)
 
-        val screenSize = orientationHandler.getUsableScreenSize()
-        val layoutSize = (AppConstants.OVERLAY_LAYOUT_SIZE_DP * resources.displayMetrics.density).toInt()
-        val buttonSize = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
-        val offset = (layoutSize - buttonSize) / 2
-
-        // Get actual navigation bar margin from OverlayViewManager
-        val navBarMargin = viewManager.getNavigationBarMargin()
-
-        // Use same logic as OverlayViewManager.constrainPositionToBounds
-        val constrainedX = settings.position.x.coerceIn(-offset, screenSize.x - buttonSize - offset)
-        val constrainedY = settings.position.y.coerceIn(-offset, screenSize.y - buttonSize - offset - navBarMargin)
+        // Constrain position to screen bounds (button is now positioned using margins)
+        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(settings.position.x, settings.position.y)
         val constrainedPosition = DotPosition(constrainedX, constrainedY)
 
-        Log.d(TAG, "updateOverlayAppearance: screenSize=${screenSize.x}x${screenSize.y}, layoutSize=$layoutSize, buttonSize=$buttonSize, offset=$offset")
-        Log.d(TAG, "updateOverlayAppearance: navBarMargin=$navBarMargin (detected height + 48dp safety)")
         Log.d(TAG, "updateOverlayAppearance: savedPosition=(${settings.position.x},${settings.position.y}) -> constrainedPosition=($constrainedX,$constrainedY)")
-        Log.d(TAG, "updateOverlayAppearance: maxX=${screenSize.x - buttonSize - offset}, maxY=${screenSize.y - buttonSize - offset - navBarMargin}")
 
         viewManager.updatePosition(constrainedPosition)
         Log.d(TAG, "updateOverlayAppearance: Position updated to ($constrainedX, $constrainedY)")
@@ -618,10 +608,10 @@ class OverlayService : Service() {
 
         // Transform position if rotation changed
         if (newRotation != oldRotation) {
-            val layoutSizePx = (AppConstants.OVERLAY_LAYOUT_SIZE_DP * resources.displayMetrics.density).toInt()
-            val half = layoutSizePx / 2
+            val buttonSizePx = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
+            val half = buttonSizePx / 2
 
-            // Calculate center point
+            // Calculate center point of button
             val centerX = baselinePosition.x + half
             val centerY = baselinePosition.y + half
             val centerPosition = DotPosition(centerX, centerY, oldWidth, oldHeight, oldRotation)
@@ -631,7 +621,7 @@ class OverlayService : Service() {
                 centerPosition, oldWidth, oldHeight, oldRotation, newRotation
             )
 
-            // Calculate new top-left position
+            // Calculate new top-left position from transformed center
             val newTopLeftX = transformedCenter.x - half
             val newTopLeftY = transformedCenter.y - half
             val transformedPosition = DotPosition(newTopLeftX, newTopLeftY, newSize.x, newSize.y, newRotation)

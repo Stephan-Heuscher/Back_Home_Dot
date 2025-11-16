@@ -2,15 +2,12 @@ package ch.heuscher.back_home_dot.service.overlay
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.PixelFormat
 import android.graphics.Point
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import ch.heuscher.back_home_dot.R
@@ -20,12 +17,14 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 /**
  * Manages tooltip display that shows action descriptions beside the button.
  * Shows comprehensive overlay on interaction and hides 2.5s after last interaction.
- * Tooltip has FLAG_NOT_TOUCHABLE so button remains clickable even if visually overlapped.
+ * Tooltip is added as a child view to the overlay container, ensuring proper Z-order control.
  */
 class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
-    private val getScreenSize: () -> Point
+    private val getScreenSize: () -> Point,
+    private val getTooltipContainer: () -> android.widget.FrameLayout?,
+    private val bringButtonToFront: () -> Unit
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -40,7 +39,6 @@ class TooltipManager(
     }
 
     private var tooltipView: View? = null
-    private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     private val handler = Handler(Looper.getMainLooper())
     private var hideTooltipRunnable: Runnable? = null
     private var currentTapBehavior: String? = null
@@ -73,18 +71,23 @@ class TooltipManager(
         // Remove existing tooltip if present
         removeTooltip()
 
+        val tooltipContainer = getTooltipContainer() ?: run {
+            Log.e(TAG, "Tooltip container not available")
+            return
+        }
+
         val density = context.resources.displayMetrics.density
         val paddingPx = (TOOLTIP_PADDING_DP * density).toInt()
         val lineSpacingPx = (TOOLTIP_LINE_SPACING_DP * density).toInt()
         val maxWidthPx = (TOOLTIP_MAX_WIDTH_DP * density).toInt()
 
-        // Create container layout
+        // Create tooltip content
         val container = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Color.parseColor("#2D2D2D"))
             setPadding(paddingPx, paddingPx, paddingPx, paddingPx)
             alpha = TOOLTIP_ALPHA
-            elevation = 12f * density
+            elevation = 8f * density  // Visual depth effect
         }
 
         // Add title
@@ -121,32 +124,23 @@ class TooltipManager(
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
 
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                @Suppress("DEPRECATION")
-                WindowManager.LayoutParams.TYPE_PHONE
-            },
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-            PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.TOP or Gravity.START
-        }
-
         try {
-            windowManager.addView(tooltipView, params)
+            // Add tooltip as child of overlay container
+            tooltipContainer.visibility = View.VISIBLE
+            tooltipContainer.removeAllViews()
+            tooltipContainer.addView(container)
+
             positionTooltip()
-            Log.d(TAG, "Comprehensive help overlay shown (FLAG_NOT_TOUCHABLE ensures button remains clickable)")
+
+            // Bring button to front in Z-order (ViewGroup child reordering)
+            bringButtonToFront()
+
+            Log.d(TAG, "Tooltip shown as child view with button in front")
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to add comprehensive help overlay", e)
+            Log.e(TAG, "Failed to add tooltip", e)
             tooltipView = null
             currentTapBehavior = null
+            tooltipContainer.visibility = View.GONE
             return
         }
     }
@@ -247,17 +241,18 @@ class TooltipManager(
             }
         }
 
-        // Update window parameters
-        val params = tooltip.layoutParams as WindowManager.LayoutParams
-        params.x = tooltipX
-        params.y = tooltipY
-
-        try {
-            windowManager.updateViewLayout(tooltip, params)
-            Log.d(TAG, "Tooltip positioned at ($tooltipX, $tooltipY) - below button, button at ($buttonLeft, $buttonTop)")
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to update tooltip position", e)
+        // Update position using FrameLayout.LayoutParams
+        val params = android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.TOP or android.view.Gravity.START
+            leftMargin = tooltipX
+            topMargin = tooltipY
         }
+        tooltip.layoutParams = params
+
+        Log.d(TAG, "Tooltip positioned at ($tooltipX, $tooltipY) - below button, button at ($buttonLeft, $buttonTop)")
     }
 
     /**
@@ -266,7 +261,10 @@ class TooltipManager(
     fun removeTooltip() {
         tooltipView?.let {
             try {
-                windowManager.removeView(it)
+                getTooltipContainer()?.apply {
+                    removeAllViews()
+                    visibility = View.GONE
+                }
                 Log.d(TAG, "Tooltip removed")
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to remove tooltip", e)
