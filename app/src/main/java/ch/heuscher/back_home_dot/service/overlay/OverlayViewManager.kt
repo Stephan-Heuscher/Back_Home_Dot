@@ -52,7 +52,6 @@ class OverlayViewManager(
     private var haloAnimator: ValueAnimator? = null
     private val fadeHandler = Handler(Looper.getMainLooper())
     private var fadeRunnable: Runnable? = null
-    private val bringToFrontHandler = Handler(Looper.getMainLooper())
 
     // Cache nav bar height, position, and log only once
     private var cachedNavBarHeight: Int? = null
@@ -100,7 +99,6 @@ class OverlayViewManager(
         haloAnimator = null
         fadeRunnable?.let { fadeHandler.removeCallbacks(it) }
         fadeRunnable = null
-        bringToFrontHandler.removeCallbacksAndMessages(null)
         floatingView?.let { windowManager.removeView(it) }
         floatingView = null
         floatingDot = null
@@ -139,53 +137,6 @@ class OverlayViewManager(
         return layoutParams?.let { params ->
             DotPosition(params.x, params.y)
         }
-    }
-
-    /**
-     * Gets the window token of the button view for Z-ordering.
-     */
-    fun getWindowToken(): android.os.IBinder? {
-        return floatingView?.windowToken
-    }
-
-    /**
-     * Brings the button overlay to front by re-adding it to the window manager.
-     * This ensures the button stays visually on top of other overlays like tooltips.
-     * Delayed to avoid interrupting ongoing touch events.
-     */
-    fun bringToFront() {
-        floatingView?.let { view ->
-            layoutParams?.let { params ->
-                // Delay to allow current touch event to complete
-                // This prevents interrupting ACTION_UP events
-                bringToFrontHandler.postDelayed({
-                    try {
-                        // Remove and re-add to bring to front
-                        windowManager.removeView(view)
-                        windowManager.addView(view, params)
-
-                        // Re-attach touch listener to the button
-                        touchListener?.let { listener ->
-                            floatingDot = view.findViewById(R.id.floating_dot)
-                            floatingDot?.setOnTouchListener(listener)
-                        }
-
-                        Log.d(TAG, "Button brought to front in Z-order (delayed)")
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Failed to bring button to front", e)
-                    }
-                }, 100) // 100ms delay to ensure touch event completes
-            }
-        }
-    }
-
-    /**
-     * Cancels any pending bringToFront operations.
-     * Call this when a drag starts to prevent interrupting the drag.
-     */
-    fun cancelPendingBringToFront() {
-        bringToFrontHandler.removeCallbacksAndMessages(null)
-        Log.d(TAG, "Cancelled pending bringToFront operation")
     }
 
     /**
