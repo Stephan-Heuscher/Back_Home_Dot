@@ -2,7 +2,9 @@ package ch.heuscher.back_home_dot.service.overlay
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PixelFormat
 import android.graphics.Point
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -17,14 +19,12 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 /**
  * Manages tooltip display that shows action descriptions beside the button.
  * Shows comprehensive overlay on interaction and hides 2.5s after last interaction.
- * Tooltip is added as a child view to the overlay container.
- * Button remains on top via XML declaration order (button declared last).
+ * Tooltip has FLAG_NOT_TOUCHABLE so touches pass through to the button below.
  */
 class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
-    private val getScreenSize: () -> Point,
-    private val getTooltipContainer: () -> android.widget.FrameLayout?
+    private val getScreenSize: () -> Point
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -42,6 +42,7 @@ class TooltipManager(
     private val handler = Handler(Looper.getMainLooper())
     private var hideTooltipRunnable: Runnable? = null
     private var currentTapBehavior: String? = null
+    private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager
 
     /**
      * Shows a tooltip with all possible action descriptions beside the button.
@@ -70,11 +71,6 @@ class TooltipManager(
     private fun showComprehensiveHelp(tapBehavior: String) {
         // Remove existing tooltip if present
         removeTooltip()
-
-        val tooltipContainer = getTooltipContainer() ?: run {
-            Log.e(TAG, "Tooltip container not available")
-            return
-        }
 
         val density = context.resources.displayMetrics.density
         val paddingPx = (TOOLTIP_PADDING_DP * density).toInt()
@@ -125,24 +121,33 @@ class TooltipManager(
         )
 
         try {
-            // Add tooltip as child of overlay container
-            tooltipContainer.visibility = View.VISIBLE
-            tooltipContainer.removeAllViews()
+            // Add tooltip as separate window with FLAG_NOT_TOUCHABLE
+            val tooltipParams = android.view.WindowManager.LayoutParams(
+                android.view.WindowManager.LayoutParams.WRAP_CONTENT,
+                android.view.WindowManager.LayoutParams.WRAP_CONTENT,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    android.view.WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                } else {
+                    @Suppress("DEPRECATION")
+                    android.view.WindowManager.LayoutParams.TYPE_PHONE
+                },
+                android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE or
+                android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                PixelFormat.TRANSLUCENT
+            ).apply {
+                gravity = Gravity.TOP or Gravity.START
+            }
 
-            // Ensure tooltip container doesn't intercept touches
-            tooltipContainer.isClickable = false
-            tooltipContainer.isFocusable = false
-
-            tooltipContainer.addView(container)
+            windowManager.addView(container, tooltipParams)
             positionTooltip()
 
-            // Button is already on top (declared last in XML) - no need to call bringToFront()
-            Log.d(TAG, "Tooltip shown as child view (button already on top by XML declaration order)")
+            // Tooltip has FLAG_NOT_TOUCHABLE, so touches pass through to button
+            Log.d(TAG, "Comprehensive help overlay shown")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to add tooltip", e)
             tooltipView = null
             currentTapBehavior = null
-            tooltipContainer.visibility = View.GONE
             return
         }
     }
@@ -243,16 +248,11 @@ class TooltipManager(
             }
         }
 
-        // Update position using FrameLayout.LayoutParams
-        val params = android.widget.FrameLayout.LayoutParams(
-            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = android.view.Gravity.TOP or android.view.Gravity.START
-            leftMargin = tooltipX
-            topMargin = tooltipY
-        }
-        tooltip.layoutParams = params
+        // Update position using WindowManager.LayoutParams
+        val params = tooltip.layoutParams as android.view.WindowManager.LayoutParams
+        params.x = tooltipX
+        params.y = tooltipY
+        windowManager.updateViewLayout(tooltip, params)
 
         Log.d(TAG, "Tooltip positioned at ($tooltipX, $tooltipY) - below button, button at ($buttonLeft, $buttonTop)")
     }
@@ -263,10 +263,7 @@ class TooltipManager(
     fun removeTooltip() {
         tooltipView?.let {
             try {
-                getTooltipContainer()?.apply {
-                    removeAllViews()
-                    visibility = View.GONE
-                }
+                windowManager.removeView(it)
                 Log.d(TAG, "Tooltip removed")
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to remove tooltip", e)

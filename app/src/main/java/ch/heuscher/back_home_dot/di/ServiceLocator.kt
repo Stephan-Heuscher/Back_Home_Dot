@@ -109,14 +109,12 @@ object ServiceLocator {
     fun createTooltipManager(
         context: Context,
         getCurrentPosition: () -> DotPosition?,
-        getScreenSize: () -> Point,
-        getTooltipContainer: () -> android.widget.FrameLayout?
+        getScreenSize: () -> Point
     ): TooltipManager {
         return TooltipManager(
             context = context,
             getCurrentPosition = getCurrentPosition,
-            getScreenSize = getScreenSize,
-            getTooltipContainer = getTooltipContainer
+            getScreenSize = getScreenSize
         )
     }
 
