@@ -1,11 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="#FFFF4444" />
-    <stroke
-        android:width="3dp"
-        android:color="@android:color/white" />
-    <size
-        android:width="48dp"
-        android:height="48dp" />
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Outer white circle background -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,24m-24,0a24,24 0,1,1 48,0a24,24 0,1,1 -48,0" />
+
+    <!-- Red segment - top -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M24,0 A24,24 0,0,1 41.57,6.43 L31.11,16.89 A10,10 0,0,0 24,14 Z" />
+
+    <!-- White segment - right -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M41.57,6.43 A24,24 0,0,1 48,24 L34,24 A10,10 0,0,0 31.11,16.89 Z" />
+
+    <!-- Red segment - bottom -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M48,24 A24,24 0,0,1 41.57,41.57 L31.11,31.11 A10,10 0,0,0 34,24 Z" />
+
+    <!-- White segment - bottom right -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M41.57,41.57 A24,24 0,0,1 24,48 L24,34 A10,10 0,0,0 31.11,31.11 Z" />
+
+    <!-- Red segment - bottom left -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M24,48 A24,24 0,0,1 6.43,41.57 L16.89,31.11 A10,10 0,0,0 24,34 Z" />
+
+    <!-- White segment - left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M6.43,41.57 A24,24 0,0,1 0,24 L14,24 A10,10 0,0,0 16.89,31.11 Z" />
+
+    <!-- Red segment - top left -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M0,24 A24,24 0,0,1 6.43,6.43 L16.89,16.89 A10,10 0,0,0 14,24 Z" />
+
+    <!-- White segment - top left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M6.43,6.43 A24,24 0,0,1 24,0 L24,14 A10,10 0,0,0 16.89,16.89 Z" />
+
+    <!-- Center hole (transparent) -->
+    <path
+        android:fillColor="#00FFFFFF"
+        android:pathData="M24,24m-10,0a10,10 0,1,1 20,0a10,10 0,1,1 -20,0" />
+
+    <!-- Inner white ring outline -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1"
+        android:fillColor="#00000000"
+        android:pathData="M24,24m-10,0a10,10 0,1,1 20,0a10,10 0,1,1 -20,0" />
+
+    <!-- Outer edge outline for definition -->
+    <path
+        android:strokeColor="#B71C1C"
+        android:strokeWidth="0.5"
+        android:fillColor="#00000000"
+        android:pathData="M24,24m-24,0a24,24 0,1,1 48,0a24,24 0,1,1 -48,0" />
+</vector>
