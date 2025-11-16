@@ -70,6 +70,9 @@ class OverlayViewManager(
         floatingDot = floatingView?.findViewById<View>(R.id.floating_dot)
         tooltipContainer = floatingView?.findViewById(R.id.tooltip_container)
 
+        // Make container pass through all touches (only button should consume touches)
+        floatingView?.setOnTouchListener { _, _ -> false }
+
         // Initialize button position params (will be updated in updatePosition)
         buttonLayoutParams = android.widget.FrameLayout.LayoutParams(
             (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density).toInt(),
