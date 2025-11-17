@@ -297,6 +297,10 @@ class OverlayService : Service() {
                     isFirstEmission = false
                     updateOverlayAppearance()
                     updateGestureMode(settings.tapBehavior)
+
+                    // Initialize tooltip window and bring button to front
+                    // This happens once after both overlay windows are created
+                    tooltipManager.initialize(settings.tapBehavior)
                 } else {
                     // Subsequent emissions: Preserve current position to prevent jumping
                     val currentPosition = viewManager.getCurrentPosition()

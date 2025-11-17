@@ -40,53 +40,74 @@ class TooltipManager(
     }
 
     private var tooltipView: View? = null
+    private var tooltipContainer: LinearLayout? = null
     private val handler = Handler(Looper.getMainLooper())
     private var hideTooltipRunnable: Runnable? = null
     private var currentTapBehavior: String? = null
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager
+    private var isInitialized = false
 
     /**
-     * Shows a tooltip with all possible action descriptions beside the button.
+     * Initialize tooltip by creating the window once on startup.
+     * This should be called after the button is created.
+     * Brings button to front after tooltip window is created.
+     */
+    fun initialize(tapBehavior: String) {
+        if (isInitialized) return
+
+        createTooltipWindow(tapBehavior)
+        tooltipView?.visibility = View.GONE
+
+        // Bring button to front once after both windows are initialized
+        handler.postDelayed({
+            onBringButtonToFront()
+            isInitialized = true
+            Log.d(TAG, "Tooltip initialized and button brought to front")
+        }, 50)
+    }
+
+    /**
+     * Shows the tooltip with action descriptions beside the button.
      * Resets the hide timer on each interaction.
      * Automatically hides 2.5s after last interaction.
-     * Brings button to front whenever a new tooltip window is created.
      */
     fun showTooltip(gesture: Gesture, tapBehavior: String) {
         // Cancel any pending hide operation to reset timer
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
 
-        // Only recreate if tooltip doesn't exist or tap behavior changed
-        if (tooltipView == null || currentTapBehavior != tapBehavior) {
-            showComprehensiveHelp(tapBehavior)
-
-            // Bring button to front after new tooltip window is created
-            // This ensures button stays on top whenever tooltip is recreated
-            handler.postDelayed({
-                onBringButtonToFront()
-                Log.d(TAG, "Button brought to front relative to tooltip")
-            }, 50)
+        // Update content if tap behavior changed
+        if (currentTapBehavior != tapBehavior) {
+            updateTooltipContent(tapBehavior)
         }
+
+        // Position and show the tooltip
+        positionTooltip()
+        tooltipView?.visibility = View.VISIBLE
 
         // Schedule auto-hide 2.5s after this interaction
         hideTooltipRunnable = Runnable {
-            removeTooltip()
+            hideTooltip()
         }
         handler.postDelayed(hideTooltipRunnable!!, TOOLTIP_DISPLAY_DURATION_MS)
     }
 
     /**
-     * Shows comprehensive help overlay with all interactions.
+     * Hides the tooltip without removing it.
      */
-    private fun showComprehensiveHelp(tapBehavior: String) {
-        // Remove existing tooltip if present
-        removeTooltip()
+    private fun hideTooltip() {
+        tooltipView?.visibility = View.GONE
+    }
 
+    /**
+     * Creates the tooltip window once on initialization.
+     */
+    private fun createTooltipWindow(tapBehavior: String) {
         val density = context.resources.displayMetrics.density
         val paddingPx = (TOOLTIP_PADDING_DP * density).toInt()
         val lineSpacingPx = (TOOLTIP_LINE_SPACING_DP * density).toInt()
         val maxWidthPx = (TOOLTIP_MAX_WIDTH_DP * density).toInt()
 
-        // Create tooltip content
+        // Create tooltip content container
         val container = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Color.parseColor("#2D2D2D"))
@@ -120,6 +141,7 @@ class TooltipManager(
             container.addView(textView)
         }
 
+        tooltipContainer = container
         tooltipView = container
         currentTapBehavior = tapBehavior
 
@@ -152,13 +174,52 @@ class TooltipManager(
             positionTooltip()
 
             // Tooltip has FLAG_NOT_TOUCHABLE, so touches pass through to button
-            Log.d(TAG, "Comprehensive help overlay shown")
+            Log.d(TAG, "Tooltip window created")
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to add tooltip", e)
+            Log.e(TAG, "Failed to create tooltip window", e)
             tooltipView = null
+            tooltipContainer = null
             currentTapBehavior = null
-            return
         }
+    }
+
+    /**
+     * Updates tooltip content when tap behavior changes.
+     */
+    private fun updateTooltipContent(tapBehavior: String) {
+        val container = tooltipContainer ?: return
+        val density = context.resources.displayMetrics.density
+        val lineSpacingPx = (TOOLTIP_LINE_SPACING_DP * density).toInt()
+
+        // Remove old action descriptions (keep title at index 0)
+        while (container.childCount > 1) {
+            container.removeViewAt(1)
+        }
+
+        // Add updated gesture descriptions
+        val actions = getAllActionsText(tapBehavior)
+        actions.forEach { actionText ->
+            val textView = TextView(context).apply {
+                text = actionText
+                textSize = TOOLTIP_TEXT_SIZE_SP
+                setTextColor(Color.parseColor("#E0E0E0"))
+                setPadding(0, lineSpacingPx / 2, 0, lineSpacingPx / 2)
+                gravity = Gravity.START
+                setLineSpacing(lineSpacingPx.toFloat(), 1f)
+            }
+            container.addView(textView)
+        }
+
+        currentTapBehavior = tapBehavior
+
+        // Re-measure after content update
+        val maxWidthPx = (TOOLTIP_MAX_WIDTH_DP * density).toInt()
+        container.measure(
+            View.MeasureSpec.makeMeasureSpec(maxWidthPx, View.MeasureSpec.AT_MOST),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+
+        Log.d(TAG, "Tooltip content updated for tap behavior: $tapBehavior")
     }
 
     /**
@@ -267,28 +328,36 @@ class TooltipManager(
     }
 
     /**
-     * Removes the tooltip from the screen.
+     * Removes the tooltip from the screen (deprecated - use hideTooltip instead).
+     * Kept for compatibility but now just hides the tooltip.
      */
+    @Deprecated("Use hideTooltip instead", ReplaceWith("hideTooltip()"))
     fun removeTooltip() {
-        tooltipView?.let {
-            try {
-                windowManager.removeView(it)
-                Log.d(TAG, "Tooltip removed")
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to remove tooltip", e)
-            }
-            tooltipView = null
-        }
-        currentTapBehavior = null
+        hideTooltip()
         hideTooltipRunnable?.let { handler.removeCallbacks(it) }
         hideTooltipRunnable = null
     }
 
     /**
      * Cleanup method to be called when the service is destroyed.
+     * Actually removes the tooltip window from WindowManager.
      */
     fun cleanup() {
-        removeTooltip()
+        hideTooltipRunnable?.let { handler.removeCallbacks(it) }
+        hideTooltipRunnable = null
         handler.removeCallbacksAndMessages(null)
+
+        tooltipView?.let {
+            try {
+                windowManager.removeView(it)
+                Log.d(TAG, "Tooltip window removed")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to remove tooltip window", e)
+            }
+        }
+        tooltipView = null
+        tooltipContainer = null
+        currentTapBehavior = null
+        isInitialized = false
     }
 }
