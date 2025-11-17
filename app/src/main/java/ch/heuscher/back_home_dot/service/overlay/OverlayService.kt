@@ -135,7 +135,8 @@ class OverlayService : Service() {
         tooltipManager = ServiceLocator.createTooltipManager(
             context = this,
             getCurrentPosition = { viewManager.getCurrentPosition() },
-            getScreenSize = { orientationHandler.getUsableScreenSize() }
+            getScreenSize = { orientationHandler.getUsableScreenSize() },
+            onBringButtonToFront = { viewManager.bringToFront() }
         )
 
         // Create overlay view

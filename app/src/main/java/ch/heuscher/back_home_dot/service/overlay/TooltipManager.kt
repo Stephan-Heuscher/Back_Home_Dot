@@ -24,7 +24,8 @@ import ch.heuscher.back_home_dot.domain.model.Gesture
 class TooltipManager(
     private val context: Context,
     private val getCurrentPosition: () -> DotPosition?,
-    private val getScreenSize: () -> Point
+    private val getScreenSize: () -> Point,
+    private val onBringButtonToFront: () -> Unit = {}
 ) {
     companion object {
         private const val TAG = "TooltipManager"
@@ -43,11 +44,13 @@ class TooltipManager(
     private var hideTooltipRunnable: Runnable? = null
     private var currentTapBehavior: String? = null
     private val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager
+    private var hasButtonBeenBroughtToFront = false
 
     /**
      * Shows a tooltip with all possible action descriptions beside the button.
      * Resets the hide timer on each interaction.
      * Automatically hides 2.5s after last interaction.
+     * Brings button to front on first tooltip show.
      */
     fun showTooltip(gesture: Gesture, tapBehavior: String) {
         // Cancel any pending hide operation to reset timer
@@ -56,6 +59,16 @@ class TooltipManager(
         // Only recreate if tooltip doesn't exist or tap behavior changed
         if (tooltipView == null || currentTapBehavior != tapBehavior) {
             showComprehensiveHelp(tapBehavior)
+
+            // Bring button to front only once after first tooltip is shown
+            if (!hasButtonBeenBroughtToFront) {
+                // Post with a small delay to ensure tooltip window is fully added
+                handler.postDelayed({
+                    onBringButtonToFront()
+                    hasButtonBeenBroughtToFront = true
+                    Log.d(TAG, "Button brought to front relative to tooltip")
+                }, 50)
+            }
         }
 
         // Schedule auto-hide 2.5s after this interaction

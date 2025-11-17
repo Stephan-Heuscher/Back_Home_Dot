@@ -108,6 +108,32 @@ class OverlayViewManager(
     }
 
     /**
+     * Brings the button view to front by removing and re-adding it to WindowManager.
+     * This ensures the button appears above other overlay windows (like tooltips).
+     */
+    fun bringToFront() {
+        val view = floatingView ?: return
+        val params = layoutParams ?: return
+
+        try {
+            // Remove view from window manager
+            windowManager.removeView(view)
+
+            // Re-add view with same parameters (this brings it to front)
+            windowManager.addView(view, params)
+
+            // Re-attach touch listener after re-adding
+            touchListener?.let { listener ->
+                floatingDot?.setOnTouchListener(listener)
+            }
+
+            Log.d(TAG, "Button brought to front successfully")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to bring button to front", e)
+        }
+    }
+
+    /**
      * Updates the overlay appearance based on settings.
      */
     fun updateAppearance(settings: OverlaySettings) {
