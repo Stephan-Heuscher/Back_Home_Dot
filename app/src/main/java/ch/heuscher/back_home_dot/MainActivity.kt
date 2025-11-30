@@ -59,6 +59,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: Starting MainActivity")
 
+        // Check if onboarding should be shown
+        if (!OnboardingActivity.isOnboardingCompleted(this)) {
+            Log.d(TAG, "onCreate: Onboarding not completed, launching OnboardingActivity")
+            val intent = Intent(this, OnboardingActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate: Content view set")
 

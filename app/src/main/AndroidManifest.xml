@@ -45,6 +45,12 @@
             android:theme="@style/Theme.Material3.DayNight"
             android:parentActivityName=".SettingsActivity" />
 
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Material3.DayNight" />
+
         <service
             android:name=".service.overlay.OverlayService"
             android:enabled="true"

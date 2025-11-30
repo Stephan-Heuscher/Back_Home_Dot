@@ -128,6 +128,37 @@
     <string name="action_open_app">Open Assistive Tap</string>
     <string name="action_drag_mode">Drag mode active</string>
 
+    <!-- Privacy Policy -->
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_summary">Assistive Tap collects NO personal data. All settings are stored locally on your device only. No advertising, no tracking, no analytics. Your privacy is protected.</string>
+    <string name="view_full_privacy_policy">View Full Privacy Policy</string>
+    <string name="privacy_policy_url">https://github.com/Stephan-Heuscher/Back_Home_Dot/blob/master/PRIVACY_POLICY.md</string>
+
+    <!-- Terms of Service -->
+    <string name="terms_of_service_title">Terms of Service</string>
+    <string name="terms_of_service_content">By using Assistive Tap, you agree to the following terms:\n\n• This app is provided "as is" without warranty\n• The app is intended as an assistive tool only\n• Use of this app is at your own risk\n• The developer is not liable for any damages\n• The app is free and open source under MIT License\n• You may modify and distribute the code following MIT License terms</string>
+
+    <!-- Feedback -->
+    <string name="feedback_title">Send Feedback</string>
+    <string name="feedback_content">We appreciate your feedback! Help us improve Assistive Tap by sharing your experience, reporting issues, or suggesting new features.</string>
+    <string name="send_feedback">📧 Send Feedback via Email</string>
+    <string name="feedback_email_subject">Assistive Tap Feedback</string>
+    <string name="feedback_email_body">Hello,\n\nI would like to share feedback about Assistive Tap:\n\n[Please describe your feedback, issue, or suggestion here]\n\nDevice: %1$s\nAndroid Version: %2$s\nApp Version: %3$s\n\nThank you!</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Welcome to Assistive Tap!</string>
+    <string name="onboarding_welcome_message">This app helps you navigate your phone with simple taps on a floating button.</string>
+    <string name="onboarding_step1_title">Step 1: Enable Permissions</string>
+    <string name="onboarding_step1_message">First, allow the app to display over other apps and enable the accessibility service.</string>
+    <string name="onboarding_step2_title">Step 2: Turn On the Button</string>
+    <string name="onboarding_step2_message">Use the switch to show the floating navigation button on your screen.</string>
+    <string name="onboarding_step3_title">Step 3: Tap to Navigate</string>
+    <string name="onboarding_step3_message">Tap the button to go Home. In Safe Home mode, all taps take you home. Long-press and drag to move the button anywhere.</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip Tutorial</string>
+    <string name="onboarding_done">Get Started</string>
+    <string name="onboarding_page_indicator">Step %1$d of %2$d</string>
+
     <!-- Tooltip Comprehensive Help -->
     <string name="tooltip_all_actions_title">How it works:</string>
     <string name="tooltip_tap_once">1 Tap</string>

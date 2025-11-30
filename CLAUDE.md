@@ -473,6 +473,53 @@ app/src/main/java/ch/heuscher/back_home_dot/
 
 ---
 
+## Recent Changes (v2.2.0) - Tester Feedback Implementation
+
+### New Onboarding Tutorial
+- Added `OnboardingActivity` with 4-step interactive tutorial for first-time users
+- Guides users through: Welcome, Permissions, Enabling the button, Using gestures
+- Skip option available for users who want to explore independently
+- Dot indicators and page indicator show progress
+- Persists completion state in SharedPreferences
+- Automatically redirects from MainActivity on first launch
+
+### Privacy Policy & Terms of Service
+- Added in-app access to Privacy Policy (opens GitHub page)
+- Added Terms of Service section in Legal Notice (Impressum)
+- Privacy policy summary displayed in-app for transparency
+- Button to view full privacy policy on GitHub
+
+### User Feedback Mechanism
+- Added "Send Feedback" button in Legal Notice section
+- Opens email client with pre-filled:
+  - Recipient: s.heuscher@gmail.com
+  - Subject: "Assistive Tap Feedback"
+  - Body with device info (model, Android version, app version)
+- Makes it easy for users to report issues or suggest improvements
+
+### Technical Changes
+- Created `OnboardingActivity.kt` with companion object helper methods
+- Created `activity_onboarding.xml` layout with ConstraintLayout
+- Added onboarding drawable resources (ic_permissions, ic_switch, ic_tap)
+- Added dot indicator drawables (onboarding_dot_active/inactive)
+- Updated `ImpressumActivity.kt` with feedback and privacy policy buttons
+- Updated `activity_impressum.xml` with new sections
+- Added ~25 new string resources in English and German
+
+### New Files Added
+- `OnboardingActivity.kt` - Onboarding tutorial activity
+- `activity_onboarding.xml` - Onboarding layout
+- `ic_permissions.xml` - Shield icon for permissions step
+- `ic_switch.xml` - Toggle switch icon
+- `ic_tap.xml` - Tap gesture icon
+- `onboarding_dot_active.xml` - Active dot indicator
+- `onboarding_dot_inactive.xml` - Inactive dot indicator
+
+### Note on Button Movement Limitation
+The tester feedback mentioned "Assistive Tap button limited to upper half of screen" - this was investigated and found to be incorrect. The code already allows full screen mobility with proper bounds checking for navigation bar avoidance. No changes were needed.
+
+---
+
 ## Git Workflow
 
 **Current Branch:** `claude/safe-home-mode-color-picker-011CV2dBsyFQXT1CmbJzqetR`
