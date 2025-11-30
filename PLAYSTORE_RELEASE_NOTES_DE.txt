@@ -1,10 +1,14 @@
-Neu in v3.0.0:
+Neu in v3.1.0:
 
-🎓 Interaktiver Tooltip - Neue Nutzer sehen hilfreiche Gesten-Hinweise beim ersten Touch
-🎨 Verbesserter Farbwähler - Intuitive HSV-Regler (Farbton, Intensität, Helligkeit)
-🏠 Safe Home als Standard - Maximale Sicherheit, alle Tipps führen nach Hause
-👆 Bessere Touch-Reaktion - Touch-Durchleitung korrigiert
-📍 Verbesserte Positionierung - Button bleibt im sichtbaren Bereich
-✨ Vereinfachte Oberfläche - Klarere Beschriftungen und übersichtliche Einstellungen
+🎓 Willkommens-Tutorial - Neue interaktive Einführung führt durch die Einrichtung
+🔒 Datenschutz - In-App-Zugang zu unserer Datenschutzerklärung (keine Daten gesammelt!)
+📧 Feedback senden - Einfacher Feedback-Button mit vorgefüllter E-Mail
+📜 Nutzungsbedingungen - Klare Nutzungsbedingungen jetzt in der App
+⏭️ Überspringen-Option - Tutorial kann übersprungen werden
+
+Vorherige Verbesserungen:
+• Interaktive Tooltips mit Gesten-Hinweisen
+• HSV-Farbwähler für einfache Anpassung
+• Safe Home Modus als Standard
 
 Perfekt für Senioren und Nutzer mit motorischen Einschränkungen!

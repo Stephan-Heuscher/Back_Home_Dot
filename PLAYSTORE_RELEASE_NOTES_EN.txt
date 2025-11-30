@@ -1,10 +1,14 @@
-What's New in v3.0.0:
+What's New in v3.1.0:
 
-🎓 Interactive Tooltip - New users see helpful gesture hints on first touch
-🎨 Improved Color Picker - Intuitive HSV sliders (Hue, Saturation, Brightness)
-🏠 Safe Home as Default - Maximum safety with all taps leading home
-👆 Better Touch Response - Fixed touch pass-through issues
-📍 Improved Positioning - Button stays in bounds and avoids navigation bar
-✨ Simplified Interface - Clearer labels and streamlined settings
+🎓 Welcome Tutorial - New interactive onboarding guides you through setup
+🔒 Privacy Policy - In-app access to our privacy commitment (no data collected!)
+📧 Send Feedback - Easy feedback button with pre-filled email
+📜 Terms of Service - Clear usage terms now available in-app
+⏭️ Skip Option - Tutorial can be skipped if you prefer to explore
+
+Previous improvements:
+• Interactive tooltips with gesture hints
+• HSV color picker for easy customization
+• Safe Home mode as default
 
 Perfect for seniors and users with motor impairments!
