@@ -4,7 +4,7 @@
 
 **Assistive Tap** (AssistiPunkt) is an Android accessibility application that provides a floating navigation dot for users with limited mobility, especially elderly users. It enables one-handed navigation through customizable gesture controls.
 
-**Current Version:** 2.0.0 (Code: 8)
+**Current Version:** 3.1.0 (Code: 13)
 **Target Users:** Elderly users and people with motor impairments
 **Language:** Kotlin (100%)
 **Min SDK:** 26 (Android 8.0) | **Target SDK:** 36 (Android 15)
@@ -211,10 +211,10 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ### Version Management
 **File:** `version.properties`
 ```properties
-VERSION_MAJOR=2
-VERSION_MINOR=0
+VERSION_MAJOR=3
+VERSION_MINOR=1
 VERSION_PATCH=0
-VERSION_CODE=8
+VERSION_CODE=13
 ```
 - Auto-increments on release builds
 - Version name: `${MAJOR}.${MINOR}.${PATCH}`
